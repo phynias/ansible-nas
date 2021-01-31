@@ -13,10 +13,10 @@
       PUID: "{{ sabnzbd_user_id }}"
       PGID: "{{ sabnzbd_group_id }}"
     restart_policy: unless-stopped
-    network_mode: "container:expressvpn"
+    network_mode: "{{ 'container:' + proxy_container if sabnzbd_proxy else 'None' }}"
     memory: 1g
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://greeneggsnspam.com"]
+      test: ["CMD", "curl", "--fail", "-4", {{ health_check_url }}"]
       interval: 1m
       timeout: 5s
       retries: 2
