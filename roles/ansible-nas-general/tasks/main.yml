@@ -4,14 +4,22 @@
     src: motd.txt
     dest: /etc/motd
 
-- name: Enable Universe repository
-  raw: apt-add-repository universe
+- name: ensuring Ubuntu universe repo is enabled ({{ ansible_distribution_version }} >= 16.04)
+  apt_repository:
+    repo: "deb http://us.archive.ubuntu.com/ubuntu {{ ansible_distribution_release|lower }} universe"
+    state: present
+  when: >
+        ansible_distribution_version >= '16.04'
+
+
+- name: Enable universe repository
+  apt_repository:
+    repo: "{{ item }}"
+  loop:
+    - "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }}  universe"
+    - "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }}-updates universe"
+    - "deb http://security.ubuntu.com/ubuntu/ {{ ansible_distribution_release }}-security universe"
   register: add_repo_result
-  changed_when: "'distribution component enabled for all sources' in add_repo_result.stdout"
-  until: add_repo_result.rc == 0
-  retries: 3
-  ignore_errors: yes
-  delay: 1
 
 - debug: var=add_repo_result
 
