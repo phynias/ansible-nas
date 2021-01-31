@@ -42,6 +42,7 @@ Ansible config and a bunch of Docker containers.
 * [Deluge](https://dev.deluge-torrent.org/) - A lightweight, Free Software, cross-platform BitTorrent client.
 * [Duplicati](https://www.duplicati.com/) - for backing up your stuff
 * [Emby](https://emby.media/) - Media streaming and management
+* [ExpressVPN](https://www.expressvpn.com/) - ExpressVPN client
 * [Firefly III](https://firefly-iii.org/) - Free and open source personal finance manager
 * [get_iplayer](https://github.com/get-iplayer/get_iplayer) - download programmes from BBC iplayer
 * [Gitea](https://gitea.io/en-us/) - Simple self-hosted GitHub clone
@@ -57,26 +58,35 @@ Ansible config and a bunch of Docker containers.
 * [Joomla](https://www.joomla.org/) - Open source content management system
 * [Krusader](https://krusader.org/) - Twin panel file management for your desktop
 * [Lidarr](https://github.com/lidarr/Lidarr) - Music collection manager for Usenet and BitTorrent users
+* [MineCraft](https://www.minecraft.net) - It's MineCraft...
 * [MiniDLNA](https://sourceforge.net/projects/minidlna/) - simple media server which is fully compliant with DLNA/UPnP-AV clients
 * [Miniflux](https://miniflux.app/) - An RSS news reader
 * [Mosquitto](https://mosquitto.org) - An open source MQTT broker
 * [Mylar](https://github.com/evilhero/mylar) - An automated Comic Book downloader (cbr/cbz) for use with SABnzbd, NZBGet and torrents
 * [MyMediaForAlexa](https://www.mymediaalexa.com/) - Lets you stream your music collection to your alexa device
 * [n8n](https://n8n.io") - Nodemation, a node based workflow and automation service like IFTTT.
+* [MuxiMux](https://github.com/mescon/Muximux) - Lightweight portal to your webapps
 * [Netdata](https://my-netdata.io/) - An extremely comprehensive system monitoring solution
 * [Nextcloud](https://nextcloud.com/) - A self-hosted Dropbox alternative
 * [NZBget](https://nzbget.net/) - The most efficient usenet downloader
 * [Ombi](https://ombi.io/) - web application that automatically gives your users the ability to request content
+* [OpenVPN](https://openvpn.net/) - OpenVPN client
 * [Organizr](https://organizr.app/) - ORGANIZR aims to be your one stop shop for your Servers Frontend.
 * [openHAB](https://www.openhab.org/) - A vendor and technology agnostic open source automation software for your home
+* [OwnCloud](https://owncloud.com/) - share files and folders, easy and secure
+* [piHole](https://pi-hole.net/) - Network-wide Ad Blocking
 * [Plex](https://www.plex.tv/) - Plex Media Server
 * [Portainer](https://portainer.io/) - for managing Docker and running custom images
+* [Prometheus](https://prometheus.io/) - Monitoring system & time series database (includes: node_exporter, cadvisor)
+* [Pushover](https://pushover.net/) - a service to receive instant push notifications on your phone or tablet from a variety of sources.
 * [pyLoad](https://pyload.net/) - A download manager with a friendly web-interface
 * [PyTivo](http://pytivo.org) - An HMO and GoBack server for TiVos.
 * [Radarr](https://radarr.video/) - for organising and downloading movies
+* [sabnzbd](https://sabnzbd.org/) - Free and easy binary newsreader
 * [Sickchill](https://sickchill.github.io/) - for managing TV episodes
 * [Sonarr](https://sonarr.tv/) - for downloading and managing TV episodes
 * [Syncthing](https://syncthing.net/) - sync directories with another device
+* [Subsonic](http://www.subsonic.org/) - catalog and music streaming (og)
 * [Tautulli](http://tautulli.com/) - Monitor Your Plex Media Server
 * [Telegraf](https://github.com/influxdata/telegraf) - Metrics collection agent
 * [The Lounge](https://thelounge.chat) - Web based always-on IRC client
@@ -85,6 +95,7 @@ Ansible config and a bunch of Docker containers.
 * [Transmission](https://transmissionbt.com/) - BitTorrent client (with OpenVPN if you have a supported VPN provider)
 * [Ubooquity](http://vaemendis.net/ubooquity/) - Book and comic server
 * [uTorrent](https://www.utorrent.com/) - The best torrent downloading app for beginners
+* [Varken](https://github.com/Boerderij/Varken) - aggregate data from the Plex ecosystem into InfluxDB
 * [Virtual Desktop](https://github.com/RattyDAVE/docker-ubuntu-xrdp-mate-custom) - A virtual desktop running on your NAS.
 * [Wallabag](https://wallabag.org/) - Save and classify articles. Read them later.
 * [Watchtower](https://github.com/v2tec/watchtower) - Monitor your Docker containers and update them if a new version is available
