@@ -571,3 +571,6 @@ vd_users:
     password: "topsecret"
     sudo: "Y"
 vd_rdp_port: 3389
+
+health_check_url: ""
+proxy_container: ""

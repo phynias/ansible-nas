@@ -13,3 +13,4 @@ sabnzbd_group_id: "0"
 # network
 sabnzbd_port: "9090"
 sabnzbd_hostname: "sabnzbd"
+sabnzbd_proxy: false
