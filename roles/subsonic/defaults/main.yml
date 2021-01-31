@@ -2,6 +2,11 @@ subsonic_available_externally: false
 subsonic_enabled: "false"
 subsonic_hostname: "sub"
 
+subsonic_music_directory: "{{ music_root }}"
+subsonic_podcasts_directory: "{{ podcasts_root }}"
+subsonic_books_directory: "{{ audiobooks_root }}"
+subsonic_playlists_directory: "{{ playlists_root }}"
+
 subsonic_user_id: "0"
 subsonic_group_id: "0"
 subsonic_port: "4040"

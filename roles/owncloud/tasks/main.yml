@@ -13,7 +13,10 @@
 
 - name: create mysql volume
   command: docker volume create --name mysql
-  when: myvolume_exists.stderr_lines is search("No such volume")
+  when: 
+    - myvolume_exists is defined
+    - myvolume_exists.stderr_lines is defined
+    - myvolume_exists.stderr_lines is search("No such volume")
 
 - name: redis
   docker_container:

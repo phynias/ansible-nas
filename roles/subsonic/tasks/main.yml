@@ -14,9 +14,10 @@
     name: subsonic
     image: subsonic
     volumes:
-      - "{{ music_root }}:/music:ro"
-      - "{{ books_root }}":/books:ro"
-      - "{{ playlists_root }}:/playlists"
+      - "{{ subsonic_music_directory }}:/music:rw"
+      - "{{ subsonic_books_directory }}:/books:rw"
+      - "{{ subsonic_podcasts_directory}}:/podcasts:rw"
+      - "{{ subsonic_playlists_directory }}:/playlists:rw"
       - "{{ subsonic_data_directory }}:/data"
     restart_policy: unless-stopped
     env:
