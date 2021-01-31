@@ -25,14 +25,17 @@ RUN sed -i '/# Create Subsonic home directory./i \
 	mkdir -p ${SUBSONIC_HOME}/transcode && ln -fs /usr/bin/ffmpeg /usr/bin/lame ${SUBSONIC_HOME}/transcode\n' ${SUBSONIC_BIN}/subsonic.sh
 
 VOLUME [/music]
-VOLUME [/data]
 VOLUME [/books]
-RUN addgroup -S downloads -g 1001 && adduser -u 1001 -S downloads -G downloads
+VOLUME [/podcasts]
+VOLUME [/playlists]
+VOLUME [/data]
+
+RUN addgroup -S subsonic -g {{ subsonic_user_id }} && adduser -u {{ subsonic_group_id }} -S subsonic -G subsonic
 ADD    startup.sh /startup.sh
-RUN    mkdir -p /data && chown downloads:downloads /data && chmod 755 /startup.sh
-RUN    chown -R downloads:downloads /opt/subsonic
+RUN    mkdir -p /data && chown subsonic:subsonic /data && chmod 755 /startup.sh
+RUN    chown -R subsonic:subsonic /opt/subsonic
 
 EXPOSE 4040
-USER   downloads
+USER   subsonic
 
 ENTRYPOINT ["/startup.sh"]
