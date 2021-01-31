@@ -1,0 +1,15 @@
+---
+sabnzbd_enabled: false
+sabnzbd_available_externally: "false"
+
+# directories
+sabnzbd_config_directory: "{{ docker_home }}/sabnzbd/config"
+sabnzbd_download_directory: "{{ downloads_root }}"
+
+# uid / gid
+sabnzbd_user_id: "0"
+sabnzbd_group_id: "0"
+
+# network
+sabnzbd_port: "9090"
+sabnzbd_hostname: "sabnzbd"

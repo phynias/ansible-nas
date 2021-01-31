@@ -1,0 +1,7 @@
+---
+expressvpn_enabled: false
+expressvpn_available_externally: "false"
+
+expressvpn_memory: "512m"
+
+expressvpn_hostname: "expressvpn"

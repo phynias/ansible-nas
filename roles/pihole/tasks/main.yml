@@ -1,0 +1,30 @@
+---
+- name: piHole
+  docker_container:
+    name: pihole
+    image: pihole/pihole:latest
+    pull: true
+    volumes:
+      - "{{ pihole_data_directory }}/pihole:/etc/pihole"
+      - "{{ pihole_data_directory }}/dnsmasq.d:/etc/dnsmasq.d"
+    interactive: yes
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "8080:80"
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      PUID: "{{ pihole_user_id }}"
+      PGID: "{{ pihole_group_id }}"
+      DNS1: "1.1.1.1"
+      DNS2: "1.0.0.1"
+      ServerIP: "{{ pihole_ip }}"
+      WEBPASSWORD: "slappy"
+      IPv6: "false"
+    dns_servers:
+      - 127.0.0.1
+      - 1.1.1.1
+    restart_policy: unless-stopped
+    capabilities:
+      - NET_ADMIN

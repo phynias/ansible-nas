@@ -1,0 +1,16 @@
+---
+minecraft_enabled: false
+minecraft_available_externally: "false"
+
+# directories
+minecraft_data_directory: "{{ docker_home }}/minecraft"
+
+# uid / gid
+minecraft_user_id: "0"
+minecraft_group_id: "0"
+
+# network
+minecraft_hostname: "minecraft"
+minecraft_pw: "password"
+minecraft_my_port: "9999"
+minecraft_port: "25565"

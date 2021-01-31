@@ -43,6 +43,16 @@
     ###
     ### Applications
     ###
+    - role: openvpn
+      tags:
+        - openvpn
+      when: (openvpn_enabled | default(False))
+
+    - role: expressvpn
+      tags:
+        - expressvpn
+      when: (expressvpn_enabled | default(False))
+
     - role: airsonic
       tags:
         - airsonic
@@ -68,11 +78,6 @@
         - couchpotato
       when: (couchpotato_enabled | default(False))
 
-    - role: deluge
-      tags:
-        - deluge
-      when: (deluge_enabled | default(False))
-
     - role: duplicati
       tags:
         - duplicati
@@ -93,6 +98,16 @@
         - heimdall
       when: (heimdall_enabled | default(False))
 
+    - role: varken
+      tags:
+        - varken
+      when: (varken_enabled | default(False))
+
+    - role: muximux
+      tags:
+        - muximux
+      when: (muximux_enabled | default(False))
+
     - role: homeassistant
       tags:
         - homeassistant
@@ -102,11 +117,6 @@
       tags:
         - lidarr
       when: (lidarr_enabled | default(False))
-
-    - role: n8n
-      tags:
-        - n8n_enabled
-      when: (n8n_enabled | default(False))
 
     - role: netdata
       tags:
@@ -133,6 +143,11 @@
         - ombi
       when: (ombi_enabled | default(False))
 
+    - role: owncloud
+      tags:
+        - owncloud
+      when: (owncloud_enabled | default(False))
+
     - role: plex
       tags:
         - plex
@@ -143,10 +158,15 @@
         - radarr
       when: (radarr_enabled | default(False))
 
-    - role: radarr
+    - role: pushover
       tags:
-        - radarr
-      when: (radarr_enabled | default(False))
+        - pushover
+      when: (pushover_enabled | default(False))
+
+    - role: minecraft
+      tags:
+        - minecraft
+      when: (minecraft_enabled | default(False))
 
     - role: sickchill
       tags:
@@ -163,6 +183,11 @@
         - syncthing
       when: (syncthing_enabled | default(False))
 
+    - role: sabnzbd
+      tags:
+        - sabnzbd
+      when: (sabnzbd_enabled | default(False))
+
     - role: transmission
       tags:
         - transmission
@@ -178,6 +203,11 @@
         - utorrent
       when: (utorrent_enabled | default(False))
 
+    - role: pihole
+      tags:
+        - pihole
+      when: (pihole_enabled | default(False))
+
     - role: traefik
       tags:
         - traefik
@@ -187,6 +217,17 @@
       tags:
         - watchtower
       when: (watchtower_enabled | default(False))
+
+    - role: subsonic
+      tags:
+        - subsonic
+      when: (subsonic_enabled | default(False))
+
+    - role: prometheus
+      tags:
+        - prometheus
+      when: (prometheus_enabled | default(False))
+
 
   tasks:
   - import_tasks: tasks/firefly.yml
@@ -308,3 +349,15 @@
   - import_tasks: tasks/pytivo.yml
     when: (pytivo_enabled | default(False))
     tags: pytivo
+
+  - include: roles/pihole/tasks/dns.yml
+    when: (pihole_enabled | default(False))
+    tags: 
+    - pihole
+    - pihole_dns
+
+  handlers:
+  - name: 'restart prometheus'
+    docker_container:
+      name: prometheus
+      restart: yes

@@ -108,6 +108,8 @@
       - "{{ grafana_port }}:3000"
     restart_policy: unless-stopped
     memory: 1g
+    env:
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel,grafana-worldmap-panel"
     labels:
       traefik.enable: "{{ grafana_available_externally }}"
       traefik.http.routers.grafana.rule: "Host(`grafana.{{ ansible_nas_domain }}`) "

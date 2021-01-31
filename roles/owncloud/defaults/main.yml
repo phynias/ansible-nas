@@ -1,0 +1,17 @@
+---
+owncloud_enabled: false
+owncloud_available_externally: "false"
+
+# directories
+owncloud_config_directory: "{{ docker_home }}/owncloud"
+owncloud_data_directory: "{{ owncloud_config_directory }}/data"
+
+# uid / gid
+owncloud_user_id: "0"
+owncloud_group_id: "0"
+
+# network
+owncloud_port: "8080"
+owncloud_hostname: "owncloud"
+owncloud_user: "admin"
+owncloud_pass: "admin"

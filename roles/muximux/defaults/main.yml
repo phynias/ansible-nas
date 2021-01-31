@@ -1,0 +1,14 @@
+---
+muximux_enabled: false
+muximux_available_externally: "false"
+
+# directories
+muximux_data_directory: "{{ docker_home }}/muximux"
+
+# uid / gid
+muximux_user_id: "0"
+muximux_group_id: "0"
+
+# network
+muximux_port: "8082"
+muximux_hostname: "muximux"

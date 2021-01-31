@@ -1,0 +1,13 @@
+---
+varken_enabled: false
+varken_available_externally: "false"
+
+# directories
+varken_data_directory: "{{ docker_home }}/varken"
+
+# uid / gid
+varken_user_id: "0"
+varken_group_id: "0"
+
+# network
+varken_hostname: "varken"

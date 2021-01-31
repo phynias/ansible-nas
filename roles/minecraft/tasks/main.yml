@@ -1,0 +1,43 @@
+---
+- name: minecraft
+  docker_container:
+    name: minecraft
+    image: bymatej/minecraft-server
+    pull: true
+    volumes:
+      - "{{ minecraft_data_directory }}/mymcadmin:/McMyAdmin:rw"
+    ports:
+      - "{{ minecraft_my_port }}:8080"
+      - "{{ minecraft_port }}:25565"
+    stop_timeout: 30
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      PUID: "{{ minecraft_user_id }}"
+      PGID: "{{ minecraft_group_id }}"
+      MCMA_PASSWORD: "{{ minecraft_pw }}"
+      MINECRAFT_FLAVOR: "Forge"
+      MINECRAFT_VERSION: "1.16"
+      JAVA_MEMORY: "3072"
+      JAVA_GC: "-XX:+UseG1GC"
+      JAVA_CUSTOM_OPTS: "-server"
+      ENABLE_COMMAND_BLOCK: "true"
+      LEVEL_NAME: "nerdcraft"
+      MOTD: "A Minecraft server for nerds"
+      DIFFICULTY: "hard"
+      MAX_PLAYERS: "10"
+      ONLINE_MODE: "true"
+      VIEW_DISTANCE: "10"
+      MAX_BUILD_HEIGHT: "256"
+      PLAYER_IDLE_TIMEOUT: "0"
+      SNOOPER_ENABLED: "true"
+      SPAWN_PROTECTION: "16"
+      MAX_WORLD_SIZE: "29999984"
+    restart_policy: unless-stopped
+    memory: 1g
+    labels:
+      traefik.enable: "{{ minecraft_available_externally }}"
+      traefik.http.routers.minecraft.rule: "Host(`{{ minecraft_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.minecraft.tls.certresolver: "letsencrypt"
+      traefik.http.routers.minecraft.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.minecraft.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.minecraft.loadbalancer.server.port: "7878"

@@ -1,0 +1,17 @@
+---
+- name: pushover
+  docker_container:
+    name: pushover
+    image: phynias/docker-events-pushover
+    pull: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    env:
+      PUSHOVER_TOKEN: "{{ pushover_token }}"
+      PUSHOVER_KEY: "{{ pushover_key }}"
+      EVENTS: "{{ pushover_events }}"
+      LIMIT_ALL: "{{ pushover_limit_all | default(0) }}"
+      LIMIT_PER: "{{ pushover_limit_per | default(0) }}"
+      LIMIT_FLUSH: "{{ pushover_flush | default(0) }}"
+    restart_policy: unless-stopped
+    memory: 64m

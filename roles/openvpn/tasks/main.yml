@@ -1,0 +1,28 @@
+---
+- name: OpenVPN
+  docker_container:
+    name: openvpn
+    image: dperson/openvpn-client:latest
+    pull: true
+    capabilities:
+      - NET_ADMIN
+    security_opts:
+      - label:disable
+    restart_policy: unless-stopped
+    volumes:
+      - "{{ openvpn_config_directory }}:/vpn"
+      - "/dev/net/tun:/dev/net/tun:z"
+    ports:
+      - "9090:9090"
+    memory: "{{ openvpn_memory }}"
+    env:
+      TZ: 'America/Los_Angeles'
+    tty: yes
+    interactive: yes
+    devices:
+      - "/dev/net/tun:/dev/net/tun"
+    tmpfs:
+      - /run
+      - /tmp
+    dns_servers:
+      - 1.1.1.1

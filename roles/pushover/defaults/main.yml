@@ -1,0 +1,13 @@
+---
+pushover_enabled: false
+pushover_available_externally: "false"
+
+pushover_user_id: "0"
+pushover_group_id: "0"
+
+# network
+pushover_hostname: "pushover"
+
+pushover_events: "stop,kill,destroy"
+pushover_token: ""
+pushcer_key: ""

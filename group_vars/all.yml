@@ -306,6 +306,7 @@ homebridge_port: "8087"
 ###
 ### Tautulli
 ###
+tautulli_hostname: "tautulli"
 tautulli_available_externally: "false"
 tautulli_config_directory: "{{ docker_home }}/tautulli/config"
 tautulli_user_id: "0"
@@ -338,7 +339,7 @@ youtubedlmaterial_port_http: "8998"
 ###
 ### OpenVPN
 ###
-openvpn_config_directory: "{{ docker_home }}/openvpn"
+openvpn_config_directory: "{{ docker_home }}/openvpn/config"
 
 
 ###
@@ -375,6 +376,7 @@ gitlab_port_ssh: "422"
 ###
 ### Glances
 ###
+glances_hostname: "glances"
 glances_available_externally: "false"
 glances_port_one: "61208"
 glances_port_two: "61209"
