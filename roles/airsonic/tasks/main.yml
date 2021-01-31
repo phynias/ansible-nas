@@ -6,27 +6,50 @@
     # mode: 0755
   with_items:
     - "{{ airsonic_data_directory }}/data"
-    - "{{ airsonic_data_directory }}/playlists"
 
 - name: Airsonic Docker Container
   docker_container:
     name: airsonic
-    image: airsonic/airsonic:latest
+    image: linuxserver/airsonic:latest
     pull: true
     volumes:
-      - "{{ airsonic_data_directory }}/data:/airsonic/data:rw"
-      - "{{ airsonic_data_directory }}/playlists:/airsonic/playlists:rw"
-      - "{{ airsonic_music_directory }}:/airsonic/music:rw"
-      - "{{ airsonic_podcasts_directory }}:/airsonic/podcasts:rw"
+      - "{{ airsonic_data_directory }}/data:/config:rw"
+      - "{{ airsonic_playlist_directory }}:/playlists:rw"
+      - "{{ airsonic_music_directory }}:/music:rw"
+      - "{{ airsonic_books_directory }}:/books:rw"
+      - "{{ airsonic_podcasts_directory }}:/podcasts:rw"
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      PUID: "{{ airsonic_user_id }}"
+      PGID: "{{ airsonic_group_id }}"
     ports:
       - "{{ airsonic_port }}:4040"
     restart_policy: unless-stopped
     memory: 1g
     labels:
       traefik.enable: "{{ airsonic_available_externally }}"
+      traefik.passHostHeader: "true"
       traefik.http.routers.airsonic.rule: "Host(`{{ airsonic_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.airsonic.tls.certresolver: "letsencrypt"
       traefik.http.routers.airsonic.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.airsonic.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.airsonic.loadbalancer.server.port: "4040"
+
+- name: airsonic-frontend
+  docker_container:
+    name: airsonic-frontend
+    image: tamland/airsonic-frontend:latest
+    pull: true
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      SERVER_URL: "https://{{ airsonic_hostname }}.{{ ansible_nas_domain }}"
+    ports:
+      - "{{ airsonic_fe_port }}:80"
+    restart_policy: unless-stopped
+    memory: 256m
+    labels:
+      traefik.enable: "true"
+      traefik.passHostHeader: "true"
+      traefik.http.routers.sonicfe.rule: "Host(`{{ airsonic_fe_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.services.sonicfe.loadbalancer.server.port: "80"
 

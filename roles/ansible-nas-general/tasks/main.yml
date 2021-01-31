@@ -10,7 +10,10 @@
   changed_when: "'distribution component enabled for all sources' in add_repo_result.stdout"
   until: add_repo_result.rc == 0
   retries: 3
+  ignore_errors: yes
   delay: 1
+
+- debug: var=add_repo_result
 
 - name: Update apt-cache
   apt:
@@ -44,12 +47,12 @@
   timezone:
     name: "{{ ansible_nas_timezone }}"
 
-- name: "Permission share directories"
-  file:
-    path: "{{ item.path }}"
-    state: directory
-    owner: ansible-nas
-    group: ansible-nas
-    mode: "u=rwX,g=rwX,o=rX"
-    recurse: false
-  loop: "{{ samba_shares }}"
+#- name: "Permission share directories"
+#  file:
+#    path: "{{ item.path }}"
+#    state: directory
+#    owner: nasuser
+#    group: root
+#    mode: "u=rwX,g=rwX,o=rX"
+#    recurse: false
+#  loop: "{{ samba_shares }}"

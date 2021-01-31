@@ -1,0 +1,8 @@
+---
+openvpn_enabled: false
+openvpn_available_externally: "false"
+
+openvpn_memory: "512m"
+# directories
+openvpn_config_directory: "{{ docker_home }}/openvpn/config"
+openvpn_hostname: "openvpn"

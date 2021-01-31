@@ -1,0 +1,37 @@
+---
+- name: build subsonic image
+  docker_image:
+    name: subsonic
+    build:
+      path: "{{ role_path }}/files/"
+    source: build
+    state: build
+    rm: yes
+    force: yes
+
+- name: Subsonic Docker Container
+  docker_container:
+    name: subsonic
+    image: subsonic
+    volumes:
+      - "{{ music_root }}:/music:ro"
+      - "{{ books_root }}":/books:ro"
+      - "{{ playlists_root }}:/playlists"
+      - "{{ subsonic_data_directory }}:/data"
+    restart_policy: unless-stopped
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      PUID: "{{ subsonic_user_id }}"
+      PGID: "{{ subsonic_group_id }}"
+    user: "{{ subsonic_user_id }}"
+    memory: 2g
+    ports:
+      - "{{ subsonic_port }}:4040"
+    labels:
+      traefik.enable: "{{ subsonic_available_externally }}"
+      traefik.passHostHeader: "true"
+      traefik.http.routers.subsonic.rule: "Host(`{{ subsonic_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.subsonic.tls.certresolver: "letsencrypt"
+      traefik.http.routers.subsonic.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.subsonic.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.subsonic.loadbalancer.server.port: "4040"

@@ -1,0 +1,12 @@
+---
+pihole_enabled: false
+pihole_data_directory: "{{ docker_home }}/pihole"
+pihole_ip: ""
+
+# uid / gid
+pihole_user_id: "0"
+pihole_group_id: "0"
+
+# network
+pihole_port: "80"
+pihole_hostname: "pihole"

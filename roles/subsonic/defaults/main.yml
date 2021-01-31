@@ -1,0 +1,7 @@
+subsonic_available_externally: false
+subsonic_enabled: "false"
+subsonic_hostname: "sub"
+
+subsonic_user_id: "0"
+subsonic_group_id: "0"
+subsonic_port: "4040"

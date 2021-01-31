@@ -18,9 +18,10 @@ traefik_docker_image: traefik:v2.4
 traefik_log_level: "INFO"
 
 # find the relevant name and environment variables for your DNS provider at https://go-acme.github.io/lego/dns/
-traefik_dns_provider: cloudflare
+traefik_dns_provider: gcloud
 traefik_environment_variables:
-  CF_DNS_API_TOKEN: "abcdabcd123412341234"
+  GCE_PROJECT: "encoded-etching-291513"
+  GCE_SERVICE_ACCOUNT_FILE: "/etc/traefik/.google.json"
 
 # Ansible-NAS requests a wildcard certificate for your domain, so there should be no reason to have to use the staging
 # letsencrypt acme server. If you do want to flip between staging/production, you might need to stop Traefik and clear

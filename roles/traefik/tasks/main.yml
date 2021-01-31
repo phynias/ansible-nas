@@ -21,6 +21,7 @@
     network_mode: host
     volumes:
       - "{{ traefik_data_directory }}/traefik.toml:/etc/traefik/traefik.toml:ro"
+      - "{{ traefik_data_directory }}/.google.json:/etc/traefik/.google.json:ro"
       - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:rw"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     env: "{{ traefik_environment_variables }}"
