@@ -28,3 +28,20 @@
     restart_policy: unless-stopped
     capabilities:
       - NET_ADMIN
+
+- name: set custom dns list
+  template:
+    src: custom.list.j2
+    dest: "custom.list"
+    owner: nasuser
+    group: nasuser
+    mode: '0660'
+  tags:
+    - pihole
+    - pihole_dns
+
+- name: restart pihole dns
+  command: docker exec pihole bash -c 'pihole restartdns'
+  tags:
+    - pihole
+    - pihole_dns
