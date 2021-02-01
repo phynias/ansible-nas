@@ -208,6 +208,7 @@
     - role: pihole
       tags:
         - pihole
+        - pihole_dns
       when: (pihole_enabled | default(False))
 
     - role: traefik
@@ -352,11 +353,6 @@
     when: (pytivo_enabled | default(False))
     tags: pytivo
 
-  - include: roles/pihole/tasks/dns.yml
-    when: (pihole_enabled | default(False))
-    tags: 
-    - pihole
-    - pihole_dns
 
   handlers:
   - name: 'restart prometheus'
