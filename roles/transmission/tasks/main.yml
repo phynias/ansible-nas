@@ -31,3 +31,5 @@
       timeout: 5s
       retries: 2
       start_period: 90s
+    labels:
+      autoheal: "true"
