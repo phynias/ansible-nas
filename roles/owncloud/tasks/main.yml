@@ -88,6 +88,7 @@
       traefik.http.routers.owncloud.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.owncloud.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.owncloud.loadbalancer.server.port: "8080"
+      autoheal: "true"
     healthcheck:
       test: ["CMD", "/usr/bin/healthcheck"]
       interval: 30s

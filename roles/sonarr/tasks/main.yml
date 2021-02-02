@@ -15,14 +15,19 @@
       - "{{ sonarr_tv_directory }}:/tv:rw"
       - "{{ sonarr_download_directory }}:/downloads:rw"
       - "{{ sonarr_data_directory }}:/config:rw"
-    ports:
-      - "{{ sonarr_port }}:8989"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ sonarr_user_id }}"
       PGID: "{{ sonarr_group_id }}"
     restart_policy: unless-stopped
     memory: 1g
+    network_mode: "{{ 'container:' + proxy_container if sonarr_proxy else 'None' }}"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+      start_period: 90s
     labels:
       traefik.enable: "{{ sonarr_available_externally }}"
       traefik.http.routers.sonarr.rule: "Host(`{{ sonarr_hostname }}.{{ ansible_nas_domain }}`)"
@@ -30,3 +35,4 @@
       traefik.http.routers.sonarr.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.sonarr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.sonarr.loadbalancer.server.port: "8989"
+      autoheal: "true"

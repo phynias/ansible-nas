@@ -79,6 +79,7 @@ joomla_enabled: false
 # PyTivo
 pytivo_enabled: false
 
+autoheal_enabled: false
 
 ###
 ### General

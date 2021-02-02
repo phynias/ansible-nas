@@ -353,6 +353,9 @@
     when: (pytivo_enabled | default(False))
     tags: pytivo
 
+  - import_tasks: tasks/autoheal.yml
+    when: (autoheal_enabled | default(False))
+    tags: autoheal
 
   handlers:
   - name: 'restart prometheus'
