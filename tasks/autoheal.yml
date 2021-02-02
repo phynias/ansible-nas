@@ -1,0 +1,11 @@
+- name: autoheal
+  docker_container:
+    name: autoheal
+    image: willfarrell/autoheal
+    pull: true
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/etc/localtime:/etc/localtime:ro"
+    env:
+      AUTOHEAL_CONTAINER_LABEL: autoheal
+    restart_policy: unless-stopped
