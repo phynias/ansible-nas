@@ -11,15 +11,21 @@
     pull: true
     volumes:
       - "{{ lidarr_music_directory }}:/music:rw"
-      - "{{ lidarr_downloads_directory }}:/downloads:rw"
+      - "{{ lidarr_downloads_directory }}/music:/downloads/music:rw"
       - "{{ lidarr_data_directory }}:/config:rw"
-    ports:
-      - "{{ lidarr_port }}:8686"
+    network_mode: "{{ 'container:' + proxy_container if lidarr_proxy else 'None' }}"
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ lidarr_user_id }}"
       PGID: "{{ lidarr_group_id }}"
     restart_policy: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+      start_period: 90s
     memory: 1g
     labels:
       traefik.enable: "{{ lidarr_available_externally }}"
@@ -28,3 +34,4 @@
       traefik.http.routers.lidarr.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.lidarr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.lidarr.loadbalancer.server.port: "8686"
+      autoheal: "true"

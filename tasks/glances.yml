@@ -10,11 +10,13 @@
       #- "/glances.conf:/glances/conf/glances.conf"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/etc/timezone:/etc/timezone:ro"
+      - "{{ glances_data_directory }}:/glances/conf"
     pid_mode: host
     env:
       GLANCES_OPT: "-w"
     restart_policy: unless-stopped
     memory: 1g
+    privileged: true
     labels:
       traefik.enable: "{{ glances_available_externally }}"
       traefik.http.routers.glances.rule: "Host(`glances.{{ ansible_nas_domain }}`)"

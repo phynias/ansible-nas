@@ -36,6 +36,11 @@
   template:
     src: daemon.json
     dest: /etc/docker/daemon.json
+  vars:
+    dns:
+      - 192.168.1.200
+      - 1.1.1.1
+
   register: docker_config
 
 - name: Restart Docker

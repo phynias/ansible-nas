@@ -4,6 +4,9 @@ ENV SUBSONIC_VERSION=6.1.6
 ENV SUBSONIC_BIN=/opt/subsonic
 ENV SUBSONIC_HOME=/data
 
+ARG UID
+ARG GID
+
 # Download Subsonic
 ADD https://s3-eu-west-1.amazonaws.com/subsonic-public/download/subsonic-${SUBSONIC_VERSION}-standalone.tar.gz /tmp/subsonic.tar.gz
 
@@ -30,7 +33,7 @@ VOLUME [/podcasts]
 VOLUME [/playlists]
 VOLUME [/data]
 
-RUN addgroup -S subsonic -g {{ subsonic_user_id }} && adduser -u {{ subsonic_group_id }} -S subsonic -G subsonic
+RUN    addgroup -g ${GID} -S subsonic && adduser -u ${UID} -S subsonic -G subsonic
 ADD    startup.sh /startup.sh
 RUN    mkdir -p /data && chown subsonic:subsonic /data && chmod 755 /startup.sh
 RUN    chown -R subsonic:subsonic /opt/subsonic

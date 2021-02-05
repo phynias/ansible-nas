@@ -18,8 +18,16 @@
     name: traefik
     image: "{{ traefik_docker_image }}"
     pull: true
-    network_mode: host
+    command:
+      - "--providers.docker=true"
+      - " --serverstransport.insecureskipverify=true"
+    # network_mode: host
+    ports:
+     - 8083:8083
+     - 80:80
+     - 443:443
     volumes:
+      # - "--log.level=DEBUG"
       - "{{ traefik_data_directory }}/traefik.toml:/etc/traefik/traefik.toml:ro"
       - "{{ traefik_data_directory }}/.google.json:/etc/traefik/.google.json:ro"
       - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:rw"
