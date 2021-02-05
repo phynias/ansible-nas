@@ -104,16 +104,17 @@
     volumes:
       - "{{ grafana_data_directory }}/data:/var/lib/grafana:rw"
       - "{{ grafana_data_directory }}/config/provisioning:/etc/grafana/provisioning:ro"
-    ports:
-      - "{{ grafana_port }}:3000"
+    # ports:
+    #   - "{{ grafana_port }}:3000"
     restart_policy: unless-stopped
     memory: 1g
     env:
       GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel,grafana-worldmap-panel"
     labels:
       traefik.enable: "{{ grafana_available_externally }}"
-      traefik.http.routers.grafana.rule: "Host(`grafana.{{ ansible_nas_domain }}`) "
+      traefik.http.routers.grafana.rule: "Host(`{{ grafana_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.grafana.tls.certresolver: "letsencrypt"
       traefik.http.routers.grafana.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.grafana.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
-      traefik.http.grafana.netdata.loadbalancer.server.port: "3000"
+      traefik.http.services.grafana.loadbalancer.server.port: "3000"
+      autoheal: "true"

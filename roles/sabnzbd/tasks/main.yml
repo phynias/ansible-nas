@@ -14,6 +14,7 @@
       PGID: "{{ sabnzbd_group_id }}"
     restart_policy: unless-stopped
     network_mode: "{{ 'container:' + proxy_container if sabnzbd_proxy else 'None' }}"
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
     healthcheck:
       test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]
@@ -22,4 +23,11 @@
       retries: 2
       start_period: 90s
     labels:
-      autoheal: "true"
+      traefik.enable: "{{ sabnzbd_available_externally }}"
+      traefik.passHostHeader: "true"
+      traefik.http.routers.sabnzbd.rule: "Host(`{{ sabnzbd_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.sabnzbd.tls.certresolver: "letsencrypt"
+      traefik.http.routers.sabnzbd.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.sabnzbd.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.sabnzbd.loadbalancer.server.port: "8080"
+      # autoheal: "true"

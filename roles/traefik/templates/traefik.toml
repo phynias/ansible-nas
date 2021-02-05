@@ -49,3 +49,7 @@
 
       [certificatesResolvers.letsencrypt.acme.dnsChallenge]
         provider = "{{ traefik_dns_provider }}"
+
+## Static configuration
+[serversTransport]
+  insecureSkipVerify = true

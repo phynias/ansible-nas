@@ -39,8 +39,12 @@
       - "{{ heimdall_port_http }}:80"
       - "{{ heimdall_port_https }}:443"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
     labels:
       traefik.enable: "true"
       traefik.http.routers.heimdall.rule: "Host(`{{ heimdall_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.heimdall.tls.certresolver: "letsencrypt"
+      traefik.http.routers.heimdall.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.heimdall.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.heimdall.loadbalancer.server.port: "80"

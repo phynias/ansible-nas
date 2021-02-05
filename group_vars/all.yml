@@ -368,7 +368,7 @@ grafana_data_directory: "{{ docker_home }}/grafana"
 stat_collection_interval: 15s
 grafana_influxdb_port: "8086"
 grafana_port: "3000"
-
+grafana_hostname: "grafana"
 
 ###
 ### Gitlab
@@ -386,6 +386,7 @@ glances_hostname: "glances"
 glances_available_externally: "false"
 glances_port_one: "61208"
 glances_port_two: "61209"
+glances_data_directory: "{{ docker_home }}/glances/config"
 
 ###
 ### nginx
@@ -471,7 +472,7 @@ jackett_available_externally: "false"
 jackett_data_directory: "{{ docker_home }}/jackett"
 jackett_torrents_root: "{{ torrents_root }}"
 jackett_port: "9117"
-
+jackett_hostname: "jackett"
 ###
 ### The Lounge
 ###

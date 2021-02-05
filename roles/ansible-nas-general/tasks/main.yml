@@ -47,9 +47,9 @@
 
 #  - name: Configure smartmontools
 
-- name: "Set hostname to {{ ansible_nas_hostname }}"
+- name: "Set hostname to {{ ansible_nas_hostname }}.{{ ansible_nas_domain }}"
   hostname:
-    name: "{{ ansible_nas_hostname }}"
+    name: "{{ ansible_nas_hostname }}.{{ ansible_nas_domain }}"
 
 - name: "Set timezone to {{ ansible_nas_timezone }}"
   timezone:

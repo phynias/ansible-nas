@@ -27,6 +27,13 @@
         - docker
         - skip_ansible_lint
 
+    ###
+    ### needs to be towards the top
+    ###
+    - role: expressvpn
+      tags:
+        - expressvpn
+      when: (expressvpn_enabled | default(False))
 
     ###
     ### Ansible-NAS Roles
@@ -49,11 +56,6 @@
       tags:
         - openvpn
       when: (openvpn_enabled | default(False))
-
-    - role: expressvpn
-      tags:
-        - expressvpn
-      when: (expressvpn_enabled | default(False))
 
     - role: airsonic
       tags:
