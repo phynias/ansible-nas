@@ -370,6 +370,10 @@ grafana_influxdb_port: "8086"
 grafana_port: "3000"
 grafana_hostname: "grafana"
 
+zfswatcher_data_directory: "{{ docker_home }}/zfswatcher"
+zfswatcher_available_externally: "true"
+zfswatcher_hostname: "zfswatcher"
+
 ###
 ### Gitlab
 ###
@@ -516,6 +520,7 @@ mosquitto_port_b: "9001"
 ###
 ### Calibre-web
 ###
+calibre_hostname: "calibre"
 calibre_available_externally: "false"
 calibre_data_directory: "{{ docker_home }}/calibre"
 calibre_user_id: "0"

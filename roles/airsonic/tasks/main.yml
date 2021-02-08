@@ -25,9 +25,11 @@
     ports:
       - "{{ airsonic_port }}:4040"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
     labels:
       traefik.enable: "{{ airsonic_available_externally }}"
+      traefik.http.routers.airsonic.entrypoints: "web,websecure"
       traefik.passHostHeader: "true"
       traefik.http.routers.airsonic.rule: "Host(`{{ airsonic_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.airsonic.tls.certresolver: "letsencrypt"
@@ -46,6 +48,7 @@
     ports:
       - "{{ airsonic_fe_port }}:80"
     restart_policy: unless-stopped
+    recreate: "{{ template_files_result is changed }}"
     memory: 256m
     labels:
       traefik.enable: "true"

@@ -23,6 +23,7 @@
       - "{{ subsonic_playlists_directory }}:/playlists:rw"
       - "{{ subsonic_data_directory }}:/data"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ subsonic_user_id }}"
@@ -34,8 +35,10 @@
     labels:
       traefik.enable: "{{ subsonic_available_externally }}"
       traefik.passHostHeader: "true"
+      traefik.http.routers.subsonic.entrypoints: "websecure-ext"
       traefik.http.routers.subsonic.rule: "Host(`{{ subsonic_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.subsonic.tls.certresolver: "letsencrypt"
       traefik.http.routers.subsonic.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.subsonic.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.subsonic.loadbalancer.server.port: "4040"
+      com.centurylinklabs.watchtower.enable: "false"

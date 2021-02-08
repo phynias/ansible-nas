@@ -32,6 +32,7 @@
       start_period: 90s
     labels:
       traefik.enable: "{{ radarr_available_externally }}"
+      traefik.http.routers.radarr.entrypoints: "web,websecure"
       traefik.http.routers.radarr.rule: "Host(`{{ radarr_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.radarr.tls.certresolver: "letsencrypt"
       traefik.http.routers.radarr.tls.domains[0].main: "{{ ansible_nas_domain }}"

@@ -15,6 +15,7 @@
       - "{{ varken_data_directory }}:/config:rw"
       - "/etc/localtime:/etc/localtime:ro"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 512m
     links:
         - influxdb:influxdb

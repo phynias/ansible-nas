@@ -43,9 +43,11 @@
       OPENHAB_HTTP_PORT: "{{ openhab_port_http }}"
       OPENHAB_HTTPS_PORT: "{{ openhab_port_https }}"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
     labels:
       traefik.enable: "{{ openhab_available_externally }}"
+      traefik.http.routers.openhab.entrypoints: "web,websecure"
       traefik.http.routers.openhab.rule: "Host(`openhab.{{ ansible_nas_domain }}`)"
       traefik.http.routers.openhab.tls.certresolver: "letsencrypt"
       traefik.http.routers.openhab.tls.domains[0].main: "{{ ansible_nas_domain }}"

@@ -17,5 +17,6 @@
     ports:
       - "{{ get_iplayer_port }}:8181"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
 

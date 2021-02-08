@@ -13,6 +13,11 @@
     dest: "{{ traefik_data_directory }}/traefik.toml"
   register: template_config
 
+- name: Template Traefik middleware.yml
+  template:
+    src:  middleware.yml
+    dest: "{{ traefik_data_directory }}/rules/middleware.yml"
+
 - name: Traefik Docker Container
   docker_container:
     name: traefik
@@ -21,18 +26,34 @@
     command:
       - "--providers.docker=true"
       - " --serverstransport.insecureskipverify=true"
-    # network_mode: host
+      - "--traefikLogsFile=/logs/traefik.log"
+      - "--accessLogsFile=/logs/access.log"
+    network_mode: host
     ports:
      - 8083:8083
      - 80:80
      - 443:443
     volumes:
-      # - "--log.level=DEBUG"
       - "{{ traefik_data_directory }}/traefik.toml:/etc/traefik/traefik.toml:ro"
       - "{{ traefik_data_directory }}/.google.json:/etc/traefik/.google.json:ro"
       - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:rw"
+      - "{{ traefik_data_directory }}/rules:/rules:ro"
+      - "{{ traefik_data_directory }}/logs:/logs:rw"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     env: "{{ traefik_environment_variables }}"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
-    recreate: "{{ template_config is changed }}"
+    labels:
+      autoheal: "true"
+      traefik.frontend.headers.customFrameOptionsValue: "allow-from https://organizr.shazbot.one/"
+      traefik.frontend.passHostHeader: "true"
+      traefik.enable: "true"
+      traefik.http.routers.traefik.rule: "Host(`{{ traefik_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.traefik.entrypoints: "traefik"
+      traefik.http.routers.traefik.tls: "true"
+      traefik.http.services.traefik.loadbalancer.server.port: "8083"
+      traefik.http.routers.traefik.tls.certresolver: "letsencrypt"
+      traefik.http.routers.traefik.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.traefik.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+

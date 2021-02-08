@@ -19,9 +19,11 @@
     env:
       SYMFONY__ENV__DOMAIN_NAME: "https://wallabag.{{ ansible_nas_domain }}"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
     labels:
       traefik.enable: "{{ wallabag_available_externally }}"
+      traefik.http.routers.wallabag.entrypoints: "web,websecure"
       traefik.http.routers.wallabag.rule: "Host(`wallabag.{{ ansible_nas_domain }}`)"
       traefik.http.routers.wallabag.tls.certresolver: "letsencrypt"
       traefik.http.routers.wallabag.tls.domains[0].main: "{{ ansible_nas_domain }}"
