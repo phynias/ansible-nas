@@ -21,9 +21,11 @@
       PUID: "{{ nzbget_user_id }}"
       PGID: "{{ nzbget_group_id }}"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
     labels:
       traefik.enable: "{{ nzbget_available_externally }}"
+      traefik.http.routers.nzbget.entrypoints: "web,websecure"
       traefik.http.routers.nzbget.rule: "Host(`nzbget.{{ ansible_nas_domain }}`)"
       traefik.http.routers.nzbget.tls.certresolver: "letsencrypt"
       traefik.http.routers.nzbget.tls.domains[0].main: "{{ ansible_nas_domain }}"

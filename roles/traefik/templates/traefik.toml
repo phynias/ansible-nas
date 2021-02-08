@@ -2,6 +2,9 @@
   [entryPoints.web]
     address = ":80"
 
+    [entryPoints.web.forwardedHeaders]
+      insecure = true
+
   [entryPoints.web.http.redirections.entryPoint]
     to = "websecure"
 
@@ -17,6 +20,24 @@
             "*.{{ ansible_nas_domain }}"
           ]
 
+    [entryPoints.websecure.forwardedHeaders]
+      insecure = true
+
+  [entryPoints.websecure-ext]
+    address = ":{{ traefik_port_https_ext }}"
+
+      [entryPoints.websecure-ext.http.tls]
+        certResolver = "letsencrypt"
+
+        [entryPoints.websecure-ext.http.tls.domains]
+          main = "{{ ansible_nas_domain }}"
+          sans = [
+            "*.{{ ansible_nas_domain }}"
+          ]
+
+    [entryPoints.websecure-ext.forwardedHeaders]
+      insecure = true
+
   [entryPoints.traefik]
     address = ":{{ traefik_port_ui }}"
 
@@ -24,6 +45,10 @@
   providersThrottleDuration = "2s"
   [providers.docker]
     exposedbydefault = false
+
+  [providers.file]
+    directory = "/rules"
+    watch = true
 
 [metrics]
     [metrics.prometheus]

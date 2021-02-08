@@ -22,9 +22,11 @@
       PUID: "{{ tautulli_user_id }}"
       PGID: "{{ tautulli_group_id }}"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
     labels:
       traefik.enable: "{{ tautulli_available_externally }}"
+      traefik.http.routers.tautulli.entrypoints: "web,websecure"
       traefik.http.routers.tautulli.rule: "Host(`{{ tautulli_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.tautulli.tls.certresolver: "letsencrypt"
       traefik.http.routers.tautulli.tls.domains[0].main: "{{ ansible_nas_domain }}"

@@ -23,6 +23,7 @@
     name: redis
     image: webhippie/redis:latest
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     env:
       REDIS_DATABASES: "1"
     healthcheck:
@@ -38,6 +39,7 @@
     name: mariadb
     image: webhippie/mariadb:latest
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     env:
       MARIADB_ROOT_PASSWORD: "owncloud"
       MARIADB_USERNAME: "owncloud"
@@ -80,9 +82,11 @@
       OWNCLOUD_REDIS_ENABLED: "true"
       OWNCLOUD_REDIS_HOST: "redis"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
     labels:
       traefik.enable: "{{ owncloud_available_externally }}"
+      traefik.http.routers.owncloud.entrypoints: "websecure-ext"
       traefik.http.routers.owncloud.rule: "Host(`{{ owncloud_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.owncloud.tls.certresolver: "letsencrypt"
       traefik.http.routers.owncloud.tls.domains[0].main: "{{ ansible_nas_domain }}"

@@ -47,9 +47,11 @@
     capabilities:
       - NET_ADMIN
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
     labels:
       traefik.enable: "{{ transmission_openvpn_available_externally }}"
+      traefik.http.routers.transmission.entrypoints: "web,websecure"
       traefik.http.routers.transmission_openvpn.rule: "Host(`{{ transmission_openvpn_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.transmission_openvpn.tls.certresolver: "letsencrypt"
       traefik.http.routers.transmission_openvpn.tls.domains[0].main: "{{ ansible_nas_domain }}"

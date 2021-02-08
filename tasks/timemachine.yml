@@ -21,6 +21,7 @@
       - "nofile:1048576:1048576"
     network_mode: bridge
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
 
 - name: Install avahi

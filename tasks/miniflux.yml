@@ -16,6 +16,7 @@
       POSTGRES_USER: "miniflux"
       POSTGRES_PASSWORD: "supersecure"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
 
 - name: Create Miniflux container
@@ -34,9 +35,11 @@
       ADMIN_USERNAME: "{{ miniflux_admin_username }}"
       ADMIN_PASSWORD: "{{ miniflux_admin_password }}"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
     labels:
       traefik.enable: "{{ miniflux_available_externally }}"
+      traefik.http.routers.miniflux.entrypoints: "web,websecure"
       traefik.http.routers.miniflux.rule: "Host(`miniflux.{{ ansible_nas_domain }}`)"
       traefik.http.routers.miniflux.tls.certresolver: "letsencrypt"
       traefik.http.routers.miniflux.tls.domains[0].main: "{{ ansible_nas_domain }}"

@@ -14,12 +14,12 @@
       - "{{ jackett_data_directory }}:/config:rw"
       - "/etc/localtime:/etc/localtime:ro"
       - "{{ jackett_torrents_root }}:/downloads"
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ transmission_user_id }}"
       PGID: "{{ transmission_group_id }}"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     network_mode: "{{ 'container:' + proxy_container if jackett_proxy else 'None' }}"
     healthcheck:
       test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]
@@ -30,6 +30,7 @@
     labels:
       autoheal: "true"
       traefik.enable: "{{ jackett_available_externally }}"
+      traefik.http.routers.jackett.entrypoints: "web,websecure"
       traefik.http.routers.jackett.rule: "Host(`{{ jackett_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.jackett.tls.certresolver: "letsencrypt"
       traefik.http.routers.jackett.tls.domains[0].main: "{{ ansible_nas_domain }}"

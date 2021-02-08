@@ -13,4 +13,5 @@
       MINIDLNA_PORT: "8201"
     network_mode: host
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g

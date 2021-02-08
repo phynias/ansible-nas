@@ -32,7 +32,7 @@
     ###
     - role: expressvpn
       tags:
-        - expressvpn
+        - [ never, expressvpn ]
       when: (expressvpn_enabled | default(False))
 
     ###

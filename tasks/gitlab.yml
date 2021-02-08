@@ -42,9 +42,11 @@
       - "{{ gitlab_port_ssh }}:22"
     hostname: "gitlab.{{ ansible_nas_domain }}"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 4g
     labels:
       traefik.enable: "{{ gitlab_available_externally }}"
+      traefik.http.routers.gitlab.entrypoints: "web,websecure"
       traefik.http.routers.gitlab.rule: "Host(`gitlab.{{ ansible_nas_domain }}`)"
       traefik.http.routers.gitlab.tls.certresolver: "letsencrypt"
       traefik.http.routers.gitlab.tls.domains[0].main: "{{ ansible_nas_domain }}"

@@ -20,6 +20,21 @@
     name: node-exporter
     image: prom/node-exporter
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    volumes:
+      - "/:/host:ro,rslave"
+    command:
+      - "--path.rootfs=/host"
+      - "--collector.zfs"
+
+# - name: zfs_exporter
+#   docker_container:
+#     pid_mode: host
+#     pull: true
+#     name: zfs-exporter
+#     image: derekgottlieb/zfs-exporter
+#     restart_policy: unless-stopped
+#     privileged: true  
 
 - name: cadvisor
   docker_container:
@@ -30,6 +45,7 @@
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     restart_policy: unless-stopped
 
 - name: prometheus
@@ -49,6 +65,7 @@
       - "{{ prometheus_data_directory }}/data:/prometheus"
       - "{{ prometheus_data_directory }}/prometheus.yml:/etc/prometheus/prometheus.yml"
       - "{{ prometheus_data_directory }}/rules:/etc/prometheus/rules"
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     restart_policy: unless-stopped
     memory: 512m
     user: "{{ nas_uid }}:{{ nas_gid }}"
@@ -56,4 +73,5 @@
       - "grafana"
       - "node-exporter"
       - "cadvisor"
+#      - "zfs-exporter"
 

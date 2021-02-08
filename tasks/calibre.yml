@@ -21,10 +21,12 @@
     ports:
       - "{{ calibre_port }}:8083"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
     labels:
       traefik.enable: "{{ calibre_available_externally }}"
-      traefik.http.routers.calibre.rule: "Host(`calibre.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.calibre.entrypoints: "web,websecure"
+      traefik.http.routers.calibre.rule: "Host(`{{ calibre_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.calibre.tls.certresolver: "letsencrypt"
       traefik.http.routers.calibre.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.calibre.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"

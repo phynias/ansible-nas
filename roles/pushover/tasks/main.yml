@@ -14,4 +14,5 @@
       LIMIT_PER: "{{ pushover_limit_per | default(0) }}"
       LIMIT_FLUSH: "{{ pushover_flush | default(0) }}"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 64m

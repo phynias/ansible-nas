@@ -38,9 +38,11 @@
     ports:
       - "{{ guacamole_port }}:8080"
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
     labels:
       traefik.enable: "{{ guacamole_available_externally }}"
+      traefik.http.routers.guacamole.entrypoints: "web,websecure"
       traefik.http.routers.guacamole.rule: "Host(`guacamole.{{ ansible_nas_domain }}`)"
       traefik.http.routers.guacamole.tls.certresolver: "letsencrypt"
       traefik.http.routers.guacamole.tls.domains[0].main: "{{ ansible_nas_domain }}"
