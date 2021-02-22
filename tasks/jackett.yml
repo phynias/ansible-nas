@@ -27,6 +27,7 @@
       timeout: 5s
       retries: 2
       start_period: 90s 
+    memory: 256m
     labels:
       autoheal: "true"
       traefik.enable: "{{ jackett_available_externally }}"

@@ -25,6 +25,12 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     memory: 1g
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+      start_period: 90s
     labels:
       traefik.enable: "{{ bazarr_available_externally }}"
       traefik.http.routers.bazarr.entrypoints: "web,websecure"

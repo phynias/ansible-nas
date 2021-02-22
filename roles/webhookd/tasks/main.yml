@@ -1,0 +1,44 @@
+---
+- name: build webhookd image
+  docker_image:
+    name: webhookd
+    build:
+      path: "{{ role_path }}/files/"
+    buildargs:
+      UID: "{{ webhookd_user_id }}"
+      GID: "{{ webhookd_group_id }}"
+    source: build
+    state: build
+    rm: yes
+    force: yes
+
+- name: webhookd Docker Container
+  docker_container:
+    name: webhookd
+    image: webhookd
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "{{ webhookd_scripts_directory }}:/tools"
+      - "{{ webhookd_plex_directory }}:/plexserver"
+      - "{{ movies_root }}:/movies"
+      - "{{ tv_root }}:/tv"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    network_mode: "{{ 'container:' + proxy_container if webhookd_proxy else 'None' }}"
+    env:
+      WHD_LISTEN_ADDR: ":8787"
+      TZ: "{{ ansible_nas_timezone }}"
+      PUID: "{{ webhookd_user_id }}"
+      PGID: "{{ webhookd_group_id }}"
+    user: "{{ webhookd_user_id }}"
+    memory: 128m
+    command: webhookd --scripts=/tools
+    labels:
+      traefik.enable: "{{ webhookd_available_externally }}"
+      traefik.http.routers.webhookd.entrypoints: "web,websecure"
+      traefik.http.routers.webhookd.rule: "Host(`{{ webhookd_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.webhookd.tls.certresolver: "letsencrypt"
+      traefik.http.routers.webhookd.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.webhookd.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.webhookd.loadbalancer.server.port: "8787"
+      autoheal: "true"

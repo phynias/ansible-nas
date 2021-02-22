@@ -29,6 +29,7 @@
     recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     capabilities:
       - NET_ADMIN
+    memory: 256m
     labels:
       autoheal: "true"
       # traefik.enable: "{{ pihole_available_externally }}"

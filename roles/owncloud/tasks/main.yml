@@ -33,6 +33,7 @@
       retries: 5
     volumes:
       - "{{ owncloud_config_directory }}/redis:/var/lib/redis"
+    memory: 64m
 
 - name: mariadb
   docker_container:
@@ -55,6 +56,7 @@
     volumes:
       - "mysql:/var/lib/mysql:z"
       - "{{ owncloud_config_directory }}/backup:/var/lib/backup:z"
+    memory: 128m
 
 - name: owncloud
   docker_container:

@@ -16,6 +16,7 @@
       - "{{ radarr_movies_directory }}:/movies:rw"
       - "{{ radarr_download_directory }}/movies:/downloads/movies:rw"
       - "{{ radarr_data_directory }}:/config:rw"
+      - "{{ nas_root }}/tools:/tools:ro"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ radarr_user_id }}"
@@ -40,6 +41,6 @@
       traefik.http.services.radarr.loadbalancer.server.port: "7878"
       autoheal: "true"
 
-- debug: msg="{{ docker_container_output }}"
-  when: docker_container_output is defined
+#- debug: msg="{{ docker_container_output }}"
+#  when: docker_container_output is defined
 

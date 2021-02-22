@@ -22,10 +22,36 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     volumes:
-      - "/:/host:ro,rslave"
+      - "/:/rootfs:ro,rslave"
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
     command:
-      - "--path.rootfs=/host"
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--path.rootfs=/rootfs"
       - "--collector.zfs"
+      - "--collector.filesystem.ignored-mount-points"
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    memory: 64m
+
+- name: alertmanager
+  docker_container:
+    name: alertmanager
+    image: prom/alertmanager
+    ports:
+      - 9093:9093
+    volumes:
+      - "{{ prometheus_data_directory }}/alertmanager/storage:/alertmanager"
+      - "{{ prometheus_data_directory }}/alertmanager/etc:/etc/alertmanager"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+      - "--web.external-url=http://192.168.1.200:9393/"
+#      - "--web.hostname="
+    memory: 64m
+    user: "{{ nas_uid }}:{{ nas_gid }}"
 
 # - name: zfs_exporter
 #   docker_container:
@@ -47,6 +73,13 @@
       - /var/lib/docker/:/var/lib/docker:ro
     recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     restart_policy: unless-stopped
+    command:
+      - --allow_dynamic_housekeeping=true
+      - --housekeeping_interval=30s
+      - --global_housekeeping_interval=2m
+      - --disable_metrics=disk,tcp,udp
+      - --docker_only=true
+    memory: 1g
 
 - name: prometheus
   docker_container:
@@ -56,9 +89,10 @@
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
-      - --storage.tsdb.retention.time=1y
+      - "--storage.tsdb.retention.time=1y"
       - "--web.console.libraries=/usr/share/prometheus/console_libraries"
       - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--web.external-url=http://192.168.1.200:9393/"
     ports:
       - "{{ prometheus_port }}:9090"
     volumes:
@@ -67,11 +101,12 @@
       - "{{ prometheus_data_directory }}/rules:/etc/prometheus/rules"
     recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     restart_policy: unless-stopped
-    memory: 512m
+    memory: 1g
     user: "{{ nas_uid }}:{{ nas_gid }}"
     links:
       - "grafana"
       - "node-exporter"
       - "cadvisor"
+      - "alertmanager"
 #      - "zfs-exporter"
 

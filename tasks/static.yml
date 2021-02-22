@@ -1,0 +1,25 @@
+- name: Create static Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ static_data_directory }}/files"
+
+- name: Create static container
+  docker_container:
+    name: static
+    image: nginx
+    pull: true
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    memory: 128m
+    volumes:
+      - "{{ static_data_directory }}/files:/usr/share/nginx/html:ro"
+    labels:
+      traefik.enable: "{{ static_available_externally }}"
+      traefik.http.routers.static.entrypoints: "web,websecure"
+      traefik.http.routers.static.rule: "Host(`static.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.static.tls.certresolver: "letsencrypt"
+      traefik.http.routers.static.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.static.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.static.loadbalancer.server.port: "80"
