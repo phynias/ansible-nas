@@ -23,7 +23,7 @@
       PGID: "{{ tautulli_group_id }}"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate | default('no') }}"
-    memory: 1g
+    memory: 256m
     labels:
       traefik.enable: "{{ tautulli_available_externally }}"
       traefik.http.routers.tautulli.entrypoints: "web,websecure"

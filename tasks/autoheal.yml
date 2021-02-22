@@ -9,3 +9,4 @@
     env:
       AUTOHEAL_CONTAINER_LABEL: autoheal
     restart_policy: unless-stopped
+    memory: 64m

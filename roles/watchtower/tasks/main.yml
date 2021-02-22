@@ -10,4 +10,5 @@
       TZ: "{{ ansible_nas_timezone }}"
     command: "{{ watchtower_command }}"
     restart_policy: unless-stopped
-    memory: 1g
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    memory: 32m

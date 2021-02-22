@@ -18,5 +18,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY entrypoint.sh /tmp/entrypoint.sh
 COPY expressvpnActivate.sh /tmp/expressvpnActivate.sh
-
+RUN expressvpn preferences set send_diagnostics false
 ENTRYPOINT ["/bin/bash", "/tmp/entrypoint.sh"]

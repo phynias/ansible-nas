@@ -3,11 +3,8 @@ global:
   scrape_timeout: 10s
   evaluation_interval: 15s
 rule_files:
-- /etc/prometheus/rules/*.yaml
+- /etc/prometheus/rules/*.yml
 scrape_configs:
-- job_name: 'zfs'
-  static_configs:
-  - targets: ['[::1]:9312']
 - job_name: prometheus
   honor_timestamps: true
   scrape_interval: 15s
@@ -43,7 +40,7 @@ scrape_configs:
   scheme: http
   static_configs:
   - targets:
-    - traefik:8080
+    - traefik:8083
 - job_name: cadvisor
   honor_timestamps: true
   scrape_interval: 15s
@@ -53,12 +50,8 @@ scrape_configs:
   static_configs:
   - targets:
     - cadvisor:8080
-- job_name: 'local_traefik'
-  scrape_interval: 15s
-  scrape_timeout: 10s
-  metrics_path: /metrics
-  scheme: http
-  static_configs:
-  - targets:
-    - 192.168.1.200:8083
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets: ['alertmanager:9093']
 

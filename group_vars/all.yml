@@ -329,7 +329,7 @@ mylar_downloads_directory: "{{ downloads_root }}"
 mylar_port_http: "8585"
 mylar_user_id: "0"
 mylar_group_id: "0"
-
+mylar_hostname: "mylar"
 
 ###
 ### YouTubeDL-Material
@@ -357,6 +357,13 @@ znc_user_id: "0"
 znc_group_id: "0"
 znc_port: "6677"
 
+###
+### static
+###
+static_enabled: false
+static_available_externally: "false"
+static_data_directory: "{{ docker_home }}/static"
+static_hostname: "static"
 
 ###
 ### Stats
@@ -572,6 +579,7 @@ ubooquity_user_id: "0"
 ubooquity_group_id: "0"
 ubooquity_port_webui: "2202"
 ubooquity_port_admin: "2203"
+ubooquity_hostname: "ub"
 
 ###
 ### Virtual Desktop

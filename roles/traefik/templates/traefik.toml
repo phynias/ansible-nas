@@ -78,3 +78,6 @@
 ## Static configuration
 [serversTransport]
   insecureSkipVerify = true
+
+[accessLog]
+  filePath = "/logs/access.log"
