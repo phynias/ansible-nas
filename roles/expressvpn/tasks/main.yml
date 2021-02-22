@@ -1,0 +1,43 @@
+---
+- name: ExpressVPN
+  docker_container:
+    name: expressvpn
+    image: misioslav/expressvpn:latest
+    capabilities:
+      - NET_ADMIN
+    restart_policy: unless-stopped
+    dns_servers:
+      - 1.1.1.1
+    volumes:
+      - "/dev/net/tun:/dev/net/tun:z"
+    ports:
+      - 51413:51413
+      - 51413:51413/udp
+    memory: 1g
+    etc_hosts: >
+      { 
+        "{{ sabnzbd_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
+        "{{ transmission_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
+        "{{ jackett_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
+        "{{ bazarr_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
+        "{{ sonarr_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
+        "{{ radarr_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
+        "{{ lidarr_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
+        "{{ mylar_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
+        "{{ webhookd_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
+        "{{ static_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
+        "{{ plex_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}"
+      }
+    env:
+      SERVER: "SMART"
+      CODE: "{{ secret.expressvpn_code }}"
+      DDSN: "{{ }}"
+    tty: yes
+    interactive: yes
+    devices:
+      - "/dev/net/tun:/dev/net/tun"
+    privileged: true
+    labels:
+      autoheal: "true"
+
+
