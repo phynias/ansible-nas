@@ -116,6 +116,21 @@
         - homeassistant
       when: (homeassistant_enabled | default(False))
 
+    - role: sabnzbd
+      tags:
+        - sabnzbd
+      when: (sabnzbd_enabled | default(False))
+
+    - role: transmission
+      tags:
+        - transmission
+      when: (transmission_enabled | default(False))
+
+    - role: transmission-with-openvpn
+      tags:
+        - transmission_with_openvpn_enabled
+      when: (transmission_with_openvpn_enabled | default(False))
+
     - role: lidarr
       tags:
         - lidarr
@@ -156,11 +171,6 @@
         - plex
       when: (plex_enabled | default(False))
 
-    - role: papermerge
-      tags:
-        - papermerge
-      when: (papermerge_enabled | default(False))
-
     - role: radarr
       tags:
         - radarr
@@ -190,21 +200,6 @@
       tags:
         - syncthing
       when: (syncthing_enabled | default(False))
-
-    - role: sabnzbd
-      tags:
-        - sabnzbd
-      when: (sabnzbd_enabled | default(False))
-
-    - role: transmission
-      tags:
-        - transmission
-      when: (transmission_enabled | default(False))
-
-    - role: transmission-with-openvpn
-      tags:
-        - transmission_with_openvpn_enabled
-      when: (transmission_with_openvpn_enabled | default(False))
 
     - role: utorrent
       tags:
@@ -241,6 +236,11 @@
       tags:
         - webhookd
       when: (webhookd_enabled | default(False))
+
+    - role: papermerge
+      tags:
+        - papermerge
+      when: (papermerge_enabled | default(False))
 
   tasks:
   - import_tasks: tasks/firefly.yml
@@ -294,6 +294,10 @@
   - import_tasks: tasks/static.yml
     when: (static_enabled | default(False))
     tags: static
+
+  - import_tasks: tasks/google-ddns.yml
+    when: (gddns_enabled | default(False))
+    tags: google-ddns
 
   - import_tasks: tasks/guacamole.yml
     when: (guacamole_enabled | default(False))

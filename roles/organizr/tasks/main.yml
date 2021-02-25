@@ -25,9 +25,10 @@
     memory: 256m
     labels:
       traefik.enable: "{{ organizr_available_externally }}"
-      traefik.http.routers.orginizr.entrypoints: "web,websecure"
+      traefik.http.routers.organizr.entrypoints: "web,websecure"
       traefik.http.routers.organizr.rule: "Host(`{{ organizr_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.organizr.tls.certresolver: "letsencrypt"
       traefik.http.routers.organizr.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.organizr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.organizr.loadbalancer.server.port: "80"
+      autoheal: "true"

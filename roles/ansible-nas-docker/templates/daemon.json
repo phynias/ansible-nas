@@ -1,3 +1,9 @@
 {
-  "dns" : ["{{ dns|join('", "') }}"]
+  "dns" : ["{{ dns|join('", "') }}"],
+  "debug" : false,
+  "log-driver": "loki",
+  "log-opts": {
+    "loki-url": "http://{{ nas_ip }}:3100/loki/api/v1/push",
+    "loki-batch-size": "400"
+  }
 }

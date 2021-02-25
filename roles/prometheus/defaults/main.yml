@@ -12,3 +12,6 @@ prometheus_group_id: "0"
 # network
 prometheus_hostname: "prometheus"
 prometheus_port: 9393
+
+loki_available_externally: "false"
+loki_hostname: "loki"
