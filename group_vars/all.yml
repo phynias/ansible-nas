@@ -357,6 +357,9 @@ znc_user_id: "0"
 znc_group_id: "0"
 znc_port: "6677"
 
+gddns_enabled: false
+gddns_data_directory: "{{ docker_home }}/gddns"
+
 ###
 ### static
 ###

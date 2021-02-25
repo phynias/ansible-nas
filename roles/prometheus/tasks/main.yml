@@ -22,6 +22,7 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     volumes:
+      - "/etc/timezone:/etc/timezone:ro"
       - "/:/rootfs:ro,rslave"
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -41,6 +42,7 @@
     ports:
       - 9093:9093
     volumes:
+      - "/etc/timezone:/etc/timezone:ro"
       - "{{ prometheus_data_directory }}/alertmanager/storage:/alertmanager"
       - "{{ prometheus_data_directory }}/alertmanager/etc:/etc/alertmanager"
     restart_policy: unless-stopped
@@ -67,6 +69,7 @@
     image: gcr.io/google-containers/cadvisor
     name: cadvisor
     volumes:
+      - "/etc/timezone:/etc/timezone:ro"
       - /:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
@@ -80,6 +83,46 @@
       - --disable_metrics=disk,tcp,udp
       - --docker_only=true
     memory: 1g
+
+- name: loki
+  docker_container:
+    name: loki
+    pull: true
+    image: grafana/loki
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    restart_policy: unless-stopped
+    command: 
+      - "-config.file=/etc/loki/loki-local-config.yaml"
+    ports:
+      - "3100:3100"
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "{{ prometheus_data_directory }}/loki/data:/data/loki"
+      - "{{ prometheus_data_directory }}/loki/etc/loki-local-config.yaml:/etc/loki/loki-local-config.yaml"
+    user: "{{ nas_uid }}:{{ nas_gid }}"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-S", "http://localhost:3100/ready"]
+      start_period: 1m
+    labels:
+      autoheal: "true"
+
+- name: promtail
+  docker_container:
+    name: promtail
+    pull: true
+    image: grafana/promtail
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    restart_policy: unless-stopped
+    command: 
+      - "-config.file=/mnt/config/promtail-config.yaml"
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/zpool1/docker/traefik/logs/:/logs/traefik"
+      - "{{ prometheus_data_directory }}/promtail/etc/promtail-config.yaml:/mnt/config/promtail-config.yaml"
+      - "{{ prometheus_data_directory }}/promtail/cache:/cache"
+    user: "{{ nas_uid }}:{{ nas_gid }}"
+    labels:
+      autoheal: "true"
 
 - name: prometheus
   docker_container:
@@ -96,17 +139,20 @@
     ports:
       - "{{ prometheus_port }}:9090"
     volumes:
+      - "/etc/timezone:/etc/timezone:ro"
       - "{{ prometheus_data_directory }}/data:/prometheus"
       - "{{ prometheus_data_directory }}/prometheus.yml:/etc/prometheus/prometheus.yml"
       - "{{ prometheus_data_directory }}/rules:/etc/prometheus/rules"
     recreate: "{{ 'yes' if docker_recreate | default('no') }}"
     restart_policy: unless-stopped
     memory: 1g
-    user: "{{ nas_uid }}:{{ nas_gid }}"
     links:
       - "grafana"
       - "node-exporter"
       - "cadvisor"
       - "alertmanager"
-#      - "zfs-exporter"
+      - "loki"
+    user: "{{ nas_uid }}:{{ nas_gid }}"
+    labels:
+      autoheal: "true"
 

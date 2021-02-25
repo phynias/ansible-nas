@@ -1,0 +1,12 @@
+---
+- name: Create google-ddns container
+  docker_container:
+    name: google-ddns
+    image: dragoncube/google-domains-ddns
+    pull: true
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    memory: 32m
+    volumes:
+      - "{{ gddns_data_directory }}:/config"
+      - "/etc/localtime:/etc/localtime"
