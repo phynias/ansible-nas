@@ -19,7 +19,7 @@
       PUID: "{{ transmission_user_id }}"
       PGID: "{{ transmission_group_id }}"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     network_mode: "{{ 'container:' + proxy_container if jackett_proxy else 'None' }}"
     healthcheck:
       test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]

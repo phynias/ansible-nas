@@ -25,7 +25,7 @@
     ports:
       - "{{ airsonic_port }}:4040"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     labels:
       traefik.enable: "{{ airsonic_available_externally }}"
@@ -48,7 +48,7 @@
     ports:
       - "{{ airsonic_fe_port }}:80"
     restart_policy: unless-stopped
-    recreate: "{{ template_files_result is changed }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 256m
     labels:
       traefik.enable: "true"

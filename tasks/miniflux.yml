@@ -16,7 +16,7 @@
       POSTGRES_USER: "miniflux"
       POSTGRES_PASSWORD: "supersecure"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
 
 - name: Create Miniflux container
@@ -35,7 +35,7 @@
       ADMIN_USERNAME: "{{ miniflux_admin_username }}"
       ADMIN_PASSWORD: "{{ miniflux_admin_password }}"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     labels:
       traefik.enable: "{{ miniflux_available_externally }}"

@@ -27,5 +27,5 @@
       - "{{ vd_rdp_port }}:3389"
     privileged: true
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 2g

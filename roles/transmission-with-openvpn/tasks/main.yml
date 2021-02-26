@@ -47,7 +47,7 @@
     capabilities:
       - NET_ADMIN
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     labels:
       traefik.enable: "{{ transmission_openvpn_available_externally }}"

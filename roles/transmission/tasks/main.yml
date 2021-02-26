@@ -27,7 +27,7 @@
       CRONDATE: "daily"
       TR_CURL_SSL_NO_VERIFY: "1"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     network_mode: "{{ 'container:' + proxy_container if sabnzbd_proxy else 'None' }}"
     memory: 1g
     healthcheck:

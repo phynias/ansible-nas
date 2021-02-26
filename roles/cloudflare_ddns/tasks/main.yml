@@ -24,4 +24,4 @@
       - "{{ cloudflare_data_directory }}/config.yml:/app/config.yaml"
     restart_policy: unless-stopped
     memory: 512MB
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"

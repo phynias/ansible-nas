@@ -21,7 +21,7 @@
       PUID: "{{ nzbget_user_id }}"
       PGID: "{{ nzbget_group_id }}"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     labels:
       traefik.enable: "{{ nzbget_available_externally }}"

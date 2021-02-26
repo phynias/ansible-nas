@@ -23,7 +23,7 @@
       UID: "{{ pyload_user_id }}"
       GID: "{{ pyload_group_id }}"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     labels:
       traefik.enable: "{{ pyload_available_externally }}"

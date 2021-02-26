@@ -29,7 +29,7 @@
       ALLOW_CONFIG_MUTATIONS: "true"
       TZ: "{{ ansible_nas_timezone }}"
     restart_policy: always
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     labels:
       traefik.enable: "{{ youtubedlmaterial_available_externally }}"

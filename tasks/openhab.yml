@@ -43,7 +43,7 @@
       OPENHAB_HTTP_PORT: "{{ openhab_port_http }}"
       OPENHAB_HTTPS_PORT: "{{ openhab_port_https }}"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     labels:
       traefik.enable: "{{ openhab_available_externally }}"

@@ -20,7 +20,7 @@
       MYSQL_PASSWORD: "{{ nextcloud_sql_pass }}"
       MYSQL_ROOT_PASSWORD: "{{ nextcloud_sql_secret }}"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
 
 - name: Nextcloud Docker Container
@@ -41,7 +41,7 @@
       MYSQL_PASSWORD: "{{ nextcloud_sql_pass }}"
       NEXTCLOUD_TRUSTED_DOMAINS: "{{ nextcloud_hostname }}.{{ ansible_nas_domain }}"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     labels:
       traefik.enable: "{{ nextcloud_available_externally }}"

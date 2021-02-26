@@ -14,7 +14,7 @@
       - "{{ lidarr_downloads_directory }}/music:/downloads/music:rw"
       - "{{ lidarr_data_directory }}:/config:rw"
     network_mode: "{{ 'container:' + proxy_container if lidarr_proxy else 'None' }}"
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ lidarr_user_id }}"

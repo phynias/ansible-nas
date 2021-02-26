@@ -17,7 +17,7 @@
       - "{{ n8n_data_directory }}:/home/node/.n8n:rw"
       - "/etc/timezone:/etc/timezone:ro"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     env:
       N8N_BASIC_AUTH_ACTIVE: "true"

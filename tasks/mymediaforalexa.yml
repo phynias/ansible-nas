@@ -16,6 +16,6 @@
       - "{{ mymediaforalexa_data_directory }}:/datadir:rw"
     network_mode: host
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
 

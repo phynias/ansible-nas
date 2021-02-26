@@ -11,7 +11,7 @@
     image: nginx
     pull: true
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 128m
     volumes:
       - "{{ static_data_directory }}/files:/usr/share/nginx/html:ro"

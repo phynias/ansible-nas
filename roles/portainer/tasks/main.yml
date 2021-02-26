@@ -18,7 +18,7 @@
     ports:
       - "{{ portainer_port }}:9000"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 64m
     labels:
       traefik.enable: "{{ portainer_available_externally }}"

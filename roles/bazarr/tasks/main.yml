@@ -23,7 +23,7 @@
       PUID: "{{ bazarr_user_id }}"
       PGID: "{{ bazarr_group_id }}"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     healthcheck:
       test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]

@@ -32,7 +32,7 @@
     ports:
       - "{{ grafana_influxdb_port }}:8086"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:
       INFLUXDB_LOGGING_LEVEL: "error"
     memory: 1g
@@ -44,7 +44,7 @@
     pull: true
     privileged: true
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:
       HDDTEMP_ARGS: "-q -d -F /dev/sd*"
       TZ: "{{ ansible_nas_timezone }}"
@@ -81,7 +81,7 @@
       HOST_RUN: "/hostfs/run"
       HOST_MOUNT_PREFIX: "/hostfs"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
 
 - name: Template grafana.ini
@@ -116,7 +116,7 @@
     # ports:
     #   - "{{ grafana_port }}:3000"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     env:
       GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel,grafana-worldmap-panel"
@@ -145,7 +145,7 @@
     devices:
       - /dev/zfs:/dev/zfs:rw
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 32m
     labels:
       traefik.enable: "{{ zfswatcher_available_externally }}"

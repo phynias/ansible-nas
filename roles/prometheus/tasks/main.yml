@@ -20,7 +20,7 @@
     name: node-exporter
     image: prom/node-exporter
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "/:/rootfs:ro,rslave"
@@ -46,7 +46,7 @@
       - "{{ prometheus_data_directory }}/alertmanager/storage:/alertmanager"
       - "{{ prometheus_data_directory }}/alertmanager/etc:/etc/alertmanager"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
@@ -74,7 +74,7 @@
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     restart_policy: unless-stopped
     command:
       - --allow_dynamic_housekeeping=true
@@ -89,7 +89,7 @@
     name: loki
     pull: true
     image: grafana/loki
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     restart_policy: unless-stopped
     command: 
       - "-config.file=/etc/loki/loki-local-config.yaml"
@@ -111,7 +111,7 @@
     name: promtail
     pull: true
     image: grafana/promtail
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     restart_policy: unless-stopped
     command: 
       - "-config.file=/mnt/config/promtail-config.yaml"
@@ -143,7 +143,7 @@
       - "{{ prometheus_data_directory }}/data:/prometheus"
       - "{{ prometheus_data_directory }}/prometheus.yml:/etc/prometheus/prometheus.yml"
       - "{{ prometheus_data_directory }}/rules:/etc/prometheus/rules"
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     restart_policy: unless-stopped
     memory: 1g
     links:

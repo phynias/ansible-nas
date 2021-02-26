@@ -28,7 +28,7 @@
       traefik.hub.port: "bitwarden_port_b"
       traefik.hub.protocol: "ws"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     #memory: 1g
 
 - name: Bitwarden Backup Container
@@ -37,6 +37,6 @@
     image: bruceforce/bw_backup:latest
     pull: true
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     volumes_from: bitwarden
     memory: 1g

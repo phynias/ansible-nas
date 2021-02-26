@@ -22,7 +22,7 @@
       PUID: "{{ tautulli_user_id }}"
       PGID: "{{ tautulli_group_id }}"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 256m
     labels:
       traefik.enable: "{{ tautulli_available_externally }}"

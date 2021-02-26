@@ -29,10 +29,10 @@
       - "--serverstransport.insecureskipverify=true"
       - "--traefikLogsFile=/logs/traefik.log"
     network_mode: host
-    ports:
-     - 8083:8083
-     - 80:80
-     - 443:443
+#    ports:
+#     - 8083:8083
+#     - 80:80
+#     - 443:443
     volumes:
       - "{{ traefik_data_directory }}/traefik.toml:/etc/traefik/traefik.toml:ro"
       - "{{ traefik_data_directory }}/.google.json:/etc/traefik/.google.json:ro"
@@ -43,8 +43,9 @@
       - "/etc/timezone:/etc/timezone:ro"
     env: "{{ traefik_environment_variables }}"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
+    force_kill: true
     labels:
       autoheal: "true"
       traefik.frontend.headers.customFrameOptionsValue: "allow-from https://organizr.shazbot.one/"

@@ -21,7 +21,7 @@
     ports:
       - "{{ calibre_port }}:8083"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     labels:
       traefik.enable: "{{ calibre_available_externally }}"

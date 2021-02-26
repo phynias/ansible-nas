@@ -51,6 +51,17 @@
     ###
     ### Applications
     ###
+    - role: traefik
+      tags:
+        - traefik
+      when: (traefik_enabled | default(False))
+
+    - role: pihole
+      tags:
+        - pihole
+        - pihole_dns
+      when: (pihole_enabled | default(False))
+
     - role: openvpn
       tags:
         - openvpn
@@ -206,11 +217,6 @@
         - utorrent
       when: (utorrent_enabled | default(False))
 
-    - role: traefik
-      tags:
-        - traefik
-      when: (traefik_enabled | default(False))
-
     - role: watchtower
       tags:
         - watchtower
@@ -225,12 +231,6 @@
       tags:
         - prometheus
       when: (prometheus_enabled | default(False))
-
-    - role: pihole
-      tags:
-        - pihole
-        - pihole_dns
-      when: (pihole_enabled | default(False))
      
     - role: webhookd
       tags:

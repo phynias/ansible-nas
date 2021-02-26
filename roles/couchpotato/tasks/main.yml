@@ -24,7 +24,7 @@
       PUID: "{{ couchpotato_user_id }}"
       PGID: "{{ couchpotato_group_id }}"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     labels:
       traefik.enable: "{{ couchpotato_available_externally }}"

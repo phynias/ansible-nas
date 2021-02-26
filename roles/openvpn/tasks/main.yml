@@ -9,7 +9,7 @@
     security_opts:
       - label:disable
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     volumes:
       - "{{ openvpn_config_directory }}:/vpn"
       - "/dev/net/tun:/dev/net/tun:z"

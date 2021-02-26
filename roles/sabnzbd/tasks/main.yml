@@ -13,7 +13,7 @@
       PUID: "{{ sabnzbd_user_id }}"
       PGID: "{{ sabnzbd_group_id }}"
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate | default('no') }}"
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     network_mode: "{{ 'container:' + proxy_container if sabnzbd_proxy else 'None' }}"
     memory: 1.5g
     healthcheck:
