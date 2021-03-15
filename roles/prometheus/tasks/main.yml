@@ -21,6 +21,7 @@
     image: prom/node-exporter
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    force_kill: true
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "/:/rootfs:ro,rslave"
@@ -47,6 +48,7 @@
       - "{{ prometheus_data_directory }}/alertmanager/etc:/etc/alertmanager"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    force_kill: true
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
@@ -75,6 +77,7 @@
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    force_kill: true
     restart_policy: unless-stopped
     command:
       - --allow_dynamic_housekeeping=true
@@ -84,27 +87,28 @@
       - --docker_only=true
     memory: 1g
 
-- name: loki
-  docker_container:
-    name: loki
-    pull: true
-    image: grafana/loki
-    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-    restart_policy: unless-stopped
-    command: 
-      - "-config.file=/etc/loki/loki-local-config.yaml"
-    ports:
-      - "3100:3100"
-    volumes:
-      - "/etc/timezone:/etc/timezone:ro"
-      - "{{ prometheus_data_directory }}/loki/data:/data/loki"
-      - "{{ prometheus_data_directory }}/loki/etc/loki-local-config.yaml:/etc/loki/loki-local-config.yaml"
-    user: "{{ nas_uid }}:{{ nas_gid }}"
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-S", "http://localhost:3100/ready"]
-      start_period: 1m
-    labels:
-      autoheal: "true"
+#- name: loki
+#  docker_container:
+#    name: loki
+#    pull: true
+#    image: grafana/loki
+#    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+#    force_kill: true
+#    restart_policy: unless-stopped
+#    command: 
+#      - "-config.file=/etc/loki/loki-local-config.yaml"
+#    ports:
+#      - "3100:3100"
+#    volumes:
+#      - "/etc/timezone:/etc/timezone:ro"
+#      - "{{ prometheus_data_directory }}/loki/data:/data/loki"
+#      - "{{ prometheus_data_directory }}/loki/etc/loki-local-config.yaml:/etc/loki/loki-local-config.yaml"
+#    user: "{{ nas_uid }}:{{ nas_gid }}"
+#    healthcheck:
+#      test: ["CMD", "wget", "--spider", "-S", "http://localhost:3100/ready"]
+#      start_period: 1m
+#    labels:
+#      autoheal: "true"
 
 - name: promtail
   docker_container:
@@ -112,6 +116,7 @@
     pull: true
     image: grafana/promtail
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    force_kill: true
     restart_policy: unless-stopped
     command: 
       - "-config.file=/mnt/config/promtail-config.yaml"
@@ -144,14 +149,15 @@
       - "{{ prometheus_data_directory }}/prometheus.yml:/etc/prometheus/prometheus.yml"
       - "{{ prometheus_data_directory }}/rules:/etc/prometheus/rules"
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    force_kill: true
     restart_policy: unless-stopped
     memory: 1g
     links:
       - "grafana"
       - "node-exporter"
       - "cadvisor"
+#      - "loki"
       - "alertmanager"
-      - "loki"
     user: "{{ nas_uid }}:{{ nas_gid }}"
     labels:
       autoheal: "true"

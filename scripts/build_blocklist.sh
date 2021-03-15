@@ -7,4 +7,4 @@ curl -s https://www.iblocklist.com/lists.json | \
     egrep -v '^#' | \
     gzip > /zpool1/docker/static/files/blocklist.gz && \
     chown nasuser.nasuser /zpool1/docker/static/files/blocklist.gz && \
-    cmod 664 /zpool1/docker/static/files/blocklist.gz
+    chmod 664 /zpool1/docker/static/files/blocklist.gz

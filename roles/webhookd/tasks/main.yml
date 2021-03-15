@@ -32,6 +32,12 @@
       PGID: "{{ webhookd_group_id }}"
     user: "{{ webhookd_user_id }}"
     memory: 128m
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+      start_period: 90s
     command: webhookd --scripts=/tools
     labels:
       traefik.enable: "{{ webhookd_available_externally }}"

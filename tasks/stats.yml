@@ -119,7 +119,7 @@
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     env:
-      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel,grafana-worldmap-panel"
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel,grafana-worldmap-panel,camptocamp-prometheus-alertmanager-datasource"
     labels:
       traefik.enable: "{{ grafana_available_externally }}"
       traefik.http.routers.grafana.entrypoints: "web,websecure"
