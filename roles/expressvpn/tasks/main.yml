@@ -39,5 +39,5 @@
     privileged: true
     labels:
       autoheal: "true"
-
+      com.centurylinklabs.watchtower.enable: "false"
 
