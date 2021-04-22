@@ -44,3 +44,27 @@
       traefik.http.services.plex.loadbalancer.server.port: "32400"
       autoheal: "true"
 
+#- name: kitana
+#  docker_container:
+#    image: pannal/kitana:latest
+#    name: kitana
+#    pull: true
+#    volumes:
+#      - "{{ plex_config_directory }}/kitana:/app/data"
+#    links:
+#      - "plex:plex"
+#    command: -B 0.0.0.0:31337 -p / -P -a
+#    restart_policy: unless-stopped
+#    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+#    memory: 64m
+#    labels:
+#      traefik.enable: "{{ plex_available_externally }}"
+#      traefik.http.routers.kitana.entrypoints: "web,websecure"
+#      traefik.http.routers.kitana.rule: "Host(`kitana.{{ ansible_nas_domain }}`)"
+#      traefik.http.routers.kitana.tls.certresolver: "letsencrypt"
+#      traefik.http.routers.kitana.tls.domains[0].main: "{{ ansible_nas_domain }}"
+#      traefik.http.routers.kitana.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+#      traefik.http.services.kitana.loadbalancer.server.port: "31337"
+#      autoheal: "true"
+
+

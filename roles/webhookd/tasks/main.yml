@@ -17,6 +17,7 @@
     name: webhookd
     image: webhookd
     volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
       - "/etc/localtime:/etc/localtime:ro"
       - "{{ webhookd_scripts_directory }}:/tools"
       - "{{ webhookd_plex_directory }}:/plexserver"

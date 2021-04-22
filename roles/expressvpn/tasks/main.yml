@@ -26,7 +26,9 @@
         "{{ mylar_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
         "{{ webhookd_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
         "{{ static_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ plex_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}"
+        "{{ plex_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
+        "{{ emby_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
+        "{{ subsonic_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}"
       }
     env:
       SERVER: "SMART"

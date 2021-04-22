@@ -25,6 +25,7 @@ plex_music_permissions: "rw"
 
 # network
 plex_hostname: "plex"
+kitana_hostname: "kitana"
 
 # specs
 plex_memory: "2g"

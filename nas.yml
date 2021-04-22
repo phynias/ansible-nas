@@ -58,6 +58,7 @@
 
     - role: pihole
       tags:
+        - always
         - pihole
         - pihole_dns
       when: (pihole_enabled | default(False))

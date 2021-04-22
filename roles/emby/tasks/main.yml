@@ -8,12 +8,14 @@
 - name: emby Docker Container
   docker_container:
     name: emby
-    image: emby/embyserver
+    image: linuxserver/emby
     pull: true
     volumes:
       - "{{ emby_config_directory }}:/config:rw"
-      - "{{ emby_movies_directory }}:/movies:{{ emby_movies_permissions }}"
-      - "{{ emby_tv_directory }}:/tv:{{ emby_tv_permissions }}"
+      - "{{ emby_movies_directory }}:/data/movies:{{ emby_movies_permissions }}"
+      - "{{ emby_tv_directory }}:/data/tv:{{ emby_tv_permissions }}"
+      - "{{ emby_music_directory }}:/data/music:{{ emby_music_permissions }}"
+      - "/tools:/tools:ro"
     ports:
       - "{{ emby_port_http }}:8096"
       - "{{ emby_port_https }}:8920"
@@ -23,7 +25,7 @@
       PGID: "{{ emby_group_id }}"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-    memory: 1g
+    memory: "{{ emby_memory }}"
     labels:
       traefik.enable: "{{ emby_available_externally }}"
       traefik.http.routers.emby.entrypoints: "web,websecure"
@@ -32,3 +34,4 @@
       traefik.http.routers.emby.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.emby.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.emby.loadbalancer.server.port: "8096"
+      autoheal: "true"
