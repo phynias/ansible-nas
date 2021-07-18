@@ -3,6 +3,7 @@
   docker_container:
     name: expressvpn
     image: misioslav/expressvpn:latest
+    pull: true
     capabilities:
       - NET_ADMIN
     restart_policy: unless-stopped
@@ -36,6 +37,7 @@
       DDSN: "{{ ansible_nas_hostname }}.{{ ansible_nas_domain }}"
     tty: yes
     interactive: yes
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     devices:
       - "/dev/net/tun:/dev/net/tun"
     privileged: true
