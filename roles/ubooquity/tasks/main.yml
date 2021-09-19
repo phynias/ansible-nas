@@ -1,0 +1,36 @@
+---
+- name: ubooquity
+  docker_container:
+    name: ubooquity
+    image: linuxserver/ubooquity
+    pull: true
+    volumes:
+      - "{{ ubooquity_books_directory }}:/books"
+      - "{{ ubooquity_comics_directory }}:/comics"
+      - "{{ ubooquity_data_directory }}:/config:rw"
+    ports:
+      - "2202:2202"
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      PUID: "{{ ubooquity_user_id }}"
+      PGID: "{{ ubooquity_group_id }}"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    memory: 1g
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+      start_period: 90s
+    labels:
+      traefik.enable: "{{ ubooquity_available_externally }}"
+      traefik.http.routers.ubooquity.entrypoints: "web,websecure"
+      traefik.http.routers.ubooquity.rule: "Host(`{{ ubooquity_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.ubooquity.tls.certresolver: "letsencrypt"
+      traefik.http.routers.ubooquity.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.ubooquity.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.ubooquity.loadbalancer.server.port: "2203"
+      autoheal: "true"
+      # traefik.http.routers.ubooquity.middlewares: do-auth"
+      # traefik.http.middlewares.do-auth.basicauth.users: "{{ traefik_auth }}"
