@@ -20,7 +20,7 @@
 
 - name: redis
   docker_container:
-    name: redis
+    name: owncloud_redis
     image: webhippie/redis:latest
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
@@ -65,7 +65,7 @@
     pull: true
     links:
       - "mariadb:mariadb"
-      - "redis:redis"
+      - "owncloud_redis:redis"
     volumes:
       - "{{ owncloud_data_directory }}:/mnt/data:rw"
     env:
@@ -88,7 +88,7 @@
     memory: 1g
     labels:
       traefik.enable: "{{ owncloud_available_externally }}"
-      traefik.http.routers.owncloud.entrypoints: "websecure-ext"
+      traefik.http.routers.owncloud.entrypoints: "websecure,websecure-ext"
       traefik.http.routers.owncloud.rule: "Host(`{{ owncloud_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.owncloud.tls.certresolver: "letsencrypt"
       traefik.http.routers.owncloud.tls.domains[0].main: "{{ ansible_nas_domain }}"

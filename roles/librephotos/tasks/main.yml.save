@@ -31,21 +31,22 @@
     user: "{{ subsonic_user_id }}"
     memory: 2g
     ports:
-      - "{{ subsonic_port }}:4141"
+      - "{{ subsonic_port }}:4040"
     labels:
       traefik.enable: "{{ subsonic_available_externally }}"
 #      traefik.http.middlewares.subsonic.redirectscheme.scheme: "https"
 #      traefik.http.middlewares.subsonic.redirectscheme.permanent: "true"
 #      traefik.http.middlewares.subsonic.headers.sslproxyheaders.X-Forwarded-Proto: "https"
 #      traefik.http.routers.subsonic.middlewares: "subsonic@docker"
+      traefik.frontend.headers.SSLProxyHeaders: "X-Forwarded-Proto:https"
+      traefik.frontend.headers.SSLRedirect: "true"
       traefik.passHostHeader: "true"
       traefik.http.routers.subsonic.entrypoints: "websecure,websecure-ext"
       traefik.http.routers.subsonic.rule: "Host(`{{ subsonic_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.subsonic.tls.certresolver: "letsencrypt"
       traefik.http.routers.subsonic.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.subsonic.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
-      traefik.http.services.subsonic.loadbalancer.server.port: "4141"
-      traefik.http.services.subsonic.loadbalancer.server.scheme: "https"
+      traefik.http.services.subsonic.loadbalancer.server.port: "4040"
       com.centurylinklabs.watchtower.enable: "false"
       autoheal: "true"
 

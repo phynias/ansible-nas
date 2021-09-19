@@ -9,4 +9,4 @@ subsonic_playlists_directory: "{{ playlists_root }}"
 
 subsonic_user_id: "0"
 subsonic_group_id: "0"
-subsonic_port: "4040"
+subsonic_port: "4141"

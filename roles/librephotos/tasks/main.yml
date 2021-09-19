@@ -1,0 +1,113 @@
+---
+- name: Create librephotos Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - librephotos_cachedir
+    - librephotos_dbLocation
+    - librephotos_logLocation
+    - librephotos_proMedia
+
+- name: librephotos [redis] Docker Container
+  docker_container:
+    name: redis
+    image: redis:6
+    pull: true
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+
+- name: librephotos [postgres] Docker Container
+  docker_container:
+    name: db
+    image: postgres:13
+    pull: true
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    env:
+      TIME_ZONE: "{{ librephotos_timeZone }}"
+      POSTGRES_USER: "{{ librephotos_dbUser }}"
+      POSTGRES_PASSWORD: "{{ librephotos_dbPass }}"
+      POSTGRES_DB: "{{ librephotos_dbName }}"
+    volumes:
+      - "{{ librephotos_dbLocation }}:/var/lib/postgresql/data"
+    command: postgres -c fsync=off -c synchronous_commit=off -c full_page_writes=off -c random_page_cost=1.0
+
+
+- name: librephotos [backend] Docker Container
+  docker_container:
+    name: backend
+    image: reallibrephotos/librephotos:{{ librephotos_tag }}
+    pull: true
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    volumes:
+      - "{{ librephotos_myPhotos }}:/data"
+      - "{{ librephotos_proMedia }}:/protected_media"
+      - "{{ librephotos_logLocation }}:/logs"
+      - "{{ librephotos_cachedir }}:/root/.cache"
+
+    env:
+      SECRET_KEY: "{{ librephotos_shhhhKey }}"
+      BACKEND_HOST: "librephotos_backend"
+      ADMIN_EMAIL: "{{ librephotos_adminEmail }}"
+      ADMIN_USERNAME: "{{ librephotos_userName }}"
+      ADMIN_PASSWORD: "{{ librephotos_userPass }}"
+      DB_BACKEND: "postgresql"
+      DB_NAME: "{{ librephotos_dbName }}"
+      DB_USER: "{{ librephotos_dbUser }}"
+      DB_PASS: "{{ librephotos_dbPass }}"
+      DB_HOST: "db"
+      DB_PORT: "5432"
+      REDIS_HOST: "redis"
+      REDIS_PORT: "6379"
+      MAPBOX_API_KEY: "{{ librephotos_mapApiKey }}"
+      TIME_ZONE: "{{ librephotos_timeZone }}"
+      WEB_CONCURRENCY: "{{ librephotos_gunniWorkers }}"
+      SKIP_PATTERNS: "{{ librephotos_skipPatterns }}"
+      DEBUG: "0"
+      HEAVYWEIGHT_PROCESS: "{{ librephotos_HEAVYWEIGHT_PROCESS }}"
+    links:
+      - "redis:redis"
+      - "db:db"
+
+- name: librephotos [frontend] Docker Container
+  docker_container:
+    name: frontend
+    image: reallibrephotos/librephotos-frontend:{{ librephotos_tag }}
+    pull: true
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    env:
+      TIME_ZONE: "{{ librephotos_timeZone }}"
+    links:
+      - "backend:backend"
+
+- name: librephotos [proxy] Docker Container
+  docker_container:
+    name: proxy
+    image: reallibrephotos/librephotos-proxy:{{ librephotos_tag }}
+    pull: true
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    env:
+      TIME_ZONE: "{{ librephotos_timeZone }}"
+    volumes:
+      - "{{ librephotos_myPhotos }}:/data"
+      - "{{ librephotos_proMedia }}:/protected_media"
+    ports:
+      - "{{ librephotos_port }}:80"
+    links:
+      - "frontend:frontend"
+      - "backend:backend"
+    labels:
+      traefik.enable: "{{ librephotos_available_externally }}"
+      traefik.passHostHeader: "true"
+      traefik.http.routers.librephotos.entrypoints: "websecure,websecure-ext"
+      traefik.http.routers.librephotos.rule: "Host(`{{ librephotos_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.librephotos.tls.certresolver: "letsencrypt"
+      traefik.http.routers.librephotos.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.librephotos.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.librephotos.loadbalancer.server.port: "80"
+      com.centurylinklabs.watchtower.enable: "true"
+      autoheal: "true"

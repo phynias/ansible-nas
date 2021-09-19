@@ -228,6 +228,16 @@
         - subsonic
       when: (subsonic_enabled | default(False))
 
+    - role: funkwhale
+      tags:
+        - funkwhale
+      when: (funkwhale_enabled | default(False))
+
+    - role: librephotos
+      tags:
+        - librephotos
+      when: (librephotos_enabled | default(False))
+
     - role: prometheus
       tags:
         - prometheus

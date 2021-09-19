@@ -1,0 +1,12 @@
+funkwhale_available_externally: false
+funkwhale_enabled: "false"
+funkwhale_hostname: "funk"
+
+funkwhale_music_directory: "{{ music_root }}"
+funkwhale_podcasts_directory: "{{ podcasts_root }}"
+funkwhale_books_directory: "{{ audiobooks_root }}"
+funkwhale_playlists_directory: "{{ playlists_root }}"
+
+funkwhale_user_id: "1001"
+funkwhale_group_id: "1001"
+funkwhale_port: "5000"

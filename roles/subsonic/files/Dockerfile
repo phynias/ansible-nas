@@ -11,7 +11,8 @@ ARG GID
 ADD https://s3-eu-west-1.amazonaws.com/subsonic-public/download/subsonic-${SUBSONIC_VERSION}-standalone.tar.gz /tmp/subsonic.tar.gz
 
 # Install Java and audio tools
-RUN apk --update add --no-cache openjdk8-jre-base ffmpeg lame && \
+RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
+apk --update add --no-cache tini@commuedge nss openjdk8-jre@commuedge openssl openssl-dev ffmpeg lame && \
     rm -rf /var/cache/apk/*
 
 # Set up Subsonic binaries
@@ -39,6 +40,7 @@ RUN    mkdir -p /data && chown subsonic:subsonic /data && chmod 755 /startup.sh
 RUN    chown -R subsonic:subsonic /opt/subsonic
 
 EXPOSE 4040
+EXPOSE 4141
 USER   subsonic
 
-ENTRYPOINT ["/startup.sh"]
+CMD ["/sbin/tini","--","/startup.sh"]
