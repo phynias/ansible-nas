@@ -16,6 +16,9 @@
 - name: Create Mosquitto container
   docker_container:
     name: mosquitto
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: eclipse-mosquitto:latest
     pull: true
     volumes:

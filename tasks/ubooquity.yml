@@ -9,6 +9,9 @@
 - name: Ubooquity Docker Container
   docker_container:
     name: ubooquity
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: linuxserver/ubooquity:latest
     pull: true
     volumes:

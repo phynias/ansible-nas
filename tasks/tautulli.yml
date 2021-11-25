@@ -10,6 +10,9 @@
 - name: Tautulli Docker Container
   docker_container:
     name: tautulli
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: linuxserver/tautulli
     pull: true
     volumes:

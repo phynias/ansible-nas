@@ -11,6 +11,9 @@
 - name: pyLoad Docker Container
   docker_container:
     name: pyload
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: writl/pyload
     pull: true
     volumes:

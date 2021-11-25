@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -eo pipefail
+source /usr/bin/entrypoint
+
+DATABASES=$(mysql --user=${MARIADB_ROOT_USERNAME} --password=${MARIADB_ROOT_PASSWORD} -e 'SHOW DATABASES;' | sed 1d | grep -v -E "${MARIADB_BACKUP_IGNORE}")
+MAXIMUM=${MARIADB_BACKUP_RETENTION}
+
+if [ "${DATABASES}" == "" ]; then
+    exit
+fi
+
+if [ ! -d ${MARIADB_BACKUP_PATH} ]; then
+    mkdir -p ${MARIADB_BACKUP_PATH}
+    chmod u=rwx,g=rwx,o= ${MARIADB_BACKUP_PATH}
+fi
+
+for (( COUNTER=${MAXIMUM}; COUNTER>=1; COUNTER-- )); do
+    if [ -d ${MARIADB_BACKUP_PATH}/backup.${COUNTER} ]; then
+        DEST=`expr ${COUNTER} + 1`
+
+        if [ ${DEST} -le ${MAXIMUM} ]; then
+            rm -rf ${MARIADB_BACKUP_PATH}/backup.${DEST}
+            mv ${MARIADB_BACKUP_PATH}/backup.${COUNTER} ${MARIADB_BACKUP_PATH}/backup.${DEST}
+        fi
+    fi
+done
+
+mkdir -p ${MARIADB_BACKUP_PATH}/backup.1
+chmod u=rwx,g=rwx,o= ${MARIADB_BACKUP_PATH}/backup.1
+
+cd ${MARIADB_BACKUP_PATH}/backup.1
+
+for DATABASE in ${DATABASES}; do
+    echo "Starting backup for ${DATABASE}..."
+    START=$(date +%s)
+    mysqldump --single-transaction --skip-add-locks --skip-lock-tables --user=${MARIADB_ROOT_USERNAME} --password=${MARIADB_ROOT_PASSWORD} --databases ${DATABASE} | gzip >| "${DATABASE}.sql.gz"
+    chmod u=rwx,g=rwx,o= "${DATABASE}.sql.gz"
+    ENDS=$(date +%s)
+    echo "Done within $((${ENDS}-${START}))s"
+done

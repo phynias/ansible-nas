@@ -9,6 +9,9 @@
 - name: get_iplayer Docker Container
   docker_container:
     name: get_iplayer
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: kolonuk/get_iplayer
     pull: true
     volumes:

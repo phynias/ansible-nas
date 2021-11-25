@@ -9,6 +9,9 @@
 - name: mymedia for alexa Docker Container
   docker_container:
     name: mymediaforalexa
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: bizmodeller/mymediaforalexa
     pull: true
     volumes:

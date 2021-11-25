@@ -2,6 +2,10 @@
 - name: OpenVPN
   docker_container:
     name: openvpn
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: dperson/openvpn-client:latest
     pull: true
     capabilities:

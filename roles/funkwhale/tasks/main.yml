@@ -9,6 +9,10 @@
 - name: funkwhale Docker Container
   docker_container:
     name: funkwhale
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: funkwhale/all-in-one
     volumes:
       - "{{ funkwhale_music_directory }}:/music:ro"

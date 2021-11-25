@@ -16,6 +16,9 @@
 - name: The Lounge Docker Container
   docker_container:
     name: thelounge
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: thelounge/thelounge:latest
     pull: true
     ports:

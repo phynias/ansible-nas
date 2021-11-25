@@ -9,6 +9,10 @@
 - name: Create Organizr container
   docker_container:
     name: organizr
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: organizr/organizr:latest
     pull: true
     volumes:
@@ -17,6 +21,7 @@
       PUID: "{{ organizr_user_id }}"
       PGID: "{{ organizr_group_id }}"
       TZ: "{{ ansible_nas_timezone }}"
+      branch: "v2-master"
     ports:
       - "{{ organizr_port_http }}:80"
       - "{{ organizr_port_https }}:443"

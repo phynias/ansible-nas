@@ -25,6 +25,9 @@
 - name: InfluxDB
   docker_container:
     name: influxdb
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: influxdb:1.8
     pull: true
     volumes:
@@ -40,6 +43,9 @@
 - name: hddtemp
   docker_container:
     name: hddtemp
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: drewster727/hddtemp-docker
     pull: true
     privileged: true
@@ -58,6 +64,9 @@
 - name: Telegraf
   docker_container:
     name: telegraf
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: telegraf
     pull: true
     links:
@@ -107,6 +116,9 @@
 - name: Grafana
   docker_container:
     name: grafana
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: grafana/grafana
     pull: true
     volumes:
@@ -134,6 +146,9 @@
 - name: zfswatcher
   docker_container:
     name: zfswatcher
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: pectojin/zfswatcher:latest
     volumes:
       - "{{ zfswatcher_data_directory }}/config:/zfswatcher_config:rw"

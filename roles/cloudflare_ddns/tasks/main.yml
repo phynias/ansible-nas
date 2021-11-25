@@ -8,6 +8,17 @@
     path: "{{ cloudflare_data_directory }}"
     state: directory
 
+- name: check if config is a dir
+  stat:
+    path: "{{ cloudflare_data_directory }}/config.yml"
+  register: register_check
+
+- name: Delete content & directory
+  file:
+    state: absent
+    path: "{{ cloudflare_data_directory }}/config.yml"
+  when: register_check.stat.exists
+
 - name: Template Cloudflare Dynamic DNS config.yml with scoped token
   template:
     src: config.yml
@@ -18,6 +29,10 @@
 - name: Cloudflare Dynamic DNS Container
   docker_container:
     name: cloudflare-ddns
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: joshava/cloudflare-ddns:latest
     pull: true
     volumes:

@@ -2,6 +2,9 @@
 - name: Create google-ddns container
   docker_container:
     name: google-ddns
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: dragoncube/google-domains-ddns
     pull: true
     restart_policy: unless-stopped

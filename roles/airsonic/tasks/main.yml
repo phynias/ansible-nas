@@ -10,6 +10,9 @@
 - name: Airsonic Docker Container
   docker_container:
     name: airsonic
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: linuxserver/airsonic:latest
     pull: true
     volumes:
@@ -40,6 +43,9 @@
 - name: airsonic-frontend
   docker_container:
     name: airsonic-frontend
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: tamland/airsonic-frontend:latest
     pull: true
     env:

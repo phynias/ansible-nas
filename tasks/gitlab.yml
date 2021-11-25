@@ -30,6 +30,9 @@
 - name: Create Gitlab container
   docker_container:
     name: gitlab
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: gitlab/gitlab-ce:latest
     pull: true
     volumes:

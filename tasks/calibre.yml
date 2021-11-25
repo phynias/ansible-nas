@@ -8,6 +8,9 @@
 - name: Calibre-web Docker Container
   docker_container:
     name: calibre
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: linuxserver/calibre-web:latest
     pull: true
     volumes:

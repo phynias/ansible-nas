@@ -27,6 +27,9 @@
 - name: Create Heimdall container
   docker_container:
     name: heimdall
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: "{{ heimdall_docker_image }}"
     pull: true
     volumes:

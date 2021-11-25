@@ -2,6 +2,9 @@
 - name: Watchtower Docker Container
   docker_container:
     name: watchtower
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: containrrr/watchtower
     pull: true
     volumes:

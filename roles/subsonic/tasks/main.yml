@@ -15,13 +15,16 @@
 - name: Subsonic Docker Container
   docker_container:
     name: subsonic
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: subsonic
     volumes:
       - "{{ subsonic_music_directory }}:/music:rw"
       - "{{ subsonic_books_directory }}:/books:rw"
       - "{{ subsonic_podcasts_directory}}:/podcasts:rw"
       - "{{ subsonic_playlists_directory }}:/playlists:rw"
-      - "{{ subsonic_data_directory }}:/data"
+      - "{{ subsonic_data_directory }}:/data:rw"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:

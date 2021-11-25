@@ -1,4 +1,18 @@
 ---
+- name: build mariadb image
+  docker_image:
+    name: mymariadb
+    build:
+      path: "{{ role_path }}/files/"
+    buildargs:
+      UID: "{{ owncloud_user_id }}"
+      GID: "{{ owncloud_group_id }}"
+    source: build
+    state: build
+    rm: yes
+    force: yes
+
+
 - name: Create owncloud Directories
   file:
     path: "{{ item }}"
@@ -21,6 +35,9 @@
 - name: redis
   docker_container:
     name: owncloud_redis
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: webhippie/redis:latest
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
@@ -38,7 +55,11 @@
 - name: mariadb
   docker_container:
     name: mariadb
-    image: webhippie/mariadb:latest
+    log_options:
+      max-size: 256m
+      max-file: 1
+    image: mymariadb:latest
+#    image: mariadb:10.5
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:
@@ -57,10 +78,15 @@
       - "mysql:/var/lib/mysql:z"
       - "{{ owncloud_config_directory }}/backup:/var/lib/backup:z"
     memory: 128m
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"
 
 - name: owncloud
   docker_container:
     name: owncloud
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: owncloud/server:latest
     pull: true
     links:

@@ -16,10 +16,16 @@
     pull: true
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"
 
 - name: librephotos [postgres] Docker Container
   docker_container:
     name: db
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: postgres:13
     pull: true
     restart_policy: unless-stopped
@@ -32,11 +38,16 @@
     volumes:
       - "{{ librephotos_dbLocation }}:/var/lib/postgresql/data"
     command: postgres -c fsync=off -c synchronous_commit=off -c full_page_writes=off -c random_page_cost=1.0
-
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"
 
 - name: librephotos [backend] Docker Container
   docker_container:
     name: backend
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: reallibrephotos/librephotos:{{ librephotos_tag }}
     pull: true
     restart_policy: unless-stopped
@@ -70,10 +81,16 @@
     links:
       - "redis:redis"
       - "db:db"
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"
 
 - name: librephotos [frontend] Docker Container
   docker_container:
     name: frontend
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: reallibrephotos/librephotos-frontend:{{ librephotos_tag }}
     pull: true
     restart_policy: unless-stopped
@@ -82,10 +99,16 @@
       TIME_ZONE: "{{ librephotos_timeZone }}"
     links:
       - "backend:backend"
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"
 
 - name: librephotos [proxy] Docker Container
   docker_container:
     name: proxy
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: reallibrephotos/librephotos-proxy:{{ librephotos_tag }}
     pull: true
     restart_policy: unless-stopped
@@ -109,5 +132,5 @@
       traefik.http.routers.librephotos.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.librephotos.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.librephotos.loadbalancer.server.port: "80"
-      com.centurylinklabs.watchtower.enable: "true"
+      com.centurylinklabs.watchtower.enable: "false"
       autoheal: "true"

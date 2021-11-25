@@ -10,6 +10,9 @@
 - name: Krusader Docker Container
   docker_container:
     name: krusader
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: djaydev/krusader:latest
     pull: true
     volumes:

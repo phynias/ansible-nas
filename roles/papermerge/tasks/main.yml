@@ -11,6 +11,10 @@
   register: docker_container_output
   docker_container:
     name: papermerge
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: ghcr.io/linuxserver/papermerge:latest
     pull: true
     links:

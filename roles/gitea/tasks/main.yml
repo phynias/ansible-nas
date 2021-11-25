@@ -29,6 +29,10 @@
 - name: Create MySQL container for Gitea
   docker_container:
     name: gitea-mysql
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: mysql:5.7
     pull: true
     volumes:
@@ -45,6 +49,10 @@
 - name: Create Gitea container
   docker_container:
     name: gitea
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: gitea/gitea:1.6
     pull: true
     links:

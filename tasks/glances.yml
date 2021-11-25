@@ -1,6 +1,9 @@
 - name: Glances Docker Container
   docker_container:
     name: glances
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: nicolargo/glances:dev
     pull: true
     ports:

@@ -7,6 +7,9 @@
 - name: Time Machine Docker Container
   docker_container:
     name: timemachine
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: awlnx/samba-timemachine:latest
     pull: true
     ports:

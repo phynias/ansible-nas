@@ -10,6 +10,9 @@
 - name: MySQL Docker Container for Joomla
   docker_container:
     name: joomla_mysql
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: mysql:5.7
     pull: true
     volumes:
@@ -25,6 +28,9 @@
 - name: Joomla Docker Container
   docker_container:
     name: joomla
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: joomla
     pull: true
     volumes:

@@ -9,6 +9,9 @@
 - name: CloudCmd
   docker_container:
     name: cloudcmd
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: coderaiser/cloudcmd
     pull: true
     volumes:

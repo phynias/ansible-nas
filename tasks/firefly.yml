@@ -11,6 +11,9 @@
 - name: Create MySQL container for Firefly
   docker_container:
     name: firefly-mysql
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: mysql:5.7
     pull: true
     volumes:
@@ -31,6 +34,9 @@
 - name: Create Firefly III container
   docker_container:
     name: firefly
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: jc5x/firefly-iii:latest
     pull: true
     volumes:

@@ -7,6 +7,17 @@
     - "{{ traefik_data_directory }}"
     - "{{ traefik_data_directory }}/letsencrypt"
 
+- name: check if config is a dir
+  stat:
+    path: "{{ traefik_data_directory }}/traefik.toml"
+  register: register_check
+
+- name: Delete content & directory
+  file:
+    state: absent
+    path: "{{ traefik_data_directory }}/traefik.toml"
+  when: register_check.stat.exists
+
 - name: Template Traefik config.toml
   template:
     src: traefik.toml
@@ -21,6 +32,10 @@
 - name: Traefik Docker Container
   docker_container:
     name: traefik
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: "{{ traefik_docker_image }}"
     pull: true
     command:

@@ -1,12 +1,12 @@
 ---
 - name: MuxiMux
   docker_container:
-    image: linuxserver/muximux
     name: muximux
     log_driver: 'json-file'
     log_options:
-      max-file: '5'
-      max-size: '10m'
+      max-size: 256m
+      max-file: 1
+    image: linuxserver/muximux
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ muximux_user_id }}"

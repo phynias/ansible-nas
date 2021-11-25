@@ -238,6 +238,11 @@
         - librephotos
       when: (librephotos_enabled | default(False))
 
+    - role: librenms
+      tags:
+        - librenms
+      when: (librenms_enabled | default(False))
+
     - role: prometheus
       tags:
         - prometheus
@@ -390,4 +395,8 @@
   - name: 'restart prometheus'
     docker_container:
       name: prometheus
+      restart: yes
+  - name: 'restart blackbox'
+    docker_container:
+      name: blackbox
       restart: yes

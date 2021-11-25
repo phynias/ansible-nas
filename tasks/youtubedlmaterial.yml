@@ -16,6 +16,9 @@
 - name: YouTubeDL-Material Docker Container
   docker_container:
     name: youtubedlmaterial
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: tzahi12345/youtubedl-material:latest
     pull: true
     volumes:

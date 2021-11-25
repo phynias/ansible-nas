@@ -10,6 +10,10 @@
 - name: Sickchill Docker Container
   docker_container:
     name: sickchill
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: linuxserver/sickchill
     pull: true
     volumes:

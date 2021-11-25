@@ -8,6 +8,9 @@
 - name: Create static container
   docker_container:
     name: static
+    log_options:
+      max-size: 256m
+      max-file: 1
     image: nginx
     pull: true
     restart_policy: unless-stopped
