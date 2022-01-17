@@ -1,0 +1,42 @@
+---
+- name: Create prowlarr Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ prowlarr_data_directory }}"
+
+- name: prowlarr
+  docker_container:
+    name: prowlarr
+    image: linuxserver/prowlarr:develop
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: 1
+    pull: true
+    volumes:
+      - "{{ prowlarr_data_directory }}:/config:rw"
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      PUID: "{{ prowlarr_user_id }}"
+      PGID: "{{ prowlarr_group_id }}"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    memory: 1g
+    network_mode: "{{ 'container:' + proxy_container if prowlarr_proxy else 'None' }}"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+      start_period: 90s
+    labels:
+      traefik.enable: "{{ prowlarr_available_externally }}"
+      traefik.http.routers.prowlarr.entrypoints: "web,websecure"
+      traefik.http.routers.prowlarr.rule: "Host(`{{ prowlarr_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.prowlarr.tls.certresolver: "letsencrypt"
+      traefik.http.routers.prowlarr.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.prowlarr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.prowlarr.loadbalancer.server.port: "9696"
+      autoheal: "true"

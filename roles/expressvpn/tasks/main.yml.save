@@ -19,8 +19,8 @@
     log_options:
       max-size: 256m
       max-file: 1
-#    image: myexpressvpn:latest
-    image: misioslav/expressvpn:latest
+    image: myexpressvpn:latest
+#    image: misioslav/expressvpn:latest
     capabilities:
       - NET_ADMIN
     restart_policy: unless-stopped
@@ -50,7 +50,7 @@
         "{{ subsonic_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}"
       }
     env:
-      WHITELIST_DNS: "{{ expressvpn_whitelist_dns }}"
+      [200~expressvpn_whitelist_dns
       SERVER: "SMART"
       CODE: "{{ secret.expressvpn_code }}"
       DDSN: "{{ ansible_nas_hostname }}.{{ ansible_nas_domain }}"

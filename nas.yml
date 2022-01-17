@@ -208,6 +208,11 @@
         - sonarr
       when: (sonarr_enabled | default(False))
 
+    - role: prowlarr
+      tags:
+        - prowlarr
+      when: (prowlarr_enabled | default(False))
+
     - role: syncthing
       tags:
         - syncthing

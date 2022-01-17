@@ -1,7 +1,7 @@
 {{ nas_ip }} {{ ansible_nas_hostname }}
 {{ nas_ip }} {{ ansible_nas_hostname }}.{{ ansible_nas_domain }}
 {{ nas_ip }} {{ ansible_nas_hostname }}.local
-192.168.1.143 octopi.{{ ansible_nas_domain }}
+192.168.1.10 octopi.{{ ansible_nas_domain }}
 {% for d in pihole_custom %}
 {{ nas_ip }} {{ d }}.{{ ansible_nas_domain }}
 {% endfor %}

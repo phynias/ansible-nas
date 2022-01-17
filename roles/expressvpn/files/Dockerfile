@@ -1,22 +1,25 @@
+FROM debian:bullseye-slim
 
-# Run expressvpn in a container
+ENV CODE="code"
+ENV SERVER="smart"
+ENV HEALTHCHECK=""
+ENV BEARER=""
+ENV NETWORK="on"
+ARG APP=expressvpn_3.13.0.8-1_amd64.deb
 
-FROM debian:buster-slim
-LABEL maintainer="benjamin@polkaned.net"
+COPY files/ /expressvpn/
 
-ENV ACTIVATION_CODE Code
-ENV LOCATION smart
-ARG APP=expressvpn_3.3.0.21-1_amd64.deb
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+RUN apt-get clean && apt-get update && apt-get install -y --no-install-recommends \
+    expect curl ca-certificates iproute2 wget jq iptables 
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates wget expect iproute2 curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && wget -q "https://www.expressvpn.works/clients/linux/${APP}" -O /tmp/${APP} \
-    && dpkg -i /tmp/${APP} \
-    && rm -rf /tmp/*.deb \
-    && apt-get purge -y --auto-remove wget
+RUN wget -q "https://www.expressvpn.works/clients/linux/${APP}" -O /expressvpn/${APP} \
+    && dpkg -i /expressvpn/${APP} \
+    && rm -rf /expressvpn/*.deb \
+    && rm -rf /var/lib/apt/lists/* 
+RUN apt-get purge --autoremove -y wget \
+    && rm -rf /var/log/*.log
 
-COPY entrypoint.sh /tmp/entrypoint.sh
-COPY expressvpnActivate.sh /tmp/expressvpnActivate.sh
-RUN expressvpn preferences set send_diagnostics false
-ENTRYPOINT ["/bin/bash", "/tmp/entrypoint.sh"]
+HEALTHCHECK --start-period=30s --timeout=5s --interval=2m --retries=3 CMD bash /expressvpn/healthcheck.sh
+
+ENTRYPOINT ["/bin/bash", "/expressvpn/start.sh"]

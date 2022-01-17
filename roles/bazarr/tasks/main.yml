@@ -13,7 +13,7 @@
     log_options:
       max-size: 256m
       max-file: 1
-    image: linuxserver/bazarr
+    image: linuxserver/bazarr:development
     pull: true
     volumes:
       - "{{ bazarr_tv_directory }}:/tv:rw"

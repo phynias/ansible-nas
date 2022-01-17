@@ -5,3 +5,5 @@ expressvpn_available_externally: "false"
 expressvpn_memory: "512m"
 
 expressvpn_hostname: "expressvpn"
+
+expressvpn_whitelist_dns: ""

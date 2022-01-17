@@ -1,0 +1,11 @@
+---
+librenms_enabled: false
+librenms_available_externally: "false"
+
+# directories
+librenms_data_directory: "{{ docker_home }}/librenms"
+
+# network
+librenms_hostname: "librenms"
+
+# uid / gid

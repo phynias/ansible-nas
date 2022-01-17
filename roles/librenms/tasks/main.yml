@@ -1,0 +1,76 @@
+---
+- name: build librenms image
+  command: "docker build -t librenms {{ role_path }}/files"
+
+- name: Create libreNMS Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ librenms_data_directory }}"
+    - "{{ librenms_data_directory }}/data"
+    - "{{ librenms_data_directory }}/db"
+    - "{{ librenms_data_directory }}/db/config"
+    - "{{ librenms_data_directory }}/db/data"
+
+- name: Create librenms-db container
+  docker_container:
+    name: librenms-db
+    log_driver: "json-file"
+    log_options:
+      max-size: "256m"
+      max-file: "1"
+    image: mariadb:latest
+    pull: true
+    volumes:
+      - "{{ librenms_data_directory }}/db/data:/var/lib/mysql"
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      MYSQL_DATABASE: "librenms"
+      MYSQL_ROOT_PASSWORD: "{{ librenms_db_pass }}"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    memory: 1g
+    labels:
+      autoheal: "true"
+- name: Create librenms container
+  docker_container:
+    name: librenms
+    log_driver: "json-file"
+    log_options:
+      max-size: "256m"
+      max-file: "1"
+    image: librenms
+    volumes:
+      - "{{ librenms_data_directory }}/data:/data"
+    env:
+      APP_URL: "https://{{ librenms_hostname }}.{{ ansible_nas_domain }}/"
+      APP_TRUSTED_PROXIES: "**"
+      WEATHERMAP: "1"
+      DB_TYPE: "mysql"
+      DB_HOST: "librenms-db"
+      DB_NAME: "librenms"
+      DB_USER: "root"
+      DB_PASS: "{{ librenms_db_pass }}"
+      TZ: "{{ ansible_nas_timezone }}"
+      POLLER: "24"
+      SERVICES_ENABLED: "1"
+      UPDATE_CHANNEL: "master"
+      SYSLOG_ENABLED: "1"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    memory: 250m
+    links:
+      - "librenms-db:librenms-db"
+    ports:
+      - 514:514/tcp
+      - 514:514/udp
+    labels:
+      traefik.enable: "{{ librenms_available_externally }}"
+      traefik.http.routers.librenms.entrypoints: "web,websecure"
+      traefik.http.routers.librenms.rule: "Host(`{{ librenms_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.librenms.tls.certresolver: "letsencrypt"
+      traefik.http.routers.librenms.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.librenms.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.librenms.loadbalancer.server.port: "80"
+      autoheal: "true"
