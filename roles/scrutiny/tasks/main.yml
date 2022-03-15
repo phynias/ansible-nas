@@ -1,0 +1,60 @@
+---
+- name: Create scrutiny Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ scrutiny_config_directory }}"
+
+- name: Template scrutiny files
+  template:
+    src: "{{ item }}"
+    dest: "{{ scrutiny_config_directory }}/{{ item | basename | regex_replace('\\.j2$', '') }}"
+  with_fileglob: "files/*.j2"
+
+- shell: ls -d -- /dev/sd*[!0-9]
+  register: _output
+
+- name: scrutiny Docker Container
+  docker_container:
+    name: scrutiny
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: "1"
+    image: analogj/scrutiny
+    capabilities:
+      - SYS_RAWIO
+      - SYS_ADMIN
+    devices:
+      "{{ _output.stdout_lines }}"
+    volumes:
+      - "{{ scrutiny_config_directory }}:/scrutiny/config:rw"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    network_mode: "{{ 'container:' + proxy_container if scrutiny_proxy else 'None' }}"
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      PUID: "{{ scrutiny_user_id }}"
+      PGID: "{{ scrutiny_group_id }}"
+      DEBUG: "true"
+      SCOLLECTOR_LOG_FILE: /tmp/collector.log
+      SCRUTINY_LOG_FILE: /tmp/web.log
+    user: "{{ scrutiny_user_id }}"
+    memory: 128m
+    healthcheck:
+      test: ["CMD", "curl", "-X", "POST", "http://localhost:8080/api/health/notify"]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+      start_period: 90s
+    labels:
+      traefik.enable: "{{ scrutiny_available_externally }}"
+      traefik.http.routers.scrutiny.entrypoints: "web,websecure"
+      traefik.http.routers.scrutiny.rule: "Host(`{{ scrutiny_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.scrutiny.tls.certresolver: "letsencrypt"
+      traefik.http.routers.scrutiny.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.scrutiny.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.scrutiny.loadbalancer.server.port: "{{ scrutiny_port }}"
+      com.centurylinklabs.watchtower.enable: "false"
+      autoheal: "true"

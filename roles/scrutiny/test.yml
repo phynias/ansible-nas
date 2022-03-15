@@ -1,0 +1,13 @@
+---
+- hosts: all
+
+  tasks:
+  - shell: ls -d -- /dev/sd*[!0-9] | xargs printf " --device %s "
+    register: _output
+  - debug: var=_output
+
+  - name: use shell to print list of file paths
+    shell: "echo {{ item }}"
+    with_items: _output.stdout_lines
+
+

@@ -6,7 +6,6 @@
       tags: users
 
   roles:
-
     ###
     ### Requirements
     ###
@@ -187,6 +186,11 @@
       tags:
         - radarr
       when: (radarr_enabled | default(False))
+
+    - role: scrutiny
+      tags:
+        - scrutiny
+      when: (scrutiny_enabled | default(False))
 
     - role: pushover
       tags:

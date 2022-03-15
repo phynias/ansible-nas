@@ -1,0 +1,8 @@
+scrutiny_available_externally: "false"
+scrutiny_enabled: "false"
+scrutiny_hostname: "scrutiny"
+scrutiny_proxy: true
+scrutiny_user_id: "0"
+scrutiny_group_id: "0"
+scrutiny_port: "8282"
+scrutiny_config_directory: "{{ docker_home }}/scrutiny"

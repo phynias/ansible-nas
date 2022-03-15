@@ -1,16 +1,16 @@
 ---
-- name: build expressvpn image
-  docker_image:
-    name: myexpressvpn
-    build:
-      path: "{{ role_path }}/files/"
-    buildargs:
-      UID: "{{ owncloud_user_id }}"
-      GID: "{{ owncloud_group_id }}"
-    source: build
-    state: build
-    rm: yes
-    force: yes
+#- name: build expressvpn image
+#  docker_image:
+#    name: myexpressvpn
+#    build:
+#      path: "{{ role_path }}/files/"
+#    buildargs:
+#      UID: "{{ owncloud_user_id }}"
+#      GID: "{{ owncloud_group_id }}"
+#    source: build
+#    state: build
+#    rm: yes
+#    force: yes
 
 - name: ExpressVPN
   docker_container:
