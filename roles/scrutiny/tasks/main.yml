@@ -6,14 +6,16 @@
   with_items:
     - "{{ scrutiny_config_directory }}"
 
+- shell: ls -d -- /dev/sd*[!0-9]
+  register: _output
+
 - name: Template scrutiny files
   template:
     src: "{{ item }}"
     dest: "{{ scrutiny_config_directory }}/{{ item | basename | regex_replace('\\.j2$', '') }}"
+  vars:
+    devList: "{{ _output.stdout_lines|join(',') }}"
   with_fileglob: "files/*.j2"
-
-- shell: ls -d -- /dev/sd*[!0-9]
-  register: _output
 
 - name: scrutiny Docker Container
   docker_container:
@@ -30,18 +32,16 @@
       "{{ _output.stdout_lines }}"
     volumes:
       - "{{ scrutiny_config_directory }}:/scrutiny/config:rw"
+      - "/run/udev:/run/udev:ro"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-    network_mode: "{{ 'container:' + proxy_container if scrutiny_proxy else 'None' }}"
-    env:
-      TZ: "{{ ansible_nas_timezone }}"
-      PUID: "{{ scrutiny_user_id }}"
-      PGID: "{{ scrutiny_group_id }}"
-      DEBUG: "true"
-      SCOLLECTOR_LOG_FILE: /tmp/collector.log
-      SCRUTINY_LOG_FILE: /tmp/web.log
-    user: "{{ scrutiny_user_id }}"
-    memory: 128m
+#    network_mode: "{{ 'container:' + proxy_container if scrutiny_proxy else 'None' }}"
+#    env:
+#      TZ: "{{ ansible_nas_timezone }}"
+#      DEBUG: "true"
+#      SCOLLECTOR_LOG_FILE: /tmp/collector.log
+#      SCRUTINY_LOG_FILE: /tmp/web.log
+    memory: 512m
     healthcheck:
       test: ["CMD", "curl", "-X", "POST", "http://localhost:8080/api/health/notify"]
       interval: 1m

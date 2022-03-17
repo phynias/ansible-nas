@@ -78,11 +78,13 @@ Ansible config and a bunch of Docker containers.
 * [Plex](https://www.plex.tv/) - Plex Media Server
 * [Portainer](https://portainer.io/) - for managing Docker and running custom images
 * [Prometheus](https://prometheus.io/) - Monitoring system & time series database (includes: node_exporter, cadvisor)
+* [Prowlarr](https://github.com/Prowlarr/Prowlarr) - Prowlarr supports management of both Torrent Trackers and Usenet Indexers. It integrates seamlessly with Lidarr, Mylar3, Radarr, Readarr, and Sonarr
 * [Pushover](https://pushover.net/) - a service to receive instant push notifications on your phone or tablet from a variety of sources.
 * [pyLoad](https://pyload.net/) - A download manager with a friendly web-interface
 * [PyTivo](http://pytivo.org) - An HMO and GoBack server for TiVos.
 * [Radarr](https://radarr.video/) - for organising and downloading movies
-* [sabnzbd](https://sabnzbd.org/) - Free and easy binary newsreader
+* [Sabnzbd](https://sabnzbd.org/) - Free and easy binary newsreader
+* [Scrutiny](https://github.com/AnalogJ/scrutiny) - WebUI for smartd S.M.A.R.T monitoring
 * [Sickchill](https://sickchill.github.io/) - for managing TV episodes
 * [Sonarr](https://sonarr.tv/) - for downloading and managing TV episodes
 * [Syncthing](https://syncthing.net/) - sync directories with another device

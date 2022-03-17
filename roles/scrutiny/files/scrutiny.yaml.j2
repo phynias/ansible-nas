@@ -18,7 +18,7 @@ version: 1
 
 web:
   listen:
-    port: 8282
+    port: 8080
     host: 0.0.0.0
   database:
     # can also set absolute path here
@@ -36,11 +36,11 @@ log:
 # Notification "urls" look like the following. For more information about service specific configuration see
 # Shoutrrr's documentation: https://containrrr.dev/shoutrrr/services/overview/
 
-#notify:
-#  urls:
+notify:
+  urls:
 #    - "discord://token@channel"
 #    - "telegram://token@telegram?channels=channel-1[,channel-2,...]"
-#    - "pushover://shoutrrr:apiToken@userKey/?priority=1&devices=device1[,device2, ...]"
+    - "pushover://shoutrrr:aic8joovzg2xf4qk6ba8c3kf78zpv4@urNAxTdevoNWozjTiKuG2pxd6bb5eq/?priority=1&devices={{ devList|replace("\"","") }}"
 #    - "slack://[botname@]token-a/token-b/token-c"
 #    - "smtp://username:password@host:port/?fromAddress=fromAddress&toAddresses=recipient1[,recipient2,...]"
 #    - "teams://token-a/token-b/token-c"
