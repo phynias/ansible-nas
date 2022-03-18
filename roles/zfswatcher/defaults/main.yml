@@ -1,0 +1,5 @@
+zfswatcher_data_directory: "{{ docker_home }}/zfswatcher"
+zfswatcher_available_externally: "true"
+zfswatcher_hostname: "zfswatcher"
+zfswatcher_enabled: false
+zfswatcher_port: "80"

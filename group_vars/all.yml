@@ -382,10 +382,6 @@ grafana_influxdb_port: "8086"
 grafana_port: "3000"
 grafana_hostname: "grafana"
 
-zfswatcher_data_directory: "{{ docker_home }}/zfswatcher"
-zfswatcher_available_externally: "true"
-zfswatcher_hostname: "zfswatcher"
-
 ###
 ### Gitlab
 ###

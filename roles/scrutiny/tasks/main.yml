@@ -43,7 +43,7 @@
 #      SCRUTINY_LOG_FILE: /tmp/web.log
     memory: 512m
     healthcheck:
-      test: ["CMD", "curl", "-X", "POST", "http://localhost:8080/api/health/notify"]
+      test: ["CMD", "curl", "-L", "--fail", "-4", "localhost:{{ scrutiny_port }}/web"]
       interval: 1m
       timeout: 5s
       retries: 2

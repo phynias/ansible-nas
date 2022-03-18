@@ -267,6 +267,11 @@
         - papermerge
       when: (papermerge_enabled | default(False))
 
+    - role: zfswatcher
+      tags:
+        - zfswatcher
+      when: (zfswatcher_enabled | default(False))
+
   tasks:
   - import_tasks: tasks/firefly.yml
     when: (firefly_enabled | default(False))

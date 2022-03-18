@@ -141,32 +141,3 @@
       traefik.http.routers.grafana.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.grafana.loadbalancer.server.port: "3000"
       autoheal: "true"
-
-
-- name: zfswatcher
-  docker_container:
-    name: zfswatcher
-    log_options:
-      max-size: 256m
-      max-file: 1
-    image: pectojin/zfswatcher:latest
-    volumes:
-      - "{{ zfswatcher_data_directory }}/config:/zfswatcher_config:rw"
-      - "{{ zfswatcher_data_directory }}/logs:/var/log/zfswatcher:rw"
-      - /dev/log:/dev/log:rw
-      - /etc/hostid:/etc/hostid:ro
-#    ports:
-#      - 8990:8990
-    devices:
-      - /dev/zfs:/dev/zfs:rw
-    restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-    memory: 32m
-    labels:
-      traefik.enable: "{{ zfswatcher_available_externally }}"
-      traefik.http.routers.zfswatcher.rule: "Host(`{{ zfswatcher_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.zfswatcher.tls.certresolver: "letsencrypt"
-      traefik.http.routers.zfswatcher.tls.domains[0].main: "{{ ansible_nas_domain }}"
-      traefik.http.routers.zfswatcher.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
-      traefik.http.services.zfswatcher.loadbalancer.server.port: "80"
-      autoheal: "true"

@@ -40,7 +40,7 @@ notify:
   urls:
 #    - "discord://token@channel"
 #    - "telegram://token@telegram?channels=channel-1[,channel-2,...]"
-    - "pushover://shoutrrr:aic8joovzg2xf4qk6ba8c3kf78zpv4@urNAxTdevoNWozjTiKuG2pxd6bb5eq/?priority=1&devices={{ devList|replace("\"","") }}"
+    - "pushover://shoutrrr:aic8joovzg2xf4qk6ba8c3kf78zpv4@urNAxTdevoNWozjTiKuG2pxd6bb5eq/?priority=1&devices={{ devList|replace('"','') }}"
 #    - "slack://[botname@]token-a/token-b/token-c"
 #    - "smtp://username:password@host:port/?fromAddress=fromAddress&toAddresses=recipient1[,recipient2,...]"
 #    - "teams://token-a/token-b/token-c"
