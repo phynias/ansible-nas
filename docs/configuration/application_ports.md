@@ -1,4 +1,4 @@
-# Application Ports
+# Application Ports	
 
 By default, applications can be found on the ports listed below.
 
@@ -30,6 +30,7 @@ By default, applications can be found on the ports listed below.
 | Jackett         | 9117   |              |
 | Jellyfin        | 8896   | HTTP         |
 | Jellyfin        | 8928   | HTTPS        |
+| Komga           | 8088   | HTTPS        |
 | Krusader        | 5800   | HTTP         |
 | Krusader        | 5900   | VNC          |
 | Lidarr          | 8686   |              |

@@ -6,6 +6,25 @@
   with_items:
     - "{{ portainer_data_directory }}"
 
+
+#- name: Portainer Agent Container
+#  docker_container:
+#    name: portainer-agent
+#    log_driver: json-file
+#    log_options:
+#      max-size: 256m
+#      max-file: "1"
+#    image: portainer/agent:latest
+#    pull: true
+#    volumes:
+#      - "/var/run/docker.sock:/var/run/docker.sock"
+#      - "/var/lib/docker/volumes:/var/lib/docker/volumes"
+#      - "/:/host:ro"
+#      - "/etc/timezone:/etc/timezone:ro"
+#    restart_policy: unless-stopped
+#    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+#    memory: 64m
+
 - name: Portainer Docker Container
   docker_container:
     name: portainer
@@ -16,14 +35,18 @@
     image: portainer/portainer-ce
     pull: true
     volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/lib/docker/volumes:/var/lib/docker/volumes"
       - "{{ portainer_data_directory }}:/data:rw"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/etc/timezone:/etc/timezone:ro"
+#    command: "-H tcp://agent:9001 --tlsskipverify"
     ports:
       - "{{ portainer_port }}:9000"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 64m
+#    links:
+#      - "portainer-agent:agent"
     labels:
       traefik.enable: "{{ portainer_available_externally }}"
       traefik.http.routers.portainer.entrypoints: "web,websecure"
