@@ -1,58 +1,101 @@
-version: "3.3"
+version: "3.7"
 
 # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
 services:
+  cloudflared:
+    container_name: cloudflared
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
+    image: visibilityspots/cloudflared:latest
+    ports:
+      - target: 5054
+        published: 5054
+        protocol: tcp
+      - target: 5054
+        published: 5054
+        protocol: udp
+    restart: always
+    environment:
+      TZ: "{{ ansible_nas_timezone }}"
+      TUNNEL_DNS_UPSTREAM: "https://1.1.1.1/dns-query,https://1.0.0.1/dns-query,https://9.9.9.9/dns-query"
+      TUNNEL_DNS_PORT: "5054"
+      TUNNEL_DNS_ADDRESS: "0.0.0.0"
+      PORT: 5054
+      ADDRESS: 0.0.0.0
+    networks:
+      piholedhcp:
+        ipv4_address: "10.0.0.2"
+    labels:
+      autoheal: "true"
+
   dhcp-relay:
     container_name: dhcp-relay
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
     build:
       context: .
       dockerfile: dhcp-relay.dockerfile
       args:
         INTERFACE_UPSTREAM: "{{ pihole_int.stdout }}"
-        INTERFACE_DOWNSTREAM: "{{ default_int.stdout }}""
-        SERVER: "{{ pihole_hostname }}.{{ ansible_nas_domain }}"
-    image: local/dhcp-relay-arm32v7:latest
+        INTERFACE_DOWNSTREAM: "{{ default_int.stdout }}"
+        SERVER: "10.0.0.10"
+    image: local/dhcp-relay:latest
+    environment:
+      INTERFACE_UPSTREAM: "{{ pihole_int.stdout }}"
+      INTERFACE_DOWNSTREAM: "{{ default_int.stdout }}"
+      SERVER: "10.0.0.10"
+      TZ: "{{ ansible_nas_timezone }}"
     restart: always
     network_mode: host
     depends_on:
       - pihole
     cap_add:
       - NET_ADMIN
-    dns:
-      - "{{ pihole_hostname }}.{{ ansible_nas_domain }}" #tell container to look at pihole container for dns
-    dns_search:
-      - .local #search locally for .local domains not the internet
-      - ".{{ ansible_nas_domain }}" #search locally for .local domains not the internet
 
   pihole:
     container_name: pihole
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
     image: phynias/pihole-regex:latest
-    env_file: ./.env
-    hostname: "{{ pihole_hostname }}.{{ ansible_nas_domain }}"
+#    env_file: ./.env
+    hostname: "pihole.local"
     networks:
-      - default
-      - piholedhcp
-    ports:
-      - "53:53/tcp" #dns
-      - "53:53/udp" #dns
-      #- "67:67/udp" #dhcp server
-      #- "80:80/tcp"
-      #- "443:443/tcp"
-    expose:
-     - 80
-     - 443
+      piholedhcp:
+        ipv4_address: "10.0.0.10"
+#    ports:
+#      - "53:53/tcp" #dns
+#      - "53:53/udp" #dns
+#      - "67:67/udp" #dhcp server
+#      - "80:80/tcp"
+#      - "443:443/tcp"
+#    expose:
+#     - 80
+#     - 443
     environment:
-      TZ: 'America/Los_Angeles'
-      WEBPASSWORD: ${WEBPASSWORD}
-      DNS1: 1.1.1.1
-      DNS2: 9.9.9.9
-      ServerIP: ${HOST_IP}
-      VIRTUAL_HOST: ${URL0_SAN}
+      PIHOLE_DNS: 10.0.0.2#5054
+      TZ: "{{ ansible_nas_timezone }}"
+      WEBPASSWORD: "{{ pihole_password }}"
+      DNS1: "10.0.0.2#5054"
+      DNS2: "no"
+      ServerIP: "{{ pihole_ip }}"
+      VIRTUAL_HOST: "{{ pihole_hostname }}.{{ ansible_nas_domain }}"
       DNSMASQ_LISTENING: all
+      DNSMASQ_USER: root
     # Volumes store your data between container upgrades
     volumes:
-       - ./data/etc-pihole/:/etc/pihole/
-       - ./data/etc-dnsmasq.d/:/etc/dnsmasq.d/
+       - "{{ pihole_data_directory }}/logs:/var/log:rw"
+       - "{{ pihole_data_directory }}/pihole:/etc/pihole"
+       - "{{ pihole_data_directory }}/dnsmasq.d:/etc/dnsmasq.d"
+       - "/tools/pihole:/tools:ro"
     dns:
       - 127.0.0.1
       - 1.1.1.1
@@ -62,7 +105,6 @@ services:
       - NET_ADMIN
     restart: always
     labels:
-      - "traefik.enable=true"
       - "autoheal=true"
       - "traefik.enable={{ pihole_available_externally }}"
       - "traefik.http.routers.pihole.rule=Host(`{{ pihole_hostname }}.{{ ansible_nas_domain }}`)"
@@ -70,6 +112,24 @@ services:
       - "traefik.http.routers.pihole.tls.domains[0].main={{ ansible_nas_domain }}"
       - "traefik.http.routers.pihole.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
       - "traefik.http.services.pihole.loadbalancer.server.port=80"
+      # DNS-over-TLS
+      - "traefik.tcp.routers.dnsovertlspihole.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.dnsovertlspihole.entrypoints=dnsovertls"
+      - "traefik.tcp.routers.dnsovertlspihole.tls.certresolver=myresolver"
+      - "traefik.tcp.routers.dnsovertlspihole.service=pihole"
+      # Non TLS TCP DNS
+      - "traefik.tcp.routers.dnspihole.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.dnspihole.entrypoints=dns"
+      - "traefik.tcp.routers.dnspihole.service=pihole"
+      # DNS-over-TLS, and non TLS TCP DNS
+      - "traefik.tcp.services.pihole.loadbalancer.server.port=53"
+      # UDP DNS
+      - "traefik.udp.routers.pihole-udp.entrypoints=udpdns"
+      - "traefik.udp.services.piholeudp.loadbalancer.server.port=53"
+      - "traefik.udp.routers.pihole-udp.service=piholeudp"
+    # Starts cloudflard before Pi-hole
+    depends_on:
+      - cloudflared
 
 networks:
     piholedhcp:
