@@ -8,14 +8,14 @@
   [entryPoints.web.http.redirections.entryPoint]
     to = "websecure"
 
-  [entryPoints.dnsovertls]
-    address = ":853"
+#  [entryPoints.dnsovertls]
+#    address = ":853"
 
-  [entryPoints.dns]
-      address = ":53"
+#  [entryPoints.dns]
+#      address = ":53"
 
-  [entryPoints.udpdns]
-      address = ":53/udp"
+#  [entryPoints.udpdns]
+#      address = ":53/udp"
 
   [entryPoints.websecure]
     address = ":{{ traefik_port_https }}"

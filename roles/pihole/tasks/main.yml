@@ -30,10 +30,15 @@
     src: templates/03-pihole-dhcp-dns-fix.conf.j2
     dest: "{{ pihole_data_directory }}/dnsmasq.d/03-pihole-dhcp-dns-fix.conf"
 
-- name: Setup pihole docker-compose
+- name: Setup pihole docker-compose.yml
   template:
     src: templates/docker-compose.yml.j2
     dest: "{{ role_path }}/files/docker-compose.yml"
+
+- name: Run docker-compose pull
+  command: docker-compose pull --ignore-pull-failures
+  args:
+    chdir: "{{ role_path }}/files"
 
 - name: Deploy pihole Docker Compose stack
   docker_compose:

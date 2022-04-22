@@ -10,18 +10,20 @@
 # This file is copyright under the latest version of the EUPL.
 # Please see LICENSE file for your rights under this license.
 
-dnsmasqconfig="/etc/dnsmasq.d/01-pihole.conf"
-dhcpconfig="/etc/dnsmasq.d/02-pihole-dhcp.conf"
-FTLconf="/etc/pihole/pihole-FTL.conf"
+readonly dnsmasqconfig="/etc/dnsmasq.d/01-pihole.conf"
+readonly dhcpconfig="/etc/dnsmasq.d/02-pihole-dhcp.conf"
+readonly FTLconf="/etc/pihole/pihole-FTL.conf"
 # 03 -> wildcards
-dhcpstaticconfig="/etc/dnsmasq.d/04-pihole-static-dhcp.conf"
-dnscustomfile="/etc/pihole/custom.list"
-dnscustomcnamefile="/etc/dnsmasq.d/05-pihole-custom-cname.conf"
+readonly dhcpstaticconfig="/etc/dnsmasq.d/04-pihole-static-dhcp.conf"
+readonly dnscustomfile="/etc/pihole/custom.list"
+readonly dnscustomcnamefile="/etc/dnsmasq.d/05-pihole-custom-cname.conf"
+readonly speedtestfile="/var/www/html/admin/scripts/pi-hole/speedtest/speedtest.sh"
+readonly speedtestdb="/etc/pihole/speedtest.db"
 
-gravityDBfile="/etc/pihole/gravity.db"
+readonly gravityDBfile="/etc/pihole/gravity.db"
 
 # Source install script for ${setupVars}, ${PI_HOLE_BIN_DIR} and valid_ip()
-PI_HOLE_FILES_DIR="/etc/.pihole"
+readonly PI_HOLE_FILES_DIR="/etc/.pihole"
 # shellcheck disable=SC2034  # used in basic-install
 PH_TEST="true"
 source "${PI_HOLE_FILES_DIR}/automated install/basic-install.sh"
@@ -37,15 +39,22 @@ Example: pihole -a -p password
 Set options for the Admin Console
 
 Options:
-  -p, password        Set Admin Console password
-  -c, celsius         Set Celsius as preferred temperature unit
-  -f, fahrenheit      Set Fahrenheit as preferred temperature unit
-  -k, kelvin          Set Kelvin as preferred temperature unit
-  -e, email           Set an administrative contact address for the Block Page
-  -h, --help          Show this help dialog
-  -i, interface       Specify dnsmasq's interface listening behavior
-  -l, privacylevel    Set privacy level (0 = lowest, 3 = highest)
-  -t, teleporter      Backup configuration as an archive"
+  -p, password                    Set Admin Console password
+  -c, celsius                     Set Celsius as preferred temperature unit
+  -f, fahrenheit                  Set Fahrenheit as preferred temperature unit
+  -k, kelvin                      Set Kelvin as preferred temperature unit
+  -e, email                       Set an administrative contact address for the Block Page
+  -h, --help                      Show this help dialog
+  -i, interface                   Specify dnsmasq's interface listening behavior
+  -s, speedtest                   Set speedtest intevel , user 0 to disable Speedtests use -sn to prevent logging to results list
+  -sd                             Set speedtest display range
+  -sn                             Run speedtest now
+  -sm		                      Speedtest Mode
+  -sc                             Clear speedtest data
+  -ss                             Set custom server
+  -l, privacylevel                Set privacy level (0 = lowest, 3 = highest)
+  -t, teleporter                  Backup configuration as an archive
+  -t, teleporter myname.tar.gz    Backup configuration to archive with name myname.tar.gz as specified"
     exit 0
 }
 
@@ -113,8 +122,8 @@ SetWebPassword() {
     fi
 
     if (( ${#args[2]} > 0 )) ; then
-        PASSWORD="${args[2]}"
-        CONFIRM="${PASSWORD}"
+        readonly PASSWORD="${args[2]}"
+        readonly CONFIRM="${PASSWORD}"
     else
         # Prevents a bug if the user presses Ctrl+C and it continues to hide the text typed.
         # So we reset the terminal via stty if the user does press Ctrl+C
@@ -495,6 +504,94 @@ SetWebUILayout() {
     change_setting "WEBUIBOXEDLAYOUT" "${args[2]}"
 }
 
+
+ClearSpeedtestData(){
+    mv $speedtestdb $speedtestdb"_old"
+    cp /var/www/html/admin/scripts/pi-hole/speedtest/speedtest.db $speedtestdb
+}
+
+ChageSpeedTestSchedule(){
+  if [[ "${args[2]}" =~ ^[0-9]+$ ]]; then
+      if [ "${args[2]}" -ge 0 -a "${args[2]}" -le 24 ]; then
+          change_setting "SPEEDTESTSCHEDULE" "${args[2]}"
+          SetCronTab ${args[2]}
+      fi
+  fi
+}
+
+SpeedtestServer(){
+  if [[ "${args[2]}" =~ ^[0-9]+$ ]]; then
+      change_setting "SPEEDTEST_SERVER" "${args[2]}"
+          # SetCronTab ${args[2]}
+  else
+      # Autoselect for invalid data
+      change_setting "SPEEDTEST_SERVER" ""
+  fi
+
+}
+
+
+RunSpeedtestNow(){
+  mkdir -p /tmp/speedtest
+  lockfile="/tmp/speedtest/lock"
+  if [ -f $speedtestdb ]
+  then
+      echo ""
+  else
+      cp /var/www/html/admin/scripts/pi-hole/speedtest/speedtest.db $speedtestdb
+      sleep 2
+  fi
+  if [ -f "$lockfile" ]
+  then
+  	echo "Speedtest is already in progress, is something went wrong delete this file - "$lockfile
+  else
+    touch $lockfile
+    if [[ "${args[2]}" == "-n" ]]; then
+        speedtest-cli
+    else
+      echo "Testing Speed"
+      result=`$speedtestfile`
+      echo $result
+      rm $lockfile
+    fi
+  fi
+}
+
+SpeedtestMode(){
+  if [[ "${args[2]}" ]]; then
+      change_setting "SPEEDTEST_MODE" "${args[2]}"
+  else
+      # Autoselect for invalid data
+      change_setting "SPEEDTEST_MODE" "python"
+  fi
+
+}
+
+
+SetCronTab()
+{
+  # Remove OLD
+  crontab -l > crontab.tmp || true
+
+  if [[ "$1" == "0" ]]; then
+      sed -i '/speedtest/d' crontab.tmp
+      crontab crontab.tmp && rm -f crontab.tmp
+  else
+      sed -i '/speedtest/d' crontab.tmp
+
+      mode=$(sed -n -e '/SPEEDTEST_MODE/ s/.*\= *//p' $setupVars)
+
+      if [[ "$mode" =~ "official" ]]; then
+        speedtest_file="/var/www/html/admin/scripts/pi-hole/speedtest/speedtest-official.sh"
+      else
+        speedtest_file="/var/www/html/admin/scripts/pi-hole/speedtest/speedtest.sh"
+      fi
+
+      newtab="0 */"${1}" * * * sudo \""${speedtest_file}"\"  > /dev/null 2>&1"
+      printf '%s\n' "$newtab" >>crontab.tmp
+      crontab crontab.tmp && rm -f crontab.tmp
+  fi
+}
 SetWebUITheme() {
     change_setting "WEBTHEME" "${args[2]}"
 }
@@ -523,13 +620,13 @@ CustomizeAdLists() {
 
     if CheckUrl "${address}"; then
         if [[ "${args[2]}" == "enable" ]]; then
-            sqlite3 "${gravityDBfile}" "UPDATE adlist SET enabled = 1 WHERE address = '${address}'"
+            pihole-FTL sqlite3 "${gravityDBfile}" "UPDATE adlist SET enabled = 1 WHERE address = '${address}'"
         elif [[ "${args[2]}" == "disable" ]]; then
-            sqlite3 "${gravityDBfile}" "UPDATE adlist SET enabled = 0 WHERE address = '${address}'"
+            pihole-FTL sqlite3 "${gravityDBfile}" "UPDATE adlist SET enabled = 0 WHERE address = '${address}'"
         elif [[ "${args[2]}" == "add" ]]; then
-            sqlite3 "${gravityDBfile}" "INSERT OR IGNORE INTO adlist (address, comment) VALUES ('${address}', '${comment}')"
+            pihole-FTL sqlite3 "${gravityDBfile}" "INSERT OR IGNORE INTO adlist (address, comment) VALUES ('${address}', '${comment}')"
         elif [[ "${args[2]}" == "del" ]]; then
-            sqlite3 "${gravityDBfile}" "DELETE FROM adlist WHERE address = '${address}'"
+            pihole-FTL sqlite3 "${gravityDBfile}" "DELETE FROM adlist WHERE address = '${address}'"
         else
             echo "Not permitted"
             return 1
@@ -537,6 +634,33 @@ CustomizeAdLists() {
     else
         echo "Invalid Url"
         return 1
+    fi
+}
+
+function UpdateSpeedTestRange(){
+  if [[ "${args[2]}" =~ ^[0-9]+$ ]]; then
+      if [ "${args[2]}" -ge 0 -a "${args[2]}" -le 30 ]; then
+          change_setting "SPEEDTEST_CHART_DAYS" "${args[2]}"
+      fi
+  fi
+}
+
+SetPrivacyMode() {
+    if [[ "${args[2]}" == "true" ]]; then
+        change_setting "API_PRIVACY_MODE" "true"
+    else
+        change_setting "API_PRIVACY_MODE" "false"
+    fi
+}
+
+ResolutionSettings() {
+    typ="${args[2]}"
+    state="${args[3]}"
+
+    if [[ "${typ}" == "forward" ]]; then
+        change_setting "API_GET_UPSTREAM_DNS_HOSTNAME" "${state}"
+    elif [[ "${typ}" == "clients" ]]; then
+        change_setting "API_GET_CLIENT_HOSTNAME" "${state}"
     fi
 }
 
@@ -640,12 +764,17 @@ Interfaces:
 }
 
 Teleporter() {
-    local datetimestamp
-    local host
-    datetimestamp=$(date "+%Y-%m-%d_%H-%M-%S")
-    host=$(hostname)
-    host="${host//./_}"
-    php /var/www/html/admin/scripts/pi-hole/php/teleporter.php > "pi-hole-${host:-noname}-teleporter_${datetimestamp}.tar.gz"
+    local filename
+    filename="${args[2]}"
+    if [[ -z "${filename}" ]]; then
+        local datetimestamp
+        local host
+        datetimestamp=$(date "+%Y-%m-%d_%H-%M-%S")
+        host=$(hostname)
+        host="${host//./_}"
+        filename="pi-hole-${host:-noname}-teleporter_${datetimestamp}.tar.gz"
+    fi
+    php /var/www/html/admin/scripts/pi-hole/php/teleporter.php > "${filename}"
 }
 
 checkDomain()
@@ -681,12 +810,12 @@ addAudit()
     done
     # Insert only the domain here. The date_added field will be
     # filled with its default value (date_added = current timestamp)
-    sqlite3 "${gravityDBfile}" "INSERT INTO domain_audit (domain) VALUES ${domains};"
+    pihole-FTL sqlite3 "${gravityDBfile}" "INSERT INTO domain_audit (domain) VALUES ${domains};"
 }
 
 clearAudit()
 {
-    sqlite3 "${gravityDBfile}" "DELETE FROM domain_audit;"
+    pihole-FTL sqlite3 "${gravityDBfile}" "DELETE FROM domain_audit;"
 }
 
 SetPrivacyLevel() {
@@ -733,7 +862,7 @@ RemoveCustomDNSAddress() {
     validHost="$(checkDomain "${host}")"
     if [[ -n "${validHost}" ]]; then
         if valid_ip "${ip}" || valid_ip6 "${ip}" ; then
-            sed -i "/^${ip} ${validHost}$/d" "${dnscustomfile}"
+            sed -i "/^${ip} ${validHost}$/Id" "${dnscustomfile}"
         else
             echo -e "  ${CROSS} Invalid IP has been passed"
             exit 1
@@ -786,7 +915,7 @@ RemoveCustomCNAMERecord() {
     if [[ -n "${validDomain}" ]]; then
         validTarget="$(checkDomain "${target}")"
         if [[ -n "${validTarget}" ]]; then
-            sed -i "/cname=${validDomain},${validTarget}$/d" "${dnscustomcnamefile}"
+            sed -i "/cname=${validDomain},${validTarget}$/Id" "${dnscustomcnamefile}"
         else
             echo "  ${CROSS} Invalid Target Passed!"
             exit 1
@@ -831,16 +960,20 @@ main() {
         "audit"               ) addAudit "$@";;
         "clearaudit"          ) clearAudit;;
         "-l" | "privacylevel" ) SetPrivacyLevel;;
+        "-s" | "speedtest"    ) ChageSpeedTestSchedule;;
+        "-sd"                 ) UpdateSpeedTestRange;;
+        "-sn"                 ) RunSpeedtestNow;;
+	    "-sm"                 ) SpeedtestMode;;
+        "-sc"                 ) ClearSpeedtestData;;
+        "-ss"                 ) SpeedtestServer;;
         "addcustomdns"        ) AddCustomDNSAddress;;
         "removecustomdns"     ) RemoveCustomDNSAddress;;
         "addcustomcname"      ) AddCustomCNAMERecord;;
         "removecustomcname"   ) RemoveCustomCNAMERecord;;
         *                     ) helpFunc;;
     esac
-
     shift
-
-    if [[ $# = 0 ]]; then
+        if [[ $# = 0 ]]; then
         helpFunc
     fi
 }

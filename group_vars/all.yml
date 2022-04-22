@@ -12,6 +12,7 @@
 ###
 
 docker_recreate: false
+pihole_recreate: false
 
 ###
 ### Ansible-NAS Applications

@@ -3,6 +3,7 @@
 #########################################
 FROM pihole/pihole
 COPY webpage.sh /opt/pihole/webpage.sh
+COPY basic-install.sh /root/ph_install.sh
 
 RUN apt-get update && apt-get remove speedtest-cli && apt-get install -y wget curl &&\
   curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash && \

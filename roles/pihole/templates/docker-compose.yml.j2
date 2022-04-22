@@ -11,6 +11,9 @@ services:
         max-file: "1"
     image: visibilityspots/cloudflared:latest
     ports:
+      - target: 49312
+        published: 49312
+        protocol: tcp
       - target: 5054
         published: 5054
         protocol: tcp
@@ -20,16 +23,16 @@ services:
     restart: always
     environment:
       TZ: "{{ ansible_nas_timezone }}"
-      TUNNEL_DNS_UPSTREAM: "https://1.1.1.1/dns-query,https://1.0.0.1/dns-query,https://9.9.9.9/dns-query"
-      TUNNEL_DNS_PORT: "5054"
-      TUNNEL_DNS_ADDRESS: "0.0.0.0"
+      UPSTREAM1: "https://1.1.1.1/dns-query"
+      UPSTREAM2: "https://1.0.0.1/dns-query"
+      ADDRESS: "0.0.0.0"
       PORT: 5054
-      ADDRESS: 0.0.0.0
+      METRICS: 0.0.0.0:49312
     networks:
       piholedhcp:
         ipv4_address: "10.0.0.2"
     labels:
-      autoheal: "true"
+      - "autoheal=true"
 
   dhcp-relay:
     container_name: dhcp-relay
@@ -57,6 +60,8 @@ services:
       - pihole
     cap_add:
       - NET_ADMIN
+    labels:
+      - "autoheal=false"
 
   pihole:
     container_name: pihole
@@ -67,17 +72,21 @@ services:
         max-file: "1"
     image: phynias/pihole-regex:latest
 #    env_file: ./.env
-    hostname: "pihole.local"
+    #hostname: "pihole.local"
     networks:
       piholedhcp:
         ipv4_address: "10.0.0.10"
-#    ports:
-#      - "53:53/tcp" #dns
-#      - "53:53/udp" #dns
+    ports:
+      - "{{ pihole_ip }}:53:53/tcp" #dns
+      - "{{ pihole_ip }}:53:53/udp" #dns
+      - "{{ pihole_ip }}:853:853"
 #      - "67:67/udp" #dhcp server
 #      - "80:80/tcp"
 #      - "443:443/tcp"
-#    expose:
+    expose:
+      - "53/tcp"
+      - "53/udp"
+      - "853"
 #     - 80
 #     - 443
     environment:
@@ -112,21 +121,21 @@ services:
       - "traefik.http.routers.pihole.tls.domains[0].main={{ ansible_nas_domain }}"
       - "traefik.http.routers.pihole.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
       - "traefik.http.services.pihole.loadbalancer.server.port=80"
-      # DNS-over-TLS
-      - "traefik.tcp.routers.dnsovertlspihole.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.dnsovertlspihole.entrypoints=dnsovertls"
-      - "traefik.tcp.routers.dnsovertlspihole.tls.certresolver=myresolver"
-      - "traefik.tcp.routers.dnsovertlspihole.service=pihole"
-      # Non TLS TCP DNS
-      - "traefik.tcp.routers.dnspihole.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.dnspihole.entrypoints=dns"
-      - "traefik.tcp.routers.dnspihole.service=pihole"
-      # DNS-over-TLS, and non TLS TCP DNS
-      - "traefik.tcp.services.pihole.loadbalancer.server.port=53"
-      # UDP DNS
-      - "traefik.udp.routers.pihole-udp.entrypoints=udpdns"
-      - "traefik.udp.services.piholeudp.loadbalancer.server.port=53"
-      - "traefik.udp.routers.pihole-udp.service=piholeudp"
+#      # DNS-over-TLS
+#      - "traefik.tcp.routers.dnsovertlspihole.rule=HostSNI(`*`)"
+#      - "traefik.tcp.routers.dnsovertlspihole.entrypoints=dnsovertls"
+#      - "traefik.tcp.routers.dnsovertlspihole.tls.certresolver=letsencrypt"
+#      - "traefik.tcp.routers.dnsovertlspihole.service=pihole"
+#      # Non TLS TCP DNS
+#      - "traefik.tcp.routers.dnspihole.rule=HostSNI(`*`)"
+#      - "traefik.tcp.routers.dnspihole.entrypoints=dns"
+#      - "traefik.tcp.routers.dnspihole.service=pihole"
+#      # DNS-over-TLS, and non TLS TCP DNS
+#      - "traefik.tcp.services.pihole.loadbalancer.server.port=53"
+#      # UDP DNS
+#      - "traefik.udp.routers.pihole-udp.entrypoints=udpdns"
+#      - "traefik.udp.services.piholeudp.loadbalancer.server.port=53"
+#      - "traefik.udp.routers.pihole-udp.service=piholeudp"
     # Starts cloudflard before Pi-hole
     depends_on:
       - cloudflared
