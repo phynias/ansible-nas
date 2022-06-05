@@ -1,0 +1,19 @@
+---
+# enable or disable the application
+hakuneko_enabled: false
+hakuneko_available_externally: "false"
+
+# directories
+hakuneko_data_directory: "{{ docker_home }}/hakuneko"
+hakuneko_comics_directory: "{{ comics_root }}"
+
+# uid / gid
+hakuneko_user_id: "1000"
+hakuneko_group_id: "1000"
+
+# network
+hakuneko_hostname: "hakuneko"
+hakuneko_port_http: "8080"
+
+# specs
+hakuneko_memory: "512m"

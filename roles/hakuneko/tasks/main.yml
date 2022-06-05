@@ -1,0 +1,37 @@
+---
+- name: Create hakuneko Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    # mode: 0755
+  with_items:
+    - "{{ hakuneko_data_directory }}"
+    - "{{ hakuneko_data_directory }}/config"
+
+- name: hakuneko Docker Container
+  docker_container:
+    name: hakuneko
+    image: shlagevuk/hakuneko
+    capabilities:
+      - SYS_ADMIN
+    pull: true
+    volumes:
+      - "{{ hakuneko_comics_directory }}:/comics:ro"
+      - "{{ hakuneko_data_directory }}/config:/config:rw"
+    network_mode: "bridge"
+    ports:
+      - "{{ hakuneko_port_http }}:8080"
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      PUID: "{{ hakuneko_user_id }}"
+      PGID: "{{ hakuneko_group_id }}"
+    restart_policy: unless-stopped
+    memory: "{{ hakuneko_memory }}"
+    labels:
+      traefik.enable: "{{ hakuneko_available_externally }}"
+      traefik.http.routers.hakuneko.rule: "Host(`{{ hakuneko_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.hakuneko.tls.certresolver: "letsencrypt"
+      traefik.http.routers.hakuneko.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.hakuneko.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.hakuneko.loadbalancer.server.port: "8080"
+      autoheal: "true"
