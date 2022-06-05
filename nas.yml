@@ -67,6 +67,19 @@
         - openvpn
       when: (openvpn_enabled | default(False))
 
+    ##
+    ## put this near top or else we get alerts saying they aren't availble to sanorr,radarr...
+    ##
+    - role: sabnzbd
+      tags:
+        - sabnzbd
+      when: (sabnzbd_enabled | default(False))
+
+    - role: transmission
+      tags:
+        - transmission
+      when: (transmission_enabled | default(False))
+
     - role: airsonic
       tags:
         - airsonic
@@ -127,16 +140,6 @@
         - homeassistant
       when: (homeassistant_enabled | default(False))
 
-    - role: sabnzbd
-      tags:
-        - sabnzbd
-      when: (sabnzbd_enabled | default(False))
-
-    - role: transmission
-      tags:
-        - transmission
-      when: (transmission_enabled | default(False))
-
     - role: transmission-with-openvpn
       tags:
         - transmission_with_openvpn_enabled
@@ -151,6 +154,11 @@
       tags:
         - komga
       when: (komga_enabled | default(False))
+
+    - role: hakuneko
+      tags:
+        - hakuneko
+      when: (hakuneko_enabled | default(False))
 
     - role: netdata
       tags:
@@ -216,6 +224,11 @@
       tags:
         - sonarr
       when: (sonarr_enabled | default(False))
+
+    - role: mealie
+      tags:
+        - mealie
+      when: (mealie_enabled | default(False))
 
     - role: prowlarr
       tags:

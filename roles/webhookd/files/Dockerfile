@@ -1,7 +1,7 @@
 #########################################
 # Build stage
 #########################################
-FROM ncarlier/webhookd
+FROM ncarlier/webhookd:latest
 
 COPY ./requirements.txt /requirements.txt
 

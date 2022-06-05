@@ -15,12 +15,13 @@
     pull: true
     volumes:
       - "{{ homeassistant_data_directory }}/config:/config:rw"
-    network_mode: host
+#    network_mode: host
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     restart_policy: unless-stopped
     env:
       TZ: "{{ ansible_nas_timezone }}"
     labels:
+      autoheal: "true"
       traefik.enable: "{{ homeassistant_available_externally }}"
       traefik.http.routers.homeassistant.entrypoints: "web,websecure"
       traefik.http.routers.homeassistant.rule: "Host(`{{ homeassistant_hostname }}.{{ ansible_nas_domain }}`)"
@@ -29,3 +30,27 @@
       traefik.http.routers.homeassistant.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.homeassistant.loadbalancer.server.port: "8123"
     memory: 1g
+  register: ha_status
+
+- name: Get Homer Assistant IP
+  set_fact:
+    container_ip: "{{ ha_status.ansible_facts.docker_container.NetworkSettings.IPAddress }}"
+
+- name: Check container
+  wait_for:
+    host: "{{ container_ip }}"
+    port: 8123
+
+- name: Install HACS
+  community.docker.docker_container_exec:
+    container: homeassistant
+    command: wget -O - https://get.hacs.xyz | bash -
+    detach: true
+    chdir : /tmp
+
+- pause: seconds=5
+
+- name: Restart Home Assistant
+  docker_container:
+    name: homeassistant
+    restart: yes

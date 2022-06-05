@@ -36,9 +36,18 @@
     dest: "{{ role_path }}/files/docker-compose.yml"
 
 - name: Run docker-compose pull
-  command: docker-compose pull --ignore-pull-failures
+  shell: "docker-compose pull --ignore-pull-failures || true"
+  register: shell_output
   args:
     chdir: "{{ role_path }}/files"
+
+- name: Run docker-compose build
+  shell: "docker-compose build"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}/files"
+
+- debug: var=shell_output.stdout
 
 - name: Deploy pihole Docker Compose stack
   docker_compose:
@@ -46,23 +55,26 @@
     project_src: "{{ role_path }}/files"
     files:
     - docker-compose.yml
+  register: shell_output
+
+#- debug: var=shell_output
 
 ########
 
 - name: check if config is a dir
   stat:
     path: "{{ pihole_data_directory }}/pihole/custom.list"
-  register: register_check
+  register: dir_to_check
 
-- name: Delete content & directory
+- name: Delete custom.list if directory
   file:
     state: absent
     path: "{{ pihole_data_directory }}/pihole/custom.list"
-  when: register_check.stat.exists
+  when:  dir_to_check.stat.isdir is defined and dir_to_check.stat.isdir
 
 - name: set custom dns list
   template:
-    src: custom.list.j2
+    src: templates/custom.list.j2
     dest: "{{ pihole_data_directory }}/pihole/custom.list"
     owner: nasuser
     group: nasuser
@@ -70,15 +82,14 @@
   tags:
     - pihole
     - pihole_dns
-
+  register: diff
 
 - name: restart pihole dns
-  command: docker exec pihole bash -c 'pihole restartdns reload'
+  shell: docker exec pihole bash -c 'pihole restartdns reload'
   tags:
     - pihole
     - ihole_dns
-
-
+  when: diff.changed
 
 #
 #- name: cloudflared

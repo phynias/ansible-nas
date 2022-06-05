@@ -32,7 +32,7 @@ services:
       piholedhcp:
         ipv4_address: "10.0.0.2"
     labels:
-      - "autoheal=true"
+      - "autoheal=false"
 
   dhcp-relay:
     container_name: dhcp-relay
@@ -114,7 +114,7 @@ services:
       - NET_ADMIN
     restart: always
     labels:
-      - "autoheal=true"
+      - "autoheal=false"
       - "traefik.enable={{ pihole_available_externally }}"
       - "traefik.http.routers.pihole.rule=Host(`{{ pihole_hostname }}.{{ ansible_nas_domain }}`)"
       - "traefik.http.routers.pihole.tls.certresolver=letsencrypt"

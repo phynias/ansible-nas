@@ -29,9 +29,8 @@
       - "{{ tv_root }}:/tv"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-    network_mode: "{{ 'container:' + proxy_container if webhookd_proxy else 'None' }}"
     env:
-      WHD_LISTEN_ADDR: ":8787"
+#      WHD_LISTEN_ADDR: ":8787"
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ webhookd_user_id }}"
       PGID: "{{ webhookd_group_id }}"
@@ -43,7 +42,7 @@
       timeout: 5s
       retries: 2
       start_period: 90s
-    command: webhookd --scripts=/tools
+    command: webhookd --scripts=/tools/
     labels:
       traefik.enable: "{{ webhookd_available_externally }}"
       traefik.http.routers.webhookd.entrypoints: "web,websecure"
@@ -51,6 +50,6 @@
       traefik.http.routers.webhookd.tls.certresolver: "letsencrypt"
       traefik.http.routers.webhookd.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.webhookd.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
-      traefik.http.services.webhookd.loadbalancer.server.port: "8787"
+      traefik.http.services.webhookd.loadbalancer.server.port: "8080"
       com.centurylinklabs.watchtower.enable: "false"
       autoheal: "true"
