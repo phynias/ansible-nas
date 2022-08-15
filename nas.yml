@@ -140,6 +140,11 @@
         - homeassistant
       when: (homeassistant_enabled | default(False))
 
+    - role: umi
+      tags:
+        - umi
+      when: (umi_enabled | default(False))
+
     - role: transmission-with-openvpn
       tags:
         - transmission_with_openvpn_enabled
@@ -289,6 +294,11 @@
       tags:
         - zfswatcher
       when: (zfswatcher_enabled | default(False))
+
+    - role: wyze-bridge
+      tags:
+        - wyze
+      when: (wyze_enabled | default(False))
 
   tasks:
   - import_tasks: tasks/firefly.yml

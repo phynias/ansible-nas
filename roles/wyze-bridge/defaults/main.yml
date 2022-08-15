@@ -1,0 +1,14 @@
+wyze_enabled: false
+
+# Networking
+wyze_available_externally: "false"
+wyze_port: 5000
+wyze_hostname: "wyze"
+
+# Directories
+wyze_data_directory: "{{ docker_home }}/wyze"
+
+
+# Security
+wyze_auth_user: "wyze_user"
+wyze_auth_password: "wyze_change_me"

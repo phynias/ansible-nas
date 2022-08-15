@@ -1,0 +1,48 @@
+---
+- name: Create wyze Directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ wyze_data_directory }}"
+
+- name: wyze Docker Container
+  docker_container:
+    name: wyze
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: "1"
+    image: mrlt8/wyze-bridge
+    pull: true
+    ports:
+      - "1935:1935"
+      - "8554:8554"
+      - "8888:8888"
+      - "5000:5000"
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "{{ docker_home }}/traefik/certs_dump/certs:/ssl"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    memory: 512m
+    env:
+      WYZE_EMAIL: "{{ wyze_auth_user }}"
+      WYZE_PASSWORD: "{{ wyze_auth_password }}"
+      WB_HLS_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:8888/"
+      WB_RTMP_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:1935/"
+      WB_RTSP_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:8554/"
+      LLHLS: "True"
+      RTSP_HLSENCRYPTION: "yes"
+      RTSP_HLSSERVERKEY : "/ssl/private/{{ ansible_nas_domain }}.key"
+      RTSP_HLSSERVERCERT: "/ssl/certs/{{ ansible_nas_domain }}.crt"
+    labels:
+      traefik.enable: "{{ wyze_available_externally }}"
+      traefik.http.routers.wyze.entrypoints: "web,websecure"
+      traefik.http.routers.wyze.rule: "Host(`{{ wyze_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.wyze.tls.certresolver: "letsencrypt"
+      traefik.http.routers.wyze.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.wyze.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.wyze.loadbalancer.server.port: "5000"
+      com.centurylinklabs.watchtower.enable: "false"
+      autoheal: "true"

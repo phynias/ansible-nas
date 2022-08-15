@@ -6,6 +6,7 @@
   with_items:
     - "{{ traefik_data_directory }}"
     - "{{ traefik_data_directory }}/letsencrypt"
+    - "{{ traefik_data_directory }}/certs_dump"
 
 - name: check if config is a dir
   stat:
@@ -74,3 +75,23 @@
       traefik.http.routers.traefik.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.traefik.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
 
+- name: certs-dumper
+  docker_container:
+    name: certs-dumper
+    image: ldez/traefik-certs-dumper
+    pull: true
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    volumes:
+      - "{{ traefik_data_directory }}/certs_dump:/data"
+      - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:ro"
+    labels:
+      autoheal: "true"
+    entrypoint: sh -c '
+      apk add jq
+      ; while ! [ -e /letsencrypt/acme.json ]
+      || ! [ `jq ".[] | .Certificates | length" /letsencrypt/acme.json` != 0 ]; do
+      sleep 1
+      ; done
+      && traefik-certs-dumper file --version v2 --watch
+      --source /letsencrypt/acme.json --dest /data/certs'
