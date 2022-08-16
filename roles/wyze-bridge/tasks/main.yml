@@ -45,4 +45,5 @@
       traefik.http.routers.wyze.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.wyze.loadbalancer.server.port: "5000"
       com.centurylinklabs.watchtower.enable: "false"
+      traefik.http.routers.wyze.middlewares: "wyze_auth@file"
       autoheal: "true"

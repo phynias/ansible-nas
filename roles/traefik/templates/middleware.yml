@@ -1,6 +1,12 @@
 http:
   middlewares:
 
+    wyze_auth:
+      basicauth:
+        users:
+          - "{{ wyze_local_user }}:{{ wyze_local_pass }}"
+        removeheader: true
+
     onlyLocalNetwork:
       ipWhiteList:
         sourceRange:

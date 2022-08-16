@@ -64,7 +64,7 @@
     force_kill: true
     labels:
       autoheal: "true"
-      traefik.frontend.headers.customFrameOptionsValue: "allow-from https://organizr.shazbot.one/"
+      traefik.frontend.headers.customFrameOptionsValue: "allow-from https://organizr.{{ ansible_nas_domain }}/"
       traefik.frontend.passHostHeader: "true"
       traefik.enable: "true"
       traefik.http.routers.traefik.rule: "Host(`{{ traefik_hostname }}.{{ ansible_nas_domain }}`)"
