@@ -32,3 +32,8 @@ traefik_environment_variables:
 # the "{{ docker_home }}/traefik" after changing this setting.
 # traefik_acme_server: "https://acme-staging-v02.api.letsencrypt.org/directory" # staging
 traefik_acme_server: "https://acme-v02.api.letsencrypt.org/directory" # production
+
+traefik_google_client_id: ""
+traefik_google_client_secret: ""
+traefik_google_local_secret: ""
+traefik_google_whitelist_email: ""
