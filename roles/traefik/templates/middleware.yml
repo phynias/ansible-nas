@@ -1,7 +1,7 @@
 http:
   middlewares:
 
-    wyze_auth:
+    basic_auth:
       basicauth:
         users:
           - "{{ wyze_local_user }}:{{ wyze_local_pass }}"
