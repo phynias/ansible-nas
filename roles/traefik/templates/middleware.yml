@@ -17,3 +17,14 @@ http:
         ipstrategy:
           excludedips:
             - "192.168.1.1"
+
+    google-oauth:
+      forwardAuth:
+        address: "https://oauth.shazbot.one" # Make sure you have the OAuth service in docker-compose.yml
+        trustForwardHeader: true
+        authResponseHeaders:
+          - "X-Forwarded-User"
+
+
+
+
