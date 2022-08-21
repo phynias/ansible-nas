@@ -33,26 +33,27 @@
 - name: Setup pihole docker-compose.yml
   template:
     src: templates/docker-compose.yml.j2
-    dest: "{{ role_path }}/files/docker-compose.yml"
+    dest: "{{ role_path }}/docker-compose.yml"
 
 - name: Run docker-compose pull
   shell: "docker-compose pull --ignore-pull-failures || true"
   register: shell_output
   args:
-    chdir: "{{ role_path }}/files"
+    chdir: "{{ role_path }}"
 
 - name: Run docker-compose build
   shell: "docker-compose build"
   register: shell_output
   args:
-    chdir: "{{ role_path }}/files"
+    chdir: "{{ role_path }}"
 
 - debug: var=shell_output.stdout
 
 - name: Deploy pihole Docker Compose stack
   docker_compose:
+    remove_orphans: true
     recreate: "{{ 'always' if pihole_recreate else 'smart' }}"
-    project_src: "{{ role_path }}/files"
+    project_src: "{{ role_path }}"
     files:
     - docker-compose.yml
   register: shell_output

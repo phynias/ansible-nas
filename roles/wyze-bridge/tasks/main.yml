@@ -16,10 +16,9 @@
     image: mrlt8/wyze-bridge
     pull: true
     ports:
-      - "1935:1935"
-      - "8554:8554"
-      - "8888:8888"
-      - "5000:5000"
+      - "127.0.0.1:1935:1935"
+      - "127.0.0.1:8554:8554"
+      - "127.0.0.1:8888:8888"
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "{{ docker_home }}/traefik/certs_dump/certs:/ssl"
@@ -29,9 +28,9 @@
     env:
       WYZE_EMAIL: "{{ wyze_auth_user }}"
       WYZE_PASSWORD: "{{ wyze_auth_password }}"
-      WB_HLS_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:8888/"
-      WB_RTMP_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:1935/"
-      WB_RTSP_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:8554/"
+      #WB_HLS_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:8888/"
+      #WB_RTMP_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:1935/"
+      #WB_RTSP_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:8554/"
       LLHLS: "True"
       RTSP_HLSENCRYPTION: "yes"
       RTSP_HLSSERVERKEY : "/ssl/private/{{ ansible_nas_domain }}.key"

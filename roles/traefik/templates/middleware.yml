@@ -6,6 +6,11 @@ http:
         users:
           - "{{ wyze_local_user }}:{{ wyze_local_pass }}"
         removeheader: true
+      ipWhiteList:
+        sourceRange:
+          - "172.17.0.0/16"
+          - "127.0.0.1"
+          - "192.168.1.200"
 
     onlyLocalNetwork:
       ipWhiteList:

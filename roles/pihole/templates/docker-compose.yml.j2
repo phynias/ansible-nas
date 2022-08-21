@@ -43,7 +43,7 @@ services:
         max-file: "1"
     build:
       context: .
-      dockerfile: dhcp-relay.dockerfile
+      dockerfile: files/dhcp-relay.dockerfile
       args:
         INTERFACE_UPSTREAM: "{{ pihole_int.stdout }}"
         INTERFACE_DOWNSTREAM: "{{ default_int.stdout }}"

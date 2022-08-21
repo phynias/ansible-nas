@@ -4,41 +4,41 @@
     state: directory
   with_items:
     - "{{ homeassistant_data_directory }}/config"
+    - "{{ homeassistant_data_directory }}/mariadb"
 
-- name: Home Assistant Docker Container
-  docker_container:
-    name: homeassistant
-    log_options:
-      max-size: 256m
-      max-file: 1
-    image: homeassistant/home-assistant
-    pull: true
-    volumes:
-      - "{{ homeassistant_data_directory }}/config:/config:rw"
-#    network_mode: host
-    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-    restart_policy: unless-stopped
-    env:
-      TZ: "{{ ansible_nas_timezone }}"
-    labels:
-      autoheal: "true"
-      traefik.enable: "{{ homeassistant_available_externally }}"
-      traefik.http.routers.homeassistant.entrypoints: "web,websecure"
-      traefik.http.routers.homeassistant.rule: "Host(`{{ homeassistant_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.homeassistant.tls.certresolver: "letsencrypt"
-      traefik.http.routers.homeassistant.tls.domains[0].main: "{{ ansible_nas_domain }}"
-      traefik.http.routers.homeassistant.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
-      traefik.http.services.homeassistant.loadbalancer.server.port: "8123"
-    memory: 1g
-  register: ha_status
 
-- name: Get Homer Assistant IP
-  set_fact:
-    container_ip: "{{ ha_status.ansible_facts.docker_container.NetworkSettings.IPAddress }}"
+- name: Setup homeassistant docker-compose.yml
+  template:
+    src: templates/docker-compose.yml.j2
+    dest: "{{ role_path }}/docker-compose.yml"
+
+
+- name: Run docker-compose pull
+  shell: "docker-compose pull --ignore-pull-failures || true"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- name: Deploy homeassistant Docker Compose stack
+  docker_compose:
+    recreate: "{{ 'always' if docker_recreate else 'smart' }}"
+    project_src: "{{ role_path }}"
+    remove_orphans: true
+    files:
+    - docker-compose.yml
+  register: shell_output
+
+- command: |
+         {% raw %}
+         docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' homeassistant
+         {% endraw %}
+  register: cmd_res
+  retries: 60
+  until: cmd_res.stdout is search('172')
 
 - name: Check container
   wait_for:
-    host: "{{ container_ip }}"
+    host: "{{ cmd_res.stdout }}"
     port: 8123
 
 - name: Install HACS
@@ -50,7 +50,12 @@
 
 - pause: seconds=5
 
-- name: Restart Home Assistant
-  docker_container:
-    name: homeassistant
-    restart: yes
+- name: Restart homeassistant
+  docker_service:
+    project_src: "{{ role_path }}"
+    services:
+        - homeassistant
+    restarted: true
+    state: present
+
+
