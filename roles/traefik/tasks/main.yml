@@ -30,41 +30,6 @@
     src:  middleware.yml
     dest: "{{ traefik_data_directory }}/rules/middleware.yml"
 
-- name: oauth
-  docker_container:
-    name: oauth
-    image: thomseddon/traefik-forward-auth
-    pull: true
-    restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-    env:
-      CONFIG: /config
-      COOKIE_DOMAIN: "{{ ansible_nas_domain }}"
-      INSECURE_COOKIE: "false"
-      AUTH_HOST: "oauth.{{ ansible_nas_domain }}"
-      URL_PATH: /_oauth
-      LOG_LEVEL: warn
-      LOG_FORMAT: text
-      LIFETIME: "{{ 86400 * 7 }}"  # 7 days
-      DEFAULT_ACTION: auth
-      DEFAULT_PROVIDER: google
-      PROVIDERS_GOOGLE_CLIENT_ID: "{{ traefik_google_client_id }}"
-      PROVIDERS_GOOGLE_CLIENT_SECRET: "{{ traefik_google_client_secret }}"
-      SECRET: "{{ traefik_google_local_secret }}"
-      WHITELIST: "{{ traefik_google_whitelist_email }}"
-    labels:
-      autoheal: "true"
-      traefik.enable: "true"
-      ## HTTP Routers
-      traefik.http.routers.oauth-rtr.tls: "true"
-      traefik.http.routers.oauth-rtr.entrypoints: "web,websecure"
-      traefik.http.routers.oauth-rtr.rule: "Host(`oauth.{{ ansible_nas_domain }}`)"
-      ## Middlewares
-#      traefik.http.routers.oauth-rtr.middlewares: "google-oauth@file"
-      ## HTTP Services
-#      traefik.http.routers.oauth-rtr.service: "oauth-svc"
-      traefik.http.services.oauth-rtr.loadbalancer.server.port: "4181"
-
 - name: Traefik Docker Container
   docker_container:
     name: traefik
@@ -79,14 +44,18 @@
       - "--docker"
       - "--serverstransport.insecureskipverify=true"
       - "--traefikLogsFile=/logs/traefik.log"
-    network_mode: host
-#    ports:
-#     - 8083:8083
-#     - 80:80
-#     - 443:443
+    networks:
+      - name: bridge
+      - name: nas_bridge
+      - name: piholedhcp
+    ports:
+      - "{{ traefik_port_http }}:{{ traefik_port_http }}"
+      - "{{ traefik_port_https }}:{{ traefik_port_https }}"
+      - "{{ traefik_port_https_ext }}:{{ traefik_port_https_ext }}"
+      - "{{ traefik_port_ui }}:{{ traefik_port_ui }}"
     volumes:
       - "{{ traefik_data_directory }}/traefik.toml:/etc/traefik/traefik.toml:ro"
-      - "{{ traefik_data_directory }}/.google.json:/etc/traefik/.google.json:ro"
+      # - "{{ traefik_data_directory }}/.google.json:/etc/traefik/.google.json:ro"
       - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:rw"
       - "{{ traefik_data_directory }}/rules:/rules:ro"
       - "{{ traefik_data_directory }}/logs:/logs:rw"
@@ -98,10 +67,12 @@
     memory: 1g
     force_kill: true
     labels:
-      autoheal: "true"
+      traefik.enable: "true"
+      traefik.http.middlewares.authelia.forwardauth.address: "http://authelia:9091/api/verify?rd=https://{{ authelia_hostname }}.{{ ansible_nas_domain }}/"
+      traefik.http.middlewares.authelia.forwardauth.trustforwardheader: "true"
+      traefik.http.middlewares.authelia.forwardauth.authresponseheaders: "Remote-User, Remote-Groups"
       traefik.frontend.headers.customFrameOptionsValue: "allow-from https://organizr.{{ ansible_nas_domain }}/"
       traefik.frontend.passHostHeader: "true"
-      traefik.enable: "true"
       traefik.http.routers.traefik.rule: "Host(`{{ traefik_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.traefik.entrypoints: "traefik"
       traefik.http.routers.traefik.tls: "true"
@@ -109,6 +80,7 @@
       traefik.http.routers.traefik.tls.certresolver: "letsencrypt"
       traefik.http.routers.traefik.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.traefik.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      autoheal: "true"
 #      traefik.http.routers.traefik.middlewares: "basic_auth@file"
 
 - name: certs-dumper
@@ -117,7 +89,6 @@
     image: ldez/traefik-certs-dumper
     pull: true
     restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     volumes:
       - "{{ traefik_data_directory }}/certs_dump:/data"
       - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:ro"

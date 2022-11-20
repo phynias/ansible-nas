@@ -1,0 +1,4 @@
+- name: create docker network
+  docker_network:
+    name: nas_bridge
+

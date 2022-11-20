@@ -12,7 +12,7 @@
     name: airsonic
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: linuxserver/airsonic:latest
     pull: true
     volumes:
@@ -45,7 +45,7 @@
     name: airsonic-frontend
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: tamland/airsonic-frontend:latest
     pull: true
     env:

@@ -10,7 +10,7 @@
     name: emby
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: linuxserver/emby
     pull: true
     volumes:

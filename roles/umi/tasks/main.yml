@@ -4,7 +4,7 @@
     name: umi
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: phynias/umi:latest
     pull: true
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"

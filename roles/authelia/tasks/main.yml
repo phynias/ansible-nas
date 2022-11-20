@@ -1,0 +1,76 @@
+
+- name: Create authelia Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ authelia_config_directory }}"
+    - "{{ authelia_config_directory }}/config"
+
+- name: template files
+  template:
+    src: "templates/{{ item }}"
+    dest: "{{ authelia_config_directory }}/config/{{ item }}"
+    mode: 0400
+  with_items:
+    - "users_database.yml"
+    - "configuration.yml"
+
+- name: create authelia_session_secret
+  copy:
+    content: "{{ authelia_secret }}"
+    dest: "{{ authelia_config_directory }}/config/authelia_session_secret"
+
+- name: create authelia_storage_encryption_key
+  copy:
+    content: "{{ authelia_storage_key }}"
+    dest: "{{ authelia_config_directory }}/config/authelia_storage_encryption_key"
+
+- name: create authelia_jwt_secret
+  copy:
+    content: "{{ authelia_jwt_secret }}"
+    dest: "{{ authelia_config_directory }}/config/authelia_jwt_secret"
+
+- name: authelia_redis
+  docker_container:
+    name: authelia_redis
+    image: redis:alpine
+    networks:
+      - name: nas_bridge
+    security_opts:
+      - no-new-privileges:true
+    volumes:
+      - "{{ authelia_data_directory }}/redis:/data"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    env:
+      TZ:  "{{ ansible_nas_timezone }}"
+    command: "redis-server --appendonly yes"
+
+- name: authelia
+  docker_container:
+    name: authelia
+    image: authelia/authelia
+    security_opts:
+      - no-new-privileges:true
+    networks:
+      - name: nas_bridge
+    volumes:
+      - "{{ authelia_config_directory }}/config:/config"
+      - "{{ authelia_data_directory }}/logs:/logs"
+    labels:
+      traefik.enable: "{{ authelia_available_externally }}"
+      traefik.http.routers.authelia.entrypoints: "websecure,websecure-ext"
+      traefik.http.routers.authelia.rule: "Host(`{{ authelia_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.authelia.tls.certresolver: "letsencrypt"
+      traefik.http.routers.authelia.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.authelia.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.authelia.loadbalancer.server.port: "9091"
+      autoheal: "true"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE: "/config/authelia_storage_encryption_key"
+      AUTHELIA_JWT_SECRET_FILE: "/config/authelia_jwt_secret"
+      AUTHELIA_SESSION_SECRET_FILE: "/config/authelia_session_secret"

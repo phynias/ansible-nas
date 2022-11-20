@@ -27,13 +27,6 @@
         - skip_ansible_lint
 
     ###
-    ### needs to be towards the top
-    ###
-    - role: expressvpn
-      tags: [ never, expressvpn ]
-      when: (expressvpn_enabled | default(False))
-
-    ###
     ### Ansible-NAS Roles
     ###
     - role: ansible-nas-general
@@ -46,10 +39,24 @@
         - ansible-nas-docker
         - ansible-nas
 
+    ###
+    ### needs to be towards the top
+    ###
+    - role: expressvpn
+      tags: [ never, expressvpn ]
+      when: (expressvpn_enabled | default(False))
+
+    - role: networks
+      tags: [ always ]
 
     ###
     ### Applications
     ###
+    - role: authelia
+      tags:
+        - authelia
+      when: (authelia_enabled | default(False))
+
     - role: traefik
       tags:
         - traefik
@@ -297,7 +304,7 @@
 
     - role: wyze-bridge
       tags:
-        - wyze
+        - wyze-bridge
       when: (wyze_enabled | default(False))
 
   tasks:

@@ -27,7 +27,7 @@
     name: influxdb
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: influxdb:1.8
     pull: true
     volumes:
@@ -45,7 +45,7 @@
     name: hddtemp
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: drewster727/hddtemp-docker
     pull: true
     privileged: true
@@ -66,7 +66,7 @@
     name: telegraf
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: telegraf
     pull: true
     links:
@@ -118,7 +118,7 @@
     name: grafana
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: grafana/grafana
     pull: true
     volumes:

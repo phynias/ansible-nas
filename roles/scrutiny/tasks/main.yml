@@ -35,7 +35,6 @@
       - "/run/udev:/run/udev:ro"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-#    network_mode: "{{ 'container:' + proxy_container if scrutiny_proxy else 'None' }}"
 #    env:
 #      TZ: "{{ ansible_nas_timezone }}"
 #      DEBUG: "true"

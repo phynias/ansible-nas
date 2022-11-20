@@ -28,12 +28,13 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: prom/node-exporter
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     force_kill: true
     volumes:
+      - "{{ prometheus_data_directory }}/textcollector:/textcollector"
       - "/etc/timezone:/etc/timezone:ro"
       - "/:/rootfs:ro,rslave"
       - /proc:/host/proc:ro
@@ -42,6 +43,7 @@
       - "--path.procfs=/host/proc"
       - "--path.sysfs=/host/sys"
       - "--path.rootfs=/rootfs"
+      - "--collector.textfile.directory=/textcollector"
       - "--collector.zfs"
       - "--collector.filesystem.ignored-mount-points"
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
@@ -49,12 +51,11 @@
 - name: blackbox
   docker_container:
     name: blackbox
-    network_mode: host
     pull: true
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: prom/blackbox-exporter:latest
     volumes:
       - "{{ prometheus_data_directory }}/blackbox.yml:/etc/blackbox_exporter/config.yml"
@@ -63,13 +64,14 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     force_kill: true
+
 - name: alertmanager
   docker_container:
     name: alertmanager
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: prom/alertmanager
     ports:
       - 9093:9093
@@ -103,7 +105,7 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: gcr.io/google-containers/cadvisor
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
@@ -152,7 +154,7 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: grafana/promtail
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     force_kill: true
@@ -174,7 +176,7 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: prom/prometheus
     pull: true
     command:
@@ -204,4 +206,20 @@
     user: "{{ nas_uid }}:{{ nas_gid }}"
     labels:
       autoheal: "true"
+
+- name: Grab latest smartmon.sh
+  get_url:
+    url: https://raw.githubusercontent.com/olegeech-me/S.M.A.R.T-disk-monitoring-for-Prometheus/master/smartmon.sh
+    dest: /usr/local/bin/smartmon.sh
+    mode: 0755
+    group: root
+    owner: root
+
+- name: Setup cron
+  cron:
+    name: "Smartmon to textcollector"
+    user: "root"
+    minute: "*"
+    hour: "*"
+    job: "/usr/local/bin/smartmon.sh > {{ prometheus_data_directory }}/textcollector/smart_metrics.prom"
 

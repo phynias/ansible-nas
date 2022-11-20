@@ -5,7 +5,7 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: linuxserver/sabnzbd
     pull: true
     volumes:
@@ -19,7 +19,6 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     network_mode: "{{ 'container:' + proxy_container if sabnzbd_proxy else 'None' }}"
-    memory: 1.5g
     healthcheck:
       test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]
       interval: 1m

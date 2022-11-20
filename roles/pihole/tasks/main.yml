@@ -99,7 +99,7 @@
 #    log_driver: json-file
 #    log_options:
 #      max-size: 256m
-#      max-file: 1
+#      max-file: "1"
 #    image: visibilityspots/cloudflared
 #    restart_policy: unless-stopped
 #    pull: false
@@ -119,7 +119,7 @@
 #    log_driver: json-file
 #    log_options:
 #      max-size: 256m
-#      max-file: 1
+#      max-file: "1"
 #    image: arevindh/pihole:latest
 #    pull: false
 #    volumes:

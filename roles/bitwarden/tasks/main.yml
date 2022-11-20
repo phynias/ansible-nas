@@ -11,7 +11,7 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: bitwardenrs/server:latest
     pull: true
     ports:
@@ -41,7 +41,7 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: bruceforce/bw_backup:latest
     pull: true
     restart_policy: unless-stopped

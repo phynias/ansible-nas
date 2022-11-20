@@ -1,0 +1,15 @@
+---
+authelia_enabled: false
+authelia_available_externally: "false"
+
+# directories
+authelia_config_directory: "{{ docker_home }}/authelia"
+authelia_data_directory: "{{ authelia_config_directory }}/data"
+
+# network
+authelia_port: "9091"
+authelia_hostname: "auth"
+
+authelia_storage_key: "SECRET_GOES_HERE_20_CHARACTERS_OR_LONGER"
+authelia_secret: ""
+authelia_users: []

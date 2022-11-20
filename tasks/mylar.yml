@@ -11,7 +11,7 @@
     name: mylar
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: linuxserver/mylar3
     pull: true
     volumes:

@@ -37,7 +37,7 @@
     name: owncloud_redis
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: webhippie/redis:latest
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
@@ -57,7 +57,7 @@
     name: mariadb
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: mymariadb:latest
 #    image: mariadb:10.5
     restart_policy: unless-stopped
@@ -86,7 +86,7 @@
     name: owncloud
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: owncloud/server:latest
     pull: true
     links:
@@ -109,6 +109,7 @@
       OWNCLOUD_MYSQL_UTF8MB4: "true"
       OWNCLOUD_REDIS_ENABLED: "true"
       OWNCLOUD_REDIS_HOST: "redis"
+      OWNCLOUD_TRUSTED_DOMAINS: "localhost,{{ owncloud_hostname }}.{{ ansible_nas_domain }}"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
