@@ -9,8 +9,16 @@ http:
       ipWhiteList:
         sourceRange:
           - "172.17.0.0/16"
-          - "127.0.0.1"
-          - "192.168.1.200"
+          - "127.0.0.1/32"
+          - "192.168.1.200/32"
+
+    authelia:
+      forwardAuth:
+        address: "http://authelia:9091/api/verify?rd=https://{{ authelia_hostname }}.{{ ansible_nas_domain }}/"
+        trustForwardHeader: true
+        authResponseHeaders:
+          - Remote-User
+          - Remote-Groups
 
     onlyLocalNetwork:
       ipWhiteList:
@@ -23,12 +31,12 @@ http:
           excludedips:
             - "192.168.1.1"
 
-    google-oauth:
-      forwardAuth:
-        address: "https://oauth.shazbot.one" # Make sure you have the OAuth service in docker-compose.yml
-        trustForwardHeader: true
-        authResponseHeaders:
-          - "X-Forwarded-User"
+#    google-oauth:
+#      forwardAuth:
+#        address: "https://oauth.{{ ansible_nas_domain }}" # Make sure you have the OAuth service in docker-compose.yml
+#        trustForwardHeader: true
+#        authResponseHeaders:
+#          - "X-Forwarded-User"
 
 
 

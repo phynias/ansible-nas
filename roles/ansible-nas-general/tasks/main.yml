@@ -64,3 +64,4 @@
 #    mode: "u=rwX,g=rwX,o=rX"
 #    recurse: false
 #  loop: "{{ samba_shares }}"
+

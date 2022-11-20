@@ -28,34 +28,35 @@
     - docker-compose.yml
   register: shell_output
 
-- command: |
-         {% raw %}
-         docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' homeassistant
-         {% endraw %}
-  register: cmd_res
-  retries: 60
-  until: cmd_res.stdout is search('172')
+#- name: Get Homeassistant docker IP
+#  command: |
+#         {% raw %}
+#         docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' homeassistant
+#         {% endraw %}
+#  register: cmd_res
+#  retries: 60
+#  until: cmd_res.stdout is search('172')
 
-- name: Check container
-  wait_for:
-    host: "{{ cmd_res.stdout }}"
-    port: 8123
+#- name: Check container
+#  wait_for:
+#    host: "{{ cmd_res.stdout }}"
+#    port: 8123
 
-- name: Install HACS
-  community.docker.docker_container_exec:
-    container: homeassistant
-    command: wget -O - https://get.hacs.xyz | bash -
-    detach: true
-    chdir : /tmp
+#- name: Install HACS
+#  community.docker.docker_container_exec:
+#    container: homeassistant
+#    command: wget -O - https://get.hacs.xyz | bash -
+#    detach: true
+#    chdir : /tmp
 
-- pause: seconds=5
+#- pause: seconds=5
 
-- name: Restart homeassistant
-  docker_service:
-    project_src: "{{ role_path }}"
-    services:
-        - homeassistant
-    restarted: true
-    state: present
+#- name: Restart homeassistant
+#  docker_service:
+#    project_src: "{{ role_path }}"
+#    services:
+#        - homeassistant
+#    restarted: true
+#    state: present
 
 

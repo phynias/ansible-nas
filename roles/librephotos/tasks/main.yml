@@ -25,7 +25,7 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: postgres:13
     pull: true
     restart_policy: unless-stopped
@@ -47,7 +47,7 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: reallibrephotos/librephotos:{{ librephotos_tag }}
     pull: true
     restart_policy: unless-stopped
@@ -90,7 +90,7 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: reallibrephotos/librephotos-frontend:{{ librephotos_tag }}
     pull: true
     restart_policy: unless-stopped
@@ -108,7 +108,7 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: reallibrephotos/librephotos-proxy:{{ librephotos_tag }}
     pull: true
     restart_policy: unless-stopped

@@ -3,7 +3,7 @@
     name: minidlna
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: vladgh/minidlna
     pull: true
     volumes:

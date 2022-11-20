@@ -4,3 +4,5 @@
 {% for d in pihole_custom %}
 {{ nas_ip }} {{ d }}.{{ ansible_nas_domain }}
 {% endfor %}
+192.168.1.201 homeassistant.{{ ansible_nas_domain }}
+

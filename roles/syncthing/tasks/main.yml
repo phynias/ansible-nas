@@ -11,7 +11,7 @@
     name: syncthing
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: syncthing/syncthing:latest
     pull: true
     network_mode: host

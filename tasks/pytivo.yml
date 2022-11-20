@@ -12,7 +12,7 @@
     name: pytivo
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: pinion/docker-pytivo
     pull: true
     ports:

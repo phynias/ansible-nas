@@ -10,7 +10,7 @@
     name: static
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: nginx
     pull: true
     restart_policy: unless-stopped

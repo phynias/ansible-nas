@@ -10,7 +10,7 @@
     name: miniflux-postgres
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: postgres:11.1
     pull: true
     volumes:

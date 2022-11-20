@@ -13,7 +13,7 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: mysql:5.7
     pull: true
     volumes:
@@ -33,7 +33,7 @@
     log_driver: json-file
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: nextcloud:14
     pull: true
     links:

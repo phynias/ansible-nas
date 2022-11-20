@@ -12,7 +12,7 @@
     name: joomla_mysql
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: mysql:5.7
     pull: true
     volumes:
@@ -30,7 +30,7 @@
     name: joomla
     log_options:
       max-size: 256m
-      max-file: 1
+      max-file: "1"
     image: joomla
     pull: true
     volumes:
