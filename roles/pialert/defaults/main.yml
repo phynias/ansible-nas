@@ -1,0 +1,14 @@
+---
+pialert_enabled: false
+pialert_available_externally: "false"
+
+# directories
+pialert_config_directory: "{{ docker_home }}/pialert"
+pihole_data_directory: "{{ docker_home }}/pihole"
+# network
+pialert_port: "20211"
+pialert_hostname: pialert
+
+# uid / gid
+pialert_user_id: "0"
+pialert_group_id: "0"

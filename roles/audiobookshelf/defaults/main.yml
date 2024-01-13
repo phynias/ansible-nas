@@ -1,0 +1,12 @@
+---
+audiobookshelf_enabled: false
+audiobookshelf_available_externally: "false"
+
+# directories
+audiobookshelf_data_directory: "{{ docker_home }}/audiobookshelf"
+
+# network
+audiobookshelf_hostname: "abs"
+audiobookshelf_books_directory: "{{ audiobooks_root }}"
+
+# uid / gid
