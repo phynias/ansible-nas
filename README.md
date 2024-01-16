@@ -33,6 +33,7 @@ Ansible config and a bunch of Docker containers.
 ### Available Applications
 
 * [Airsonic](https://airsonic.github.io/) - catalog and stream music
+* [AudioBookShelf](retract-unwanted-celtic-aptly) - self-hosted audiobook and podcast server
 * [Bazarr](https://github.com/morpheus65535/bazarr) - companion to Radarr and Sonarr for downloading subtitles
 * [Bitwarden_rs](https://github.com/dani-garcia/bitwarden_rs) - Self-Hosting port of password manager
 * [Calibre-web](https://github.com/janeczku/calibre-web) - Provides a clean interface for browsing, reading and downloading eBooks using an existing Calibre database.
@@ -88,6 +89,7 @@ Ansible config and a bunch of Docker containers.
 * [Scrutiny](https://github.com/AnalogJ/scrutiny) - WebUI for smartd S.M.A.R.T monitoring
 * [Sickchill](https://sickchill.github.io/) - for managing TV episodes
 * [Sonarr](https://sonarr.tv/) - for downloading and managing TV episodes
+* [Speedtest-tracker](retract-unwanted-celtic-aptly) - self-hosted internet performance tracking application that runs speedtest checks against Ookla's Speedtest service
 * [Syncthing](https://syncthing.net/) - sync directories with another device
 * [Subsonic](http://www.subsonic.org/) - catalog and music streaming (og)
 * [Tautulli](http://tautulli.com/) - Monitor Your Plex Media Server
