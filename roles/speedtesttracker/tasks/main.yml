@@ -1,0 +1,40 @@
+---
+
+- name: Create speedtesttracker Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ speedtesttracker_data_directory }}"
+    - "{{ speedtesttracker_data_directory }}/web"
+    - "{{ speedtesttracker_data_directory }}/db"
+    - "{{ speedtesttracker_data_directory }}/config"
+
+- name: Setup speedtesttracker docker-compose.yml
+  template:
+    src: templates/docker-compose.yml.j2
+    dest: "{{ role_path }}/docker-compose.yml"
+
+- name: Run docker-compose pull
+  shell: "docker-compose pull --ignore-pull-failures || true"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- name: Run docker-compose build
+  shell: "docker-compose build"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- debug: var=shell_output.stdout
+
+- name: Deploy speedtesttracker Docker Compose stack
+  docker_compose:
+    remove_orphans: true
+    recreate: "{{ 'always' if pihole_recreate else 'smart' }}"
+    project_src: "{{ role_path }}"
+    files:
+    - docker-compose.yml
+  register: shell_output
+

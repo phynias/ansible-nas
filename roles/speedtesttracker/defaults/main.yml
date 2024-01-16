@@ -1,0 +1,11 @@
+---
+speedtesttracker_enabled: false
+speedtesttracker_available_externally: "false"
+
+# directories
+speedtesttracker_data_directory: "{{ docker_home }}/speedtesttracker"
+
+# network
+speedtesttracker_hostname: "speedtest"
+
+# uid / gid
