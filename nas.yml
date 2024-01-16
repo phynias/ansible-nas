@@ -82,6 +82,11 @@
         - sabnzbd
       when: (sabnzbd_enabled | default(False))
 
+    - role: pialert
+      tags:
+        - pialert
+      when: (pialert_enabled | default(False))
+
     - role: transmission
       tags:
         - transmission
@@ -281,6 +286,16 @@
       tags:
         - librenms
       when: (librenms_enabled | default(False))
+
+    - role: audiobookshelf
+      tags:
+        - audiobookshelf
+      when: (audiobookshelf_enabled | default(False))
+
+    - role: speedtesttracker
+      tags:
+        - speedtesttracker
+      when: (speedtesttracker_enabled | default(False))
 
     - role: prometheus
       tags:
