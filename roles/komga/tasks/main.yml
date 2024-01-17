@@ -19,8 +19,6 @@
       - "{{ komga_data_directory }}:/data:rw"
       - "{{ komga_data_directory }}/config:/config:rw"
     network_mode: "bridge"
-    ports:
-      - "{{ komga_port_http }}:8080"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ komga_user_id }}"
@@ -29,9 +27,10 @@
     memory: "{{ komga_memory }}"
     labels:
       traefik.enable: "{{ komga_available_externally }}"
+      traefik.http.routers.papermerge.entrypoints: "web,websecure"
       traefik.http.routers.komga.rule: "Host(`{{ komga_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.komga.tls.certresolver: "letsencrypt"
       traefik.http.routers.komga.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.komga.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
-      traefik.http.services.komga.loadbalancer.server.port: "8080"
+      traefik.http.services.komga.loadbalancer.server.port: "25600"
       autoheal: "true"

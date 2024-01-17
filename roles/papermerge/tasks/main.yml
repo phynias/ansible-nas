@@ -5,7 +5,7 @@
     state: directory
   with_items:
     - "{{ papermerge_data_directory }}"
-    - "{{ papermerge_config_directory }}"
+    - "{{ papermerge_data_directory }}/media"
 
 - name: papermerge
   register: docker_container_output
@@ -15,14 +15,15 @@
     log_options:
       max-size: 256m
       max-file: "1"
-    image: ghcr.io/linuxserver/papermerge:latest
+    image: papermerge/papermerge:latest
     pull: true
     links:
       - "redis:redis"
     volumes:
-      - "{{ papermerge_config_directory }}:/config:rw"
-      - "{{ papermerge_data_directory }}:/data:rw"
+      - "{{ papermerge_data_directory }}/media:/app/media:rw"
     env:
+      PAPERMERGE__MAIN__SECRET_KEY: "{{ papermerge_secret }}"
+      DJANGO_SUPERUSER_PASSWORD: "{{ papermerge_password }}"
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ papermerge_user_id }}"
       PGID: "{{ papermerge_group_id }}"
@@ -30,12 +31,6 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 512m
-    healthcheck:
-      test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]
-      interval: 1m
-      timeout: 5s
-      retries: 2
-      start_period: 90s
     labels:
       traefik.enable: "{{ papermerge_available_externally }}"
       traefik.http.routers.papermerge.entrypoints: "web,websecure"
