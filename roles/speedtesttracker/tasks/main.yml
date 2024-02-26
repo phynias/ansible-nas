@@ -32,7 +32,7 @@
 - name: Deploy speedtesttracker Docker Compose stack
   docker_compose:
     remove_orphans: true
-    recreate: "{{ 'always' if pihole_recreate else 'smart' }}"
+    recreate: "{{ 'always' if docker_recreate else 'smart' }}"
     project_src: "{{ role_path }}"
     files:
     - docker-compose.yml

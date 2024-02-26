@@ -2,6 +2,7 @@ version: "3.3"
 services:
     speedtest-tracker:
         container_name: speedtesttracker
+        network_mode: bridge
         environment:
             - PUID=1000
             - PGID=1000
@@ -20,6 +21,8 @@ services:
             - speedtest-tracker-db
         restart: unless-stopped
         restart: always
+        links:
+          - speedtest-tracker-db
         labels:
             - "traefik.http.routers.speedtesttracker.entrypoints=web,websecure"
             - "traefik.enable=true"
@@ -32,6 +35,7 @@ services:
     speedtest-tracker-db:
         container_name: speedtesttracker-db
         image: postgres:15
+        network_mode: bridge
         restart: always
         environment:
             - POSTGRES_DB=speedtest_tracker
