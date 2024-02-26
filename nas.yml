@@ -297,6 +297,16 @@
         - speedtesttracker
       when: (speedtesttracker_enabled | default(False))
 
+    - role: watchlistarr
+      tags:
+        - watchlistarr
+      when: (watchlistarr_enabled | default(False))
+
+    - role: overseerr
+      tags:
+        - overseerr
+      when: (overseerr_enabled | default(False))
+
     - role: prometheus
       tags:
         - prometheus

@@ -7,6 +7,7 @@ komga_available_externally: "false"
 komga_data_directory: "{{ docker_home }}/komga"
 komga_books_directory: "{{ books_root }}"
 komga_comics_directory: "{{ comics_root }}"
+komga_manga_directory: "{{ manga_root }}"
 
 # uid / gid
 komga_user_id: "1000"

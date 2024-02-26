@@ -1,0 +1,11 @@
+watchlistarr_enabled: false
+
+# Networking
+# watchlistarr_available_externally: "false"
+# watchlistarr_hostname: "watchlistarr"
+
+# Directories
+# watchlistarr_data_directory: "{{ docker_home }}/watchlistarr"
+
+
+# Security

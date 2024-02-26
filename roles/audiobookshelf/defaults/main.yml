@@ -8,5 +8,5 @@ audiobookshelf_data_directory: "{{ docker_home }}/audiobookshelf"
 # network
 audiobookshelf_hostname: "abs"
 audiobookshelf_books_directory: "{{ audiobooks_root }}"
-
+audiobookshelf_podcasts_directory: "{{ podcasts_root }}"
 # uid / gid
