@@ -47,7 +47,6 @@
       traefik.enable: "{{ webhookd_available_externally }}"
       traefik.http.routers.webhookd.entrypoints: "web,websecure"
       traefik.http.routers.webhookd.rule: "Host(`{{ webhookd_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.webhookd.tls.certresolver: "letsencrypt"
       traefik.http.routers.webhookd.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.webhookd.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.webhookd.loadbalancer.server.port: "8080"

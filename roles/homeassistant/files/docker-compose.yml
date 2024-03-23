@@ -19,7 +19,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.homeassistant.entrypoints=web,websecure"
       - "traefik.http.routers.homeassistant.rule=Host(`homeassistant.shazbot.one`)"
-      - "trafeik.http.routers.homeassistant.tls.certresolver=letsencrypt"
       - "traefik.http.routers.homeassistant.tls.domains[0].main=shazbot.one"
       - "traefik.http.routers.homeassistant.tls.domains[0].sans=*.shazbot.one"
       - "traefik.http.services.homeassistant.loadbalancer.server.port=8123"

@@ -35,7 +35,6 @@
       traefik.enable: "{{ prowlarr_available_externally }}"
       traefik.http.routers.prowlarr.entrypoints: "web,websecure"
       traefik.http.routers.prowlarr.rule: "Host(`{{ prowlarr_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.prowlarr.tls.certresolver: "letsencrypt"
       traefik.http.routers.prowlarr.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.prowlarr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.prowlarr.loadbalancer.server.port: "9696"

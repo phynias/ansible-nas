@@ -30,7 +30,6 @@
     labels:
       traefik.enable: "{{ hakuneko_available_externally }}"
       traefik.http.routers.hakuneko.rule: "Host(`{{ hakuneko_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.hakuneko.tls.certresolver: "letsencrypt"
       traefik.http.routers.hakuneko.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.hakuneko.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.hakuneko.loadbalancer.server.port: "8080"

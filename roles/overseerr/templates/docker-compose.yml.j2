@@ -2,7 +2,6 @@ version: "3.3"
 services:
     speedtest-tracker:
         container_name: speedtesttracker
-        network_mode: bridge
         environment:
             - PUID=1000
             - PGID=1000
@@ -13,35 +12,32 @@ services:
             - DB_USERNAME=speedy
             - DB_PASSWORD=password
         volumes:
-            - "/zpool1/docker/speedtesttracker/config:/config"
-            - "/zpool1/docker/speedtesttracker/web:/etc/ssl/web"
+            - "{{ speedtesttracker_data_directory }}/config:/config"
+            - "{{ speedtesttracker_data_directory }}/web:/etc/ssl/web"
         image: "ghcr.io/alexjustesen/speedtest-tracker:latest"
         restart: unless-stopped
         depends_on:
             - speedtest-tracker-db
         restart: unless-stopped
         restart: always
-        links:
-          - speedtest-tracker-db
         labels:
             - "traefik.http.routers.speedtesttracker.entrypoints=web,websecure"
-            - "traefik.enable=true"
-            - "traefik.http.routers.speedtesttracker.rule=Host(`speedtest.shazbot.one`)"
-            - "traefik.http.routers.speedtesttracker.tls.domains[0].main=shazbot.one"
-            - "traefik.http.routers.speedtesttracker.tls.domains[0].sans=*.shazbot.one"
+            - "traefik.enable={{ speedtesttracker_available_externally }}"
+            - "traefik.http.routers.speedtesttracker.rule=Host(`{{ speedtesttracker_hostname }}.{{ ansible_nas_domain }}`)"
+            - "traefik.http.routers.speedtesttracker.tls.domains[0].main={{ ansible_nas_domain }}"
+            - "traefik.http.routers.speedtesttracker.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
             - "traefik.http.services.speedtesttracker.loadbalancer.server.port=80"
 
     speedtest-tracker-db:
         container_name: speedtesttracker-db
         image: postgres:15
-        network_mode: bridge
         restart: always
         environment:
             - POSTGRES_DB=speedtest_tracker
             - POSTGRES_USER=speedy
             - POSTGRES_PASSWORD=password
         volumes:
-            - "/zpool1/docker/speedtesttracker/db:/var/lib/postgresql/data"
+            - "{{ speedtesttracker_data_directory }}/db:/var/lib/postgresql/data"
         restart: unless-stopped
         restart: always
 

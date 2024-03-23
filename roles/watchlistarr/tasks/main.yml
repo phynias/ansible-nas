@@ -20,7 +20,6 @@
       PLEX_TOKEN: "{{ watchistarr_plex_key }}"
       SONARR_BASE_URL: "https://sonarr.{{ ansible_nas_domain }}"
       RADARR_BASE_URL: "https://radarr.{{ ansible_nas_domain }}"
-      PLEX_WATCHLIST_URL_1: "https://plex.{{ ansible_nas_domain }}"
       REFRESH_INTERVAL_SECONDS: "5"
       ALLOW_MOVIE_DELETING: "false"
       ALLOW_ENDED_SHOW_DELETING: "false"

@@ -69,7 +69,6 @@
       traefik.enable: "{{ librenms_available_externally }}"
       traefik.http.routers.librenms.entrypoints: "web,websecure"
       traefik.http.routers.librenms.rule: "Host(`{{ librenms_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.librenms.tls.certresolver: "letsencrypt"
       traefik.http.routers.librenms.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.librenms.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.librenms.loadbalancer.server.port: "80"

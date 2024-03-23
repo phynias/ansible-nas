@@ -27,7 +27,6 @@ services:
             - "traefik.http.routers.speedtesttracker.entrypoints=web,websecure"
             - "traefik.enable={{ speedtesttracker_available_externally }}"
             - "traefik.http.routers.speedtesttracker.rule=Host(`{{ speedtesttracker_hostname }}.{{ ansible_nas_domain }}`)"
-            - "traefik.http.routers.speedtesttracker.tls.certresolver=letsencrypt"
             - "traefik.http.routers.speedtesttracker.tls.domains[0].main={{ ansible_nas_domain }}"
             - "traefik.http.routers.speedtesttracker.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
             - "traefik.http.services.speedtesttracker.loadbalancer.server.port=80"
