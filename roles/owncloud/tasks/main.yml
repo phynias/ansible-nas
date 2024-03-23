@@ -117,7 +117,6 @@
       traefik.enable: "{{ owncloud_available_externally }}"
       traefik.http.routers.owncloud.entrypoints: "websecure,websecure-ext"
       traefik.http.routers.owncloud.rule: "Host(`{{ owncloud_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.owncloud.tls.certresolver: "letsencrypt"
       traefik.http.routers.owncloud.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.owncloud.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.owncloud.loadbalancer.server.port: "8080"

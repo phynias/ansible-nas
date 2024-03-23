@@ -55,7 +55,6 @@
       - "{{ traefik_port_ui }}:{{ traefik_port_ui }}"
     volumes:
       - "{{ traefik_data_directory }}/traefik.toml:/etc/traefik/traefik.toml:ro"
-      # - "{{ traefik_data_directory }}/.google.json:/etc/traefik/.google.json:ro"
       - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:rw"
       - "{{ traefik_data_directory }}/rules:/rules:ro"
       - "{{ traefik_data_directory }}/logs:/logs:rw"

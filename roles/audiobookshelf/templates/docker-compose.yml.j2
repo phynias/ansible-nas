@@ -35,7 +35,6 @@ services:
       - "traefik.http.routers.audiobookshelf.entrypoints=websecure-ext,websecure"
       - "traefik.enable={{ audiobookshelf_available_externally }}"
       - "traefik.http.routers.audiobookshelf.rule=Host(`{{ audiobookshelf_hostname }}.{{ ansible_nas_domain }}`)"
-      - "traefik.http.routers.audiobookshelf.tls.certresolver=letsencrypt"
       - "traefik.http.routers.audiobookshelf.tls.domains[0].main={{ ansible_nas_domain }}"
       - "traefik.http.routers.audiobookshelf.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
       - "traefik.http.services.audiobookshelf.loadbalancer.server.port=80"

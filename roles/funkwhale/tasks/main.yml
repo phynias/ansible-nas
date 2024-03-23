@@ -36,7 +36,6 @@
       traefik.passHostHeader: "true"
       traefik.http.routers.funkwhale.entrypoints: "websecure,websecure-ext"
       traefik.http.routers.funkwhale.rule: "Host(`{{ funkwhale_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.funkwhale.tls.certresolver: "letsencrypt"
       traefik.http.routers.funkwhale.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.funkwhale.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.funkwhale.loadbalancer.server.port: "80"

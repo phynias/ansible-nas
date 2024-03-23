@@ -42,7 +42,6 @@
       traefik.enable: "{{ wyze_available_externally }}"
       traefik.http.routers.wyze.entrypoints: "web,websecure"
       traefik.http.routers.wyze.rule: "Host(`{{ wyze_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.wyze.tls.certresolver: "letsencrypt"
       traefik.http.routers.wyze.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.wyze.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.wyze.loadbalancer.server.port: "5000"

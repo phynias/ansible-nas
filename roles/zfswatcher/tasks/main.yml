@@ -31,7 +31,6 @@
     labels:
       traefik.enable: "{{ zfswatcher_available_externally }}"
       traefik.http.routers.zfswatcher.rule: "Host(`{{ zfswatcher_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.zfswatcher.tls.certresolver: "letsencrypt"
       traefik.http.routers.zfswatcher.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.zfswatcher.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.zfswatcher.loadbalancer.server.port: "{{ zfswatcher_port|string }}"

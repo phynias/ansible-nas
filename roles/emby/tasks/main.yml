@@ -33,7 +33,6 @@
       traefik.enable: "{{ emby_available_externally }}"
       traefik.http.routers.emby.entrypoints: "web,websecure"
       traefik.http.routers.emby.rule: "Host(`{{ emby_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.emby.tls.certresolver: "letsencrypt"
       traefik.http.routers.emby.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.emby.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.emby.loadbalancer.server.port: "8096"

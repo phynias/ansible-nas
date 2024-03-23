@@ -42,7 +42,6 @@
       traefik.enable: "{{ pialert_available_externally }}"
       traefik.http.routers.pialert.entrypoints: "websecure"
       traefik.http.routers.pialert.rule: "Host(`{{ pialert_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.pialert.tls.certresolver: "letsencrypt"
       traefik.http.routers.pialert.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.pialert.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.pialert.loadbalancer.server.port: "20211"

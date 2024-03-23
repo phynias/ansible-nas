@@ -44,7 +44,6 @@
       traefik.passHostHeader: "true"
       traefik.http.routers.subsonic.entrypoints: "websecure,websecure-ext"
       traefik.http.routers.subsonic.rule: "Host(`{{ subsonic_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.subsonic.tls.certresolver: "letsencrypt"
       traefik.http.routers.subsonic.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.subsonic.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.subsonic.loadbalancer.server.port: "4141"
