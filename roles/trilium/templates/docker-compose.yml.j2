@@ -1,0 +1,24 @@
+# Running `docker-compose up` will create/use the "trilium-data" directory in the user home
+# Run `TRILIUM_DATA_DIR=/path/of/your/choice docker-compose up` to set a different directory
+version: '2.1'
+services:
+  trilium:
+    container_name: trilium
+    image: zadam/trilium
+    network_mode: bridge
+    restart: unless-stopped
+    environment:
+      - TRILIUM_DATA_DIR=/home/node/trilium-data
+    volumes:
+      - {{ trilium_data_directory }}:/home/node/trilium-data
+    labels:
+        - "traefik.http.routers.trilium.entrypoints=web,websecure"
+        - "traefik.enable={{ trilium_available_externally }}"
+        - "traefik.http.routers.trilium.rule=Host(`{{ trilium_hostname }}.{{ ansible_nas_domain }}`)"
+        - "traefik.http.routers.trilium.tls.domains[0].main={{ ansible_nas_domain }}"
+        - "traefik.http.routers.trilium.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+        - "traefik.http.services.trilium.loadbalancer.server.port=8080"
+volumes:
+  trilium:
+
+

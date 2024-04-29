@@ -17,7 +17,7 @@
     image: sctx/overseerr
     pull: true
     volumes:
-      - "{{ overseerr_data_directory }}/config:/app/overseerr"
+      - "{{ overseerr_data_directory }}/config:/app/config"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 512m
@@ -25,7 +25,7 @@
       TZ: "{{ ansible_nas_timezone }}"
     labels:
       traefik.enable: "{{ overseerr_available_externally }}"
-      traefik.http.routers.overseerr.entrypoints: "websecure,websecure-ext"
+      traefik.http.routers.overseerr.entrypoints: "websecure,web"
       traefik.http.routers.overseerr.rule: "Host(`{{ overseerr_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.overseerr.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.overseerr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"

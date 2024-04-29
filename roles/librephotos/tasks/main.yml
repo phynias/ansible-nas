@@ -60,7 +60,7 @@
 
     env:
       SECRET_KEY: "{{ librephotos_shhhhKey }}"
-      BACKEND_HOST: "librephotos_backend"
+      BACKEND_HOST: "backend"
       ADMIN_EMAIL: "{{ librephotos_adminEmail }}"
       ADMIN_USERNAME: "{{ librephotos_userName }}"
       ADMIN_PASSWORD: "{{ librephotos_userPass }}"
