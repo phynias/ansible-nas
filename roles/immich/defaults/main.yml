@@ -1,0 +1,15 @@
+---
+immich_enabled: false
+immich_available_externally: "false"
+
+# directories
+immich_data_directory: "{{ docker_home }}/immich"
+immich_photos_directory: ""
+immich_db_password: "changeme"
+immich_db_user: "postgres"
+immich_db_name: "immich"
+
+# network
+immich_hostname: "photos"
+immich_user_id: "{{ nas_uid }}"
+immich_group_id: "{{ nas_gid }}"

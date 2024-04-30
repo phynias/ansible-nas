@@ -282,6 +282,11 @@
         - librephotos
       when: (librephotos_enabled | default(False))
 
+    - role: immich
+      tags:
+        - immich
+      when: (immich_enabled | default(False))
+
     - role: librenms
       tags:
         - librenms
