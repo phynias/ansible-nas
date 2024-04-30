@@ -10,3 +10,6 @@ inventories
 
 # Session
 Session.vim
+
+#
+roles/*/docker-compose.yml
