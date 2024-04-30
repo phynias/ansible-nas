@@ -24,7 +24,7 @@
     log_options:
       max-size: 256m
       max-file: "1"
-    image: analogj/scrutiny
+    image: ghcr.io/analogj/scrutiny
     capabilities:
       - SYS_RAWIO
       - SYS_ADMIN
@@ -54,5 +54,4 @@
       traefik.http.routers.scrutiny.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.scrutiny.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.scrutiny.loadbalancer.server.port: "{{ scrutiny_port }}"
-      com.centurylinklabs.watchtower.enable: "false"
       autoheal: "true"

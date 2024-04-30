@@ -6,24 +6,45 @@
   with_items:
     - "{{ papermerge_data_directory }}"
     - "{{ papermerge_data_directory }}/media"
+    - "{{ papermerge_data_directory }}/redis"
+
+- name: redis
+  docker_container:
+    name: papermerge_redis
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: "1"
+    image: webhippie/redis:latest
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    env:
+      REDIS_DATABASES: "1"
+    healthcheck:
+      test: ["CMD", "/usr/bin/healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - "{{ papermerge_data_directory }}/redis:/var/lib/redis"
+    memory: 64m
 
 - name: papermerge
-  register: docker_container_output
   docker_container:
     name: papermerge
     log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"
-    image: papermerge/papermerge:latest
+    image: papermerge/papermerge:3.0.3
     pull: true
     links:
-      - "redis:redis"
+      - "papermerge_redis:redis"
     volumes:
       - "{{ papermerge_data_directory }}/media:/app/media:rw"
     env:
-      PAPERMERGE__MAIN__SECRET_KEY: "{{ papermerge_secret }}"
-      DJANGO_SUPERUSER_PASSWORD: "{{ papermerge_password }}"
+      PAPERMERGE__SECURITY__SECRET_KEY: "{{ papermerge_secret }}"
+      PAPERMERGE__AUTH__PASSWORD: "{{ papermerge_password }}"
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ papermerge_user_id }}"
       PGID: "{{ papermerge_group_id }}"
@@ -33,9 +54,9 @@
     memory: 512m
     labels:
       traefik.enable: "{{ papermerge_available_externally }}"
-      traefik.http.routers.papermerge.entrypoints: "web,websecure"
+      traefik.http.routers.papermerge.entrypoints: "websecure,web"
       traefik.http.routers.papermerge.rule: "Host(`{{ papermerge_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.papermerge.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.papermerge.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
-      traefik.http.services.papermerge.loadbalancer.server.port: "8000"
+      traefik.http.services.papermerge.loadbalancer.server.port: "80"
       autoheal: "true"

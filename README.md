@@ -53,6 +53,7 @@ Ansible config and a bunch of Docker containers.
 * [Guacamole](https://guacamole.apache.org/) - Web based remote desktop gateway, supports VNC, RDP and SSH
 * [Heimdall](https://heimdall.site/) - Home server dashboard
 * [Home Assistant](https://www.home-assistant.io) - Open source home automation
+* [Immich](https://github.com/immich-app/immich) - High performance self-hosted photo and video management solution
 * [InfluxDB](https://github.com/influxdata/influxdb) - Time series database used for stats collection
 * [Jackett](https://github.com/Jackett/Jackett) - API Support for your favorite torrent trackers
 * [Jellyfin](https://jellyfin.github.io) - The Free Software Media System
@@ -74,6 +75,7 @@ Ansible config and a bunch of Docker containers.
 * [Ombi](https://ombi.io/) - web application that automatically gives your users the ability to request content
 * [OpenVPN](https://openvpn.net/) - OpenVPN client
 * [Organizr](https://organizr.app/) - ORGANIZR aims to be your one stop shop for your Servers Frontend.
+* [Overseerr](https://github.com/sct/overseerr) - Overseerr is a free and open source software application for managing requests for your media library
 * [openHAB](https://www.openhab.org/) - A vendor and technology agnostic open source automation software for your home
 * [OwnCloud](https://owncloud.com/) - share files and folders, easy and secure
 * [piHole](https://pi-hole.net/) - Network-wide Ad Blocking
@@ -98,12 +100,14 @@ Ansible config and a bunch of Docker containers.
 * [TimeMachine](https://github.com/awlx/samba-timemachine) - Samba-based mac backup server
 * [Traefik](https://traefik.io/) - Web proxy and SSL certificate manager
 * [Transmission](https://transmissionbt.com/) - BitTorrent client (with OpenVPN if you have a supported VPN provider)
+* [Trilium](https://github.com/zadam/trilium) - Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases.
 * [Ubooquity](http://vaemendis.net/ubooquity/) - Book and comic server
 * [umi](https://github.com/umijs/umi) - A React Crunchyroll frontend
 * [uTorrent](https://www.utorrent.com/) - The best torrent downloading app for beginners
 * [Varken](https://github.com/Boerderij/Varken) - aggregate data from the Plex ecosystem into InfluxDB
 * [Virtual Desktop](https://github.com/RattyDAVE/docker-ubuntu-xrdp-mate-custom) - A virtual desktop running on your NAS.
 * [Wallabag](https://wallabag.org/) - Save and classify articles. Read them later.
+* [Watchlistarr](https://github.com/nylonee/watchlistarr) - Sync plex watchlists in realtime with Sonarr and Radarr
 * [Watchtower](https://github.com/v2tec/watchtower) - Monitor your Docker containers and update them if a new version is available
 * [wyze-bridge](https://github.com/mrlt8/docker-wyze-bridge) - https://github.com/mrlt8/docker-wyze-bridge
 * [YouTubeDL-Material](https://github.com/Tzahi12345/YoutubeDL-Material) - Self-hosted YouTube downloader built on Material Design
