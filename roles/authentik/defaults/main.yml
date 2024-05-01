@@ -1,0 +1,13 @@
+---
+authentik_enabled: false
+authentik_available_externally: "false"
+
+# directories
+authentik_data_directory: "{{ docker_home }}/authentik"
+
+# network
+authentik_hostname: "auth"
+authentik_db_user: ""
+authentik_db_pass: ""
+authentik_db_name: ""
+authentik_secret_key: ""

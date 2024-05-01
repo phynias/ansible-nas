@@ -1,0 +1,125 @@
+---
+version: '3.4'
+
+services:
+  authentik_postgres:
+    image: postgres:12-alpine
+    restart: unless-stopped
+    container_name: authentik-postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    volumes:
+      - database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: {{ authentik_db_pass }}
+      POSTGRES_USER: {{ authentik_db_user }}
+      POSTGRES_DB: {{ authentik_db_name }}
+      AUTHENTIK_SECRET_KEY: {{ authentik_secret_key }}
+      AUTHENTIK_ERROR_REPORTING__ENABLED: "true"
+    network_mode: bridge
+    networks:
+      - nas_bridge
+
+  authentik_redis:
+    image: redis:alpine
+    restart: unless-stopped
+    container_name: authentik-redis
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    network_mode: bridge
+    networks:
+      - nas_bridge
+
+  server:
+    image: ghcr.io/goauthentik/server:latest
+    restart: unless-stopped
+    container_name: authentik-server
+    command: server
+    depends_on:
+      - authentik_postgres
+      - authentik_redis
+    links:
+      - authentik_postgres
+      - authentik_redis    
+    environment:
+      AUTHENTIK_REDIS__HOST: authentik-redis
+      AUTHENTIK_POSTGRESQL__HOST: authentik_postgres
+      AUTHENTIK_POSTGRESQL__USER: {{ authentik_db_user }}
+      AUTHENTIK_POSTGRESQL__NAME: {{ authentik_db_name }}
+      AUTHENTIK_POSTGRESQL__PASSWORD: {{ authentik_db_pass }}
+      AUTHENTIK_SECRET_KEY: {{ authentik_secret_key }}
+      AUTHENTIK_ERROR_REPORTING__ENABLED: "true"
+    volumes:
+      - {{ authentik_data_directory }}/media:/media
+      - {{ authentik_data_directory }}/custom-templates:/templates
+      - geoip:/geoip
+#    ports:
+#      - "0.0.0.0:${AUTHENTIK_PORT_HTTP:-9000}:9000"
+#      - "0.0.0.0:${AUTHENTIK_PORT_HTTPS:-9443}:9443"
+    network_mode: bridge
+    networks:
+      - nas_bridge
+    labels:
+      traefik.enable: {{ authentik_available_externally }}
+      traefik.http.routers.authentik.entryPoints: websecure,web
+      traefik.http.routers.authentik.rule: Host(`{{ authentik_hostname }}.{{ ansible_nas_domain }}`) || HostRegexp(`{subdomain:[A-Za-z0-9](?:[A-Za-z0-9\-]{0,61}[A-Za-z0-9])?}.{{ ansible_nas_domain }}`) && PathPrefix(`/outpost.goauthentik.io/`)
+      traefik.http.routers.immich.tls.domains[0].main: {{ ansible_nas_domain }}
+      traefik.http.routers.immich.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.authentik.loadbalancer.server.port: 9000
+
+  worker:
+    image: ghcr.io/goauthentik/server:latest
+    restart: unless-stopped
+    container_name: authentik-worker
+    command: worker
+    depends_on:
+      - authentik_postgres
+      - authentik_redis
+    links:
+      - authentik_postgres
+      - authentik_redis   
+    environment:
+      AUTHENTIK_REDIS__HOST: authentik-redis
+      AUTHENTIK_POSTGRESQL__HOST: authentik_postgres
+      AUTHENTIK_POSTGRESQL__USER: {{ authentik_db_user }}
+      AUTHENTIK_POSTGRESQL__NAME: {{ authentik_db_name }}
+      AUTHENTIK_POSTGRESQL__PASSWORD: {{ authentik_db_pass }}
+      AUTHENTIK_SECRET_KEY: {{ authentik_secret_key }}
+      AUTHENTIK_ERROR_REPORTING__ENABLED: "true"
+    user: root
+    volumes:
+      - {{ authentik_data_directory }}/media:/media
+      - {{ authentik_data_directory }}/certs:/certs
+      - /var/run/docker.sock:/var/run/docker.sock
+      - {{ authentik_data_directory }}/custom-templates:/templates
+      - geoip:/geoip
+    network_mode: bridge
+    networks:
+      - nas_bridge
+
+  geoipupdate:
+    image: "maxmindinc/geoipupdate:latest"
+    container_name: authentik-geoip
+    volumes:
+      - "geoip:/usr/share/GeoIP"
+    environment:
+      GEOIPUPDATE_EDITION_IDS: "GeoLite2-City"
+      GEOIPUPDATE_FREQUENCY: "8"
+    network_mode: bridge
+    networks:
+      - nas_bridge
+
+volumes:
+  database:
+    driver: local
+  geoip:
+    driver: local
+
