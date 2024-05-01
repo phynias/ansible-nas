@@ -79,6 +79,8 @@
       traefik.http.routers.traefik.tls.certresolver: "letsencrypt"
       traefik.http.routers.traefik.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.traefik.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.routers.api.service: api@internal
+      traefik.http.routers.api.middlewares: authentik@file
       autoheal: "true"
 #      traefik.http.routers.traefik.middlewares: "basic_auth@file"
 
