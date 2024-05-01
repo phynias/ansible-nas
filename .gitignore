@@ -12,4 +12,4 @@ inventories
 Session.vim
 
 #
-roles/*/docker-compose.yml
+docker-compose.yml
