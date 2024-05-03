@@ -41,6 +41,7 @@ Ansible config and a bunch of Docker containers.
 * [Cloudflare DDNS](https://hub.docker.com/r/joshuaavalon/cloudflare-ddns/) - automatically update Cloudflare with your IP address
 * [CouchPotato](https://couchpota.to/) - for downloading and managing movies
 * [Deluge](https://dev.deluge-torrent.org/) - A lightweight, Free Software, cross-platform BitTorrent client.
+* [Dozzle](https://github.com/amir20/dozzle) - Dozzle is a small lightweight application with a web based interface to monitor Docker logs
 * [Duplicati](https://www.duplicati.com/) - for backing up your stuff
 * [Emby](https://emby.media/) - Media streaming and management
 * [ExpressVPN](https://www.expressvpn.com/) - ExpressVPN client
@@ -64,11 +65,12 @@ Ansible config and a bunch of Docker containers.
 * [MineCraft](https://www.minecraft.net) - It's MineCraft...
 * [MiniDLNA](https://sourceforge.net/projects/minidlna/) - simple media server which is fully compliant with DLNA/UPnP-AV clients
 * [Miniflux](https://miniflux.app/) - An RSS news reader
+* [Monitorr](https://github.com/Monitorr/Monitorr) - Monitorr is a webfront to live display the status of any webapp or service
 * [Mosquitto](https://mosquitto.org) - An open source MQTT broker
 * [Mylar](https://github.com/evilhero/mylar) - An automated Comic Book downloader (cbr/cbz) for use with SABnzbd, NZBGet and torrents
 * [MyMediaForAlexa](https://www.mymediaalexa.com/) - Lets you stream your music collection to your alexa device
-* [n8n](https://n8n.io") - Nodemation, a node based workflow and automation service like IFTTT.
 * [MuxiMux](https://github.com/mescon/Muximux) - Lightweight portal to your webapps
+* [n8n](https://n8n.io") - Nodemation, a node based workflow and automation service like IFTTT.
 * [Netdata](https://my-netdata.io/) - An extremely comprehensive system monitoring solution
 * [Nextcloud](https://nextcloud.com/) - A self-hosted Dropbox alternative
 * [NZBget](https://nzbget.net/) - The most efficient usenet downloader
@@ -87,6 +89,7 @@ Ansible config and a bunch of Docker containers.
 * [pyLoad](https://pyload.net/) - A download manager with a friendly web-interface
 * [PyTivo](http://pytivo.org) - An HMO and GoBack server for TiVos.
 * [Radarr](https://radarr.video/) - for organising and downloading movies
+* [Readarr](https://github.com/Readarr/Readarr) - Readarr is an ebook and audiobook collection manager for Usenet and BitTorrent users
 * [Sabnzbd](https://sabnzbd.org/) - Free and easy binary newsreader
 * [Scrutiny](https://github.com/AnalogJ/scrutiny) - WebUI for smartd S.M.A.R.T monitoring
 * [Sickchill](https://sickchill.github.io/) - for managing TV episodes
@@ -103,6 +106,7 @@ Ansible config and a bunch of Docker containers.
 * [Trilium](https://github.com/zadam/trilium) - Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases.
 * [Ubooquity](http://vaemendis.net/ubooquity/) - Book and comic server
 * [umi](https://github.com/umijs/umi) - A React Crunchyroll frontend
+* [Uptime-Kuma](https://github.com/louislam/uptime-kuma) - Uptime Kuma is an easy-to-use self-hosted monitoring tool
 * [uTorrent](https://www.utorrent.com/) - The best torrent downloading app for beginners
 * [Varken](https://github.com/Boerderij/Varken) - aggregate data from the Plex ecosystem into InfluxDB
 * [Virtual Desktop](https://github.com/RattyDAVE/docker-ubuntu-xrdp-mate-custom) - A virtual desktop running on your NAS.

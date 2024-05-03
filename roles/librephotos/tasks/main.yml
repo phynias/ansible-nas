@@ -13,6 +13,8 @@
   docker_container:
     name: redis
     image: redis:6
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
@@ -27,6 +29,8 @@
       max-size: 256m
       max-file: "1"
     image: postgres:13
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
@@ -49,6 +53,8 @@
       max-size: 256m
       max-file: "1"
     image: reallibrephotos/librephotos:{{ librephotos_tag }}
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
@@ -92,6 +98,8 @@
       max-size: 256m
       max-file: "1"
     image: reallibrephotos/librephotos-frontend:{{ librephotos_tag }}
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
@@ -110,6 +118,8 @@
       max-size: 256m
       max-file: "1"
     image: reallibrephotos/librephotos-proxy:{{ librephotos_tag }}
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
@@ -118,8 +128,8 @@
     volumes:
       - "{{ librephotos_myPhotos }}:/data"
       - "{{ librephotos_proMedia }}:/protected_media"
-    ports:
-      - "{{ librephotos_port }}:80"
+ #   ports:
+ #     - "{{ librephotos_port }}:80"
     links:
       - "frontend:frontend"
       - "backend:backend"

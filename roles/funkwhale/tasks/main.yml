@@ -14,6 +14,8 @@
       max-size: 256m
       max-file: "1"
     image: funkwhale/all-in-one
+    networks:
+      - name: "{{ nas_bridge_network }}"
     volumes:
       - "{{ funkwhale_music_directory }}:/music:ro"
       - "{{ funkwhale_books_directory }}:/books:ro"
@@ -29,8 +31,8 @@
       NESTED_PROXY: "1"
       FUNKWHALE_HOSTNAME: "{{ funkwhale_hostname }}.{{ ansible_nas_domain }}"
     memory: 1g
-    ports:
-      - "{{ funkwhale_port }}:80"
+#    ports:
+#      - "{{ funkwhale_port }}:80"
     labels:
       traefik.enable: "{{ funkwhale_available_externally }}"
       traefik.passHostHeader: "true"

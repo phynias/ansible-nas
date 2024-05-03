@@ -15,10 +15,13 @@
 - name: Subsonic Docker Container
   docker_container:
     name: subsonic
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"
     image: subsonic
+    networks:
+      - name: "{{ nas_bridge_network }}"
     volumes:
       - "{{ subsonic_music_directory }}:/music:rw"
       - "{{ subsonic_books_directory }}:/books:rw"
@@ -33,8 +36,6 @@
       PGID: "{{ subsonic_group_id }}"
     user: "{{ subsonic_user_id }}"
     memory: 2g
-    ports:
-      - "{{ subsonic_port }}:4141"
     labels:
       traefik.enable: "{{ subsonic_available_externally }}"
 #      traefik.http.middlewares.subsonic.redirectscheme.scheme: "https"

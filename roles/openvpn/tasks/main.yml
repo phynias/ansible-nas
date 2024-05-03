@@ -7,6 +7,8 @@
       max-size: 256m
       max-file: "1"
     image: dperson/openvpn-client:latest
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     capabilities:
       - NET_ADMIN
@@ -17,8 +19,8 @@
     volumes:
       - "{{ openvpn_config_directory }}:/vpn"
       - "/dev/net/tun:/dev/net/tun:z"
-    ports:
-      - "9090:9090"
+ #   ports:
+ #     - "9090:9090"
     memory: "{{ openvpn_memory }}"
     env:
       TZ: '{{ ansible_nas_timezone }}'

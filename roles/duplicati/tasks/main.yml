@@ -14,9 +14,11 @@
       max-size: 256m
       max-file: "1"
     image: linuxserver/duplicati
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
-    ports:
-      - "{{ duplicati_port }}:8200"
+#    ports:
+#      - "{{ duplicati_port }}:8200"
     volumes:
       - "{{ duplicati_data_directory }}:/config:rw"
       - "{{ samba_shares_root }}:/source/shares:ro"

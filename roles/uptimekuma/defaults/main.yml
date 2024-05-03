@@ -1,0 +1,13 @@
+---
+uptimekuma_enabled: false
+uptimekuma_available_externally: "false"
+
+# directories
+uptimekuma_data_directory: "{{ docker_home }}/uptimekuma"
+
+# network
+uptimekuma_hostname: "kuma"
+
+# uid / gid
+uptimekuma_user_id:
+monitor_group_id:

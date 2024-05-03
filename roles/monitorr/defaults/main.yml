@@ -1,0 +1,13 @@
+---
+monitorr_enabled: false
+monitorr_available_externally: "false"
+
+# directories
+monitorr_data_directory: "{{ docker_home }}/monitorr"
+
+# network
+monitorr_hostname: "monitorr"
+
+# uid / gid
+monitorr_user_id:
+monitor_group_id:

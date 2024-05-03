@@ -1,0 +1,25 @@
+---
+- name: dozzle Docker Container
+  docker_container:
+    name: dozzle
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: "1"
+    image: amir20/dozzle:latest
+    pull: true
+    networks:
+      - name: "{{ nas_bridge_network }}"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    memory: 512m
+    labels:
+      traefik.enable: "{{ dozzle_available_externally }}"
+      traefik.http.routers.dozzle.entrypoints: "web,websecure"
+      traefik.http.routers.dozzle.rule: "Host(`{{ dozzle_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.dozzle.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.dozzle.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.dozzle.loadbalancer.server.port: "{{ dozzle_port }}"
+      autoheal: "true"

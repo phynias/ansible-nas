@@ -13,8 +13,8 @@
     dest: "{{ role_path }}/docker-compose.yml"
 
 
-- name: Run docker-compose pull
-  shell: "docker-compose pull --ignore-pull-failures || true"
+- name: Run docker compose pull
+  shell: "docker compose pull --ignore-pull-failures || true"
   register: shell_output
   args:
     chdir: "{{ role_path }}"

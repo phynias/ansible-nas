@@ -18,6 +18,8 @@
       max-size: "256m"
       max-file: "1"
     image: myzfswatcher
+    networks:
+      - name: "{{ nas_bridge_network }}"
     volumes:
       - "{{ zfswatcher_data_directory }}/config:/zfswatcher_config:rw"
       - "{{ zfswatcher_data_directory }}/logs:/var/log/zfswatcher:rw"

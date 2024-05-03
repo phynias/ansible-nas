@@ -21,6 +21,8 @@
       max-size: "256m"
       max-file: "1"
     image: mariadb:latest
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     volumes:
       - "{{ librenms_data_directory }}/db/data:/var/lib/mysql"
@@ -41,6 +43,8 @@
       max-size: "256m"
       max-file: "1"
     image: librenms
+    networks:
+      - name: "{{ nas_bridge_network }}"
     volumes:
       - "{{ librenms_data_directory }}/data:/data"
     env:
@@ -62,9 +66,9 @@
     memory: 250m
     links:
       - "librenms-db:librenms-db"
-    ports:
-      - 514:514/tcp
-      - 514:514/udp
+ #   ports:
+ #     - 514:514/tcp
+ #     - 514:514/udp
     labels:
       traefik.enable: "{{ librenms_available_externally }}"
       traefik.http.routers.librenms.entrypoints: "web,websecure"

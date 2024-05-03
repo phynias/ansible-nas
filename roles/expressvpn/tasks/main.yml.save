@@ -29,9 +29,9 @@
 #      - 1.0.0.1
     volumes:
       - "/dev/net/tun:/dev/net/tun:z"
-    ports:
-      - 51413:51413
-      - 51413:51413/udp
+ #   ports:
+ #     - 51413:51413
+ #     - 51413:51413/udp
     memory: 1g
     etc_hosts: >
       { 

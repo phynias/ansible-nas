@@ -14,9 +14,11 @@
       max-size: 256m
       max-file: "1"
    image: n8nio/n8n
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
-    ports:
-      - "{{ n8n_port }}:5678"
+#    ports:
+#      - "{{ n8n_port }}:5678"
     volumes:
       - "{{ n8n_data_directory }}:/home/node/.n8n:rw"
       - "/etc/timezone:/etc/timezone:ro"

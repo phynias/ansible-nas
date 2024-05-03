@@ -222,6 +222,11 @@
         - radarr
       when: (radarr_enabled | default(False))
 
+    - role: readarr
+      tags:
+        - readarr
+      when: (readarr_enabled | default(False))
+
     - role: scrutiny
       tags:
         - scrutiny
@@ -307,6 +312,11 @@
         - speedtesttracker
       when: (speedtesttracker_enabled | default(False))
 
+    - role: dozzle
+      tags:
+        - dozzle
+      when: (dozzle_enabled | default(False))
+
     - role: trilium
       tags:
         - trilium
@@ -321,6 +331,16 @@
       tags:
         - overseerr
       when: (overseerr_enabled | default(False))
+
+    - role: uptimekuma
+      tags:
+        - uptimekuma
+      when: (uptimekuma_enabled | default(False))
+
+    - role: monitorr
+      tags:
+        - monitorr
+      when: (monitorr_enabled | default(False))
 
     - role: prometheus
       tags:

@@ -34,8 +34,8 @@
       PGID: "{{ subsonic_group_id }}"
     user: "{{ subsonic_user_id }}"
     memory: 2g
-    ports:
-      - "{{ subsonic_port }}:4040"
+#    ports:
+#      - "{{ subsonic_port }}:4040"
     labels:
       traefik.enable: "{{ subsonic_available_externally }}"
 #      traefik.http.middlewares.subsonic.redirectscheme.scheme: "https"

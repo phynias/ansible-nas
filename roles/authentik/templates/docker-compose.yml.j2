@@ -20,7 +20,6 @@ services:
       POSTGRES_DB: {{ authentik_db_name }}
       AUTHENTIK_SECRET_KEY: {{ authentik_secret_key }}
       AUTHENTIK_ERROR_REPORTING__ENABLED: "true"
-    network_mode: bridge
     networks:
       - nas_bridge
 
@@ -34,7 +33,6 @@ services:
       interval: 30s
       retries: 5
       timeout: 3s
-    network_mode: bridge
     networks:
       - nas_bridge
 
@@ -64,15 +62,14 @@ services:
 #    ports:
 #      - "0.0.0.0:${AUTHENTIK_PORT_HTTP:-9000}:9000"
 #      - "0.0.0.0:${AUTHENTIK_PORT_HTTPS:-9443}:9443"
-    network_mode: bridge
     networks:
       - nas_bridge
     labels:
       traefik.enable: {{ authentik_available_externally }}
       traefik.http.routers.authentik.entryPoints: websecure,web
       traefik.http.routers.authentik.rule: Host(`{{ authentik_hostname }}.{{ ansible_nas_domain }}`) || HostRegexp(`{subdomain:[A-Za-z0-9](?:[A-Za-z0-9\-]{0,61}[A-Za-z0-9])?}.{{ ansible_nas_domain }}`) && PathPrefix(`/outpost.goauthentik.io/`)
-      traefik.http.routers.immich.tls.domains[0].main: {{ ansible_nas_domain }}
-      traefik.http.routers.immich.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.routers.authentik.tls.domains[0].main: {{ ansible_nas_domain }}
+      traefik.http.routers.authentik.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.authentik.loadbalancer.server.port: 9000
 
   worker:
@@ -101,7 +98,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - {{ authentik_data_directory }}/custom-templates:/templates
       - geoip:/geoip
-    network_mode: bridge
     networks:
       - nas_bridge
 
@@ -111,9 +107,10 @@ services:
     volumes:
       - "geoip:/usr/share/GeoIP"
     environment:
-      GEOIPUPDATE_EDITION_IDS: "GeoLite2-City"
-      GEOIPUPDATE_FREQUENCY: "8"
-    network_mode: bridge
+      GEOIPUPDATE_EDITION_IDS: "GeoLite2-ASN GeoLite2-City GeoLite2-Country"
+      GEOIPUPDATE_FREQUENCY: "24"
+      GEOIPUPDATE_ACCOUNT_ID: "{{ geoip_account_id }}"
+      GEOIPUPDATE_LICENSE_KEY: "{{ geoip_license_key }}"
     networks:
       - nas_bridge
 
@@ -123,3 +120,6 @@ volumes:
   geoip:
     driver: local
 
+networks:
+  nas_bridge:
+    external: true

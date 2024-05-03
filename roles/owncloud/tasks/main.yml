@@ -40,6 +40,8 @@
       max-size: 256m
       max-file: "1"
     image: webhippie/redis:latest
+    networks:
+      - name: "{{ nas_bridge_network }}"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:
@@ -55,13 +57,15 @@
 
 - name: mariadb
   docker_container:
-    name: mariadb
+    name: owncloud_mariadb
     log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"
     image: mymariadb:latest
-#    image: mariadb:10.5
+#    image: mariadb:10.6
+    networks:
+      - name: "{{ nas_bridge_network }}"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:
@@ -86,13 +90,16 @@
 - name: owncloud
   docker_container:
     name: owncloud
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"
     image: owncloud/server:latest
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     links:
-      - "mariadb:mariadb"
+      - "owncloud_mariadb:mariadb"
       - "owncloud_redis:redis"
     volumes:
       - "{{ owncloud_data_directory }}:/mnt/data:rw"

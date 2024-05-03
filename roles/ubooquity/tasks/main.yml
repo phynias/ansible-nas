@@ -7,13 +7,15 @@
       max-size: 256m
       max-file: "1"
     image: linuxserver/ubooquity
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     volumes:
       - "{{ ubooquity_books_directory }}:/books"
       - "{{ ubooquity_comics_directory }}:/comics"
       - "{{ ubooquity_data_directory }}:/config:rw"
-    ports:
-      - "2202:2202"
+#    ports:
+#      - "2202:2202"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ ubooquity_user_id }}"

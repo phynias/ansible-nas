@@ -55,5 +55,5 @@ services:
       PGID: 1000
     volumes:
       - /zpool1/docker/homeassistant/mariadb:/var/lib/mysql
-    ports:
-      - "3306:3306"
+ #   ports:
+ #     - "3306:3306"

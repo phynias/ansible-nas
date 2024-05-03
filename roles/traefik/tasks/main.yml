@@ -45,8 +45,7 @@
       - "--serverstransport.insecureskipverify=true"
       - "--traefikLogsFile=/logs/traefik.log"
     networks:
-      - name: bridge
-      - name: nas_bridge
+      - name: "{{ nas_bridge_network }}"
       - name: piholedhcp
     ports:
       - "{{ traefik_port_http }}:{{ traefik_port_http }}"

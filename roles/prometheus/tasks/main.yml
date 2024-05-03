@@ -30,6 +30,8 @@
       max-size: 256m
       max-file: "1"
     image: prom/node-exporter
+    networks:
+      - name: "{{ nas_bridge_network }}"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     force_kill: true
@@ -57,10 +59,12 @@
       max-size: 256m
       max-file: "1"
     image: prom/blackbox-exporter:latest
+    networks:
+      - name: "{{ nas_bridge_network }}"
     volumes:
       - "{{ prometheus_data_directory }}/blackbox.yml:/etc/blackbox_exporter/config.yml"
-    ports:
-      - 9115:9115
+#    ports:
+#      - 9115:9115
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     force_kill: true
@@ -73,8 +77,10 @@
       max-size: 256m
       max-file: "1"
     image: prom/alertmanager
-    ports:
-      - 9093:9093
+    networks:
+      - name: "{{ nas_bridge_network }}"
+#    ports:
+#      - 9093:9093
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "{{ prometheus_data_directory }}/alertmanager/storage:/alertmanager"
@@ -107,6 +113,8 @@
       max-size: 256m
       max-file: "1"
     image: gcr.io/google-containers/cadvisor
+    networks:
+      - name: "{{ nas_bridge_network }}"
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - /:/rootfs:ro
@@ -156,6 +164,8 @@
       max-size: 256m
       max-file: "1"
     image: grafana/promtail
+    networks:
+      - name: "{{ nas_bridge_network }}"
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     force_kill: true
     restart_policy: unless-stopped
@@ -178,6 +188,8 @@
       max-size: 256m
       max-file: "1"
     image: prom/prometheus
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"

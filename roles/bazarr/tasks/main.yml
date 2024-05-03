@@ -21,7 +21,7 @@
       - "{{ bazarr_data_directory }}:/config:rw"
 #    ports:
 #      - "{{ bazarr_port }}:6767"
-    network_mode: "{{ 'container:' + proxy_container if sabnzbd_proxy else 'None' }}"
+    network_mode: "{{ 'container:' + proxy_container if bazarr_proxy else 'None' }}"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ bazarr_user_id }}"

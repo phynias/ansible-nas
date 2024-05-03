@@ -5,7 +5,8 @@ services:
   trilium:
     container_name: trilium
     image: zadam/trilium
-    network_mode: bridge
+    networks:
+      - bridge
     restart: unless-stopped
     environment:
       - TRILIUM_DATA_DIR=/home/node/trilium-data
@@ -22,3 +23,7 @@ volumes:
   trilium:
 
 
+networks:
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"

@@ -17,6 +17,8 @@
       max-size: 256m
       max-file: "1"
     image: haugene/transmission-openvpn
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
@@ -24,11 +26,11 @@
       - "{{ transmission_config_directory }}:/config:rw"
       - "{{ transmission_watch_directory }}:/watch:rw"
       - "/etc/timezone:/etc/timezone:ro"
-    ports:
-      - "{{ transmission_openvpn_webui_port }}:9091"
-      - "{{ transmission_openvpn_external_port }}:51413"
-      - "{{ transmission_openvpn_external_port }}:51413/udp"
-      - "{{ transmission_openvpn_proxy_port }}:3128"
+#    ports:
+#      - "{{ transmission_openvpn_webui_port }}:9091"
+#      - "{{ transmission_openvpn_external_port }}:51413"
+#      - "{{ transmission_openvpn_external_port }}:51413/udp"
+#      - "{{ transmission_openvpn_proxy_port }}:3128"
     env:
       TRANSMISSION_HOME: "/config"
       TRANSMISSION_DOWNLOAD_DIR: "/downloads"

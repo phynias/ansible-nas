@@ -1,8 +1,10 @@
 ---
+version: '2.1'
 services:
   immich:
     image: ghcr.io/imagegenius/immich:latest
-    network_mode: bridge
+    networks:
+      - bridge
     container_name: immich
     environment:
       - PUID={{ immich_user_id }}
@@ -37,12 +39,14 @@ services:
 # Redis:
   immich_redis:
     image: redis
-    network_mode: bridge
+    networks:
+      - bridge
     container_name: immich_redis
 # PostgreSQL 14:
   immich_db:
     image: tensorchord/pgvecto-rs:pg14-v0.2.0
-    network_mode: bridge
+    networks:
+      - bridge
     container_name: immich_db
     environment:
       POSTGRES_USER: {{ immich_db_user }}
@@ -51,4 +55,9 @@ services:
     volumes:
       - {{ immich_data_directory }}/db:/var/lib/postgresql/data
 
+
+networks:
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"
 
