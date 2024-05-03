@@ -15,13 +15,15 @@
       max-size: 256m
       max-file: "1"
     image: linuxserver/sickchill
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     volumes:
       - "{{ sickchill_config_directory }}:/config:rw"
       - "{{ sickchill_downloads_directory }}:/downloads:rw"
       - "{{ sickchill_tv_directory }}:/tv:rw"
-    ports:
-      - "{{ sickchill_port }}:8081"
+#    ports:
+#      - "{{ sickchill_port }}:8081"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ sickchill_user_id }}"

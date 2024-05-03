@@ -1,5 +1,5 @@
 ---
-heimdall_enabled: true
+heimdall_enabled: false
 heimdall_available_externally: "false"
 
 # directories

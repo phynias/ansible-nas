@@ -13,10 +13,12 @@
       max-size: 256m
       max-file: "1"
     image: bitwardenrs/server:latest
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
-    ports:
-      - "{{ bitwarden_port_a }}:80"
-      - "{{ bitwarden_port_b }}:3012"
+#    ports:
+#      - "{{ bitwarden_port_a }}:80"
+#      - "{{ bitwarden_port_b }}:3012"
     volumes:
       - "{{ bitwarden_data_directory }}:/data:rw"
     env:

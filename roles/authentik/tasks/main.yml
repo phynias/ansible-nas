@@ -14,15 +14,17 @@
   template:
     src: templates/docker-compose.yml.j2
     dest: "{{ role_path }}/docker-compose.yml"
+  tags:
+    - always
 
-- name: Run docker-compose pull
-  shell: "docker-compose pull --ignore-pull-failures || true"
+- name: Run docker compose pull
+  shell: "docker compose pull --ignore-pull-failures || true"
   register: shell_output
   args:
     chdir: "{{ role_path }}"
 
-- name: Run docker-compose build
-  shell: "docker-compose build"
+- name: Run docker compose build
+  shell: "docker compose build"
   register: shell_output
   args:
     chdir: "{{ role_path }}"

@@ -2,10 +2,13 @@
 - name: umi Docker Container
   docker_container:
     name: umi
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"
     image: phynias/umi:latest
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     restart_policy: unless-stopped

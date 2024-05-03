@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.19
 
 ENV SUBSONIC_VERSION=6.1.6
 ENV SUBSONIC_BIN=/opt/subsonic
@@ -11,8 +11,9 @@ ARG GID
 ADD https://s3-eu-west-1.amazonaws.com/subsonic-public/download/subsonic-${SUBSONIC_VERSION}-standalone.tar.gz /tmp/subsonic.tar.gz
 
 # Install Java and audio tools
-RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
-apk --update add --no-cache tini@commuedge nss openjdk8-jre@commuedge openssl openssl-dev ffmpeg lame && \
+#RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
+#RUN echo "@commuedge http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
+RUN apk --update add --no-cache tini nss openjdk8-jre openssl openssl-dev ffmpeg lame && \
     rm -rf /var/cache/apk/*
 
 # Set up Subsonic binaries

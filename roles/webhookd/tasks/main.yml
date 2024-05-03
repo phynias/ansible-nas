@@ -20,6 +20,8 @@
       max-size: 256m
       max-file: "1"
     image: webhookd
+    networks:
+      - name: "{{ nas_bridge_network }}"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/etc/localtime:/etc/localtime:ro"

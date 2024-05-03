@@ -1,4 +1,4 @@
 - name: create docker network
   docker_network:
-    name: nas_bridge
-
+    name: "{{ nas_bridge_network }}"
+    driver: bridge

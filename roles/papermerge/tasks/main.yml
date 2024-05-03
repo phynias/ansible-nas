@@ -16,6 +16,8 @@
       max-size: 256m
       max-file: "1"
     image: webhippie/redis:latest
+    networks:
+      - name: "{{ nas_bridge_network }}"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:
@@ -37,6 +39,8 @@
       max-size: 256m
       max-file: "1"
     image: papermerge/papermerge:3.0.3
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: true
     links:
       - "papermerge_redis:redis"

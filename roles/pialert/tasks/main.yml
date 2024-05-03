@@ -16,15 +16,17 @@
     log_options:
       max-size: 256m
       max-file: "1"
-    #image: jokobsk/pi.alert:latest
-    image: tmp
+    image: jokobsk/pi.alert:latest
+    #image: tmp
+    networks:
+      - name: "{{ nas_bridge_network }}"
     pull: false
     volumes:
       - "{{ pialert_config_directory }}/config:/home/pi/pialert/config:rw"
       - "{{ pialert_config_directory }}/logs:/home/pi/pialert/front/log:rw"
       - "{{ pihole_data_directory }}/pihole:/etc/pihole:ro"
-    ports:
-      - "{{ pialert_port }}:20211"
+#    ports:
+#      - "{{ pialert_port }}:20211"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       # HOST_USER_ID: "1000"

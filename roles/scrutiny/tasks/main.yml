@@ -25,6 +25,9 @@
       max-size: 256m
       max-file: "1"
     image: ghcr.io/analogj/scrutiny
+    pull: true
+    networks:
+      - name: "{{ nas_bridge_network }}"
     capabilities:
       - SYS_RAWIO
       - SYS_ADMIN

@@ -2,7 +2,8 @@ version: "3.3"
 services:
     speedtest-tracker:
         container_name: speedtesttracker
-        network_mode: bridge
+        networks:
+            - nas_bridge
         environment:
             - PUID=1000
             - PGID=1000
@@ -34,7 +35,8 @@ services:
     speedtest-tracker-db:
         container_name: speedtesttracker-db
         image: postgres:15
-        network_mode: bridge
+        networks:
+            - nas_bridge
         restart: always
         environment:
             - POSTGRES_DB=speedtest_tracker
@@ -45,3 +47,6 @@ services:
         restart: unless-stopped
         restart: always
 
+networks:
+  nas_bridge:
+    external: true

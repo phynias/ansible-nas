@@ -1,0 +1,7 @@
+dozzle_available_externally: "false"
+dozzle_enabled: "false"
+dozzle_hostname: "dozzle"
+dozzle_proxy: false
+dozzle_user_id: "0"
+dozzle_group_id: "0"
+dozzle_port: "8080"
