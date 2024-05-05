@@ -32,4 +32,5 @@
       traefik.http.routers.overseerr.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.overseerr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.overseerr.loadbalancer.server.port: "5055"
+      traefik.http.routers.overseerr.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
       autoheal: "true"

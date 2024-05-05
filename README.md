@@ -34,6 +34,7 @@ Ansible config and a bunch of Docker containers.
 
 * [Airsonic](https://airsonic.github.io/) - catalog and stream music
 * [AudioBookShelf](retract-unwanted-celtic-aptly) - self-hosted audiobook and podcast server
+* [Authentik](https://github.com/goauthentik/authentik) - an open-source Identity Provider that emphasizes flexibility and versatility
 * [Bazarr](https://github.com/morpheus65535/bazarr) - companion to Radarr and Sonarr for downloading subtitles
 * [Bitwarden_rs](https://github.com/dani-garcia/bitwarden_rs) - Self-Hosting port of password manager
 * [Calibre-web](https://github.com/janeczku/calibre-web) - Provides a clean interface for browsing, reading and downloading eBooks using an existing Calibre database.
@@ -113,6 +114,7 @@ Ansible config and a bunch of Docker containers.
 * [Wallabag](https://wallabag.org/) - Save and classify articles. Read them later.
 * [Watchlistarr](https://github.com/nylonee/watchlistarr) - Sync plex watchlists in realtime with Sonarr and Radarr
 * [Watchtower](https://github.com/v2tec/watchtower) - Monitor your Docker containers and update them if a new version is available
+* [wg-easy](https://github.com/wg-easy/wg-easy) - The easiest way to install & manage WireGuard on any Linux host
 * [wyze-bridge](https://github.com/mrlt8/docker-wyze-bridge) - https://github.com/mrlt8/docker-wyze-bridge
 * [YouTubeDL-Material](https://github.com/Tzahi12345/YoutubeDL-Material) - Self-hosted YouTube downloader built on Material Design
 * [ZNC](https://wiki.znc.in/ZNC) - IRC bouncer to stay connected to favourite IRC networks and channels

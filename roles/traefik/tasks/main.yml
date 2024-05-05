@@ -66,11 +66,8 @@
     force_kill: true
     labels:
       traefik.enable: "true"
-      traefik.http.middlewares.authelia.forwardauth.address: "http://authelia:9091/api/verify?rd=https://{{ authelia_hostname }}.{{ ansible_nas_domain }}/"
-      traefik.http.middlewares.authelia.forwardauth.trustforwardheader: "true"
-      traefik.http.middlewares.authelia.forwardauth.authresponseheaders: "Remote-User, Remote-Groups"
-      traefik.frontend.headers.customFrameOptionsValue: "allow-from https://organizr.{{ ansible_nas_domain }}/"
-      traefik.frontend.passHostHeader: "true"
+#      traefik.frontend.headers.customFrameOptionsValue: "allow-from https://organizr.{{ ansible_nas_domain }}/"
+#      traefik.frontend.passHostHeader: "true"
       traefik.http.routers.traefik.rule: "Host(`{{ traefik_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.traefik.entrypoints: "traefik"
       traefik.http.routers.traefik.tls: "true"
@@ -79,9 +76,8 @@
       traefik.http.routers.traefik.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.traefik.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.routers.api.service: api@internal
-      traefik.http.routers.api.middlewares: authentik@file
+      traefik.http.routers.api.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
       autoheal: "true"
-#      traefik.http.routers.traefik.middlewares: "basic_auth@file"
 
 - name: certs-dumper
   docker_container:

@@ -43,6 +43,7 @@
       traefik.http.routers.readarr.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.readarr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.readarr.loadbalancer.server.port: "8787"
+      traefik.http.routers.readarr.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
       autoheal: "true"
       # traefik.http.routers.readarr.middlewares: do-auth"
       # traefik.http.middlewares.do-auth.basicauth.users: "{{ traefik_auth }}"

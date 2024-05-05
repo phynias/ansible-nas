@@ -41,5 +41,5 @@
       traefik.http.routers.sonarr.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.sonarr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.sonarr.loadbalancer.server.port: "8989"
-      #traefik.http.routers.sonarr.middlewares: "google-oauth@file"
+      traefik.http.routers.sonarr.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
       autoheal: "true"
