@@ -46,6 +46,10 @@
       tags: [ never, expressvpn ]
       when: (expressvpn_enabled | default(False))
 
+    - role: wgeasy
+      tags: wgeasy
+      when: (wgeasy_enabled | default(False))
+
     - role: networks
       tags: [ always ]
 

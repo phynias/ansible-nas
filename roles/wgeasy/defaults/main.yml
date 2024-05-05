@@ -1,0 +1,7 @@
+---
+wgeasy_enabled: false
+
+# directories
+wgeasy_data_directory: "{{ docker_home }}/wgeasy"
+wgeasy_hostname: "vpn"
+wgeasyui_hostname: "vpnui"

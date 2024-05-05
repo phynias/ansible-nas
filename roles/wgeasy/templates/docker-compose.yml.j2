@@ -1,0 +1,46 @@
+version: "3.8"
+services:
+  wg-easy:
+    environment:
+      # ⚠️ Required:
+      # Change this to your host's public address
+      - WG_HOST={{ wgeasy_hostname }}.{{ ansible_nas_domain }}
+      # Optional:
+      - PASSWORD={{ wgeasy_password }}
+      # - WG_PORT=51820
+      - WG_DEFAULT_ADDRESS=192.168.1.x
+      - WG_DEFAULT_DNS={{ wgeasy_default_dns }}
+      # - WG_MTU=1420
+      - WG_ALLOWED_IPS={{ wgeasy_allowed_ips }}
+      - UI_TRAFFIC_STATS=true
+      - UI_CHART_TYPE=1
+      - MTU=1384
+      - PersistentKeepalive=24
+      # - WG_PRE_UP=echo "Pre Up" > /etc/wireguard/pre-up.txt
+      # - WG_POST_UP=echo "Post Up" > /etc/wireguard/post-up.txt
+      # - WG_PRE_DOWN=echo "Pre Down" > /etc/wireguard/pre-down.txt
+      # - WG_POST_DOWN=echo "Post Down" > /etc/wireguard/post-down.txt
+    image: ghcr.io/wg-easy/wg-easy
+    container_name: wg-easy
+    network_mode: bridge
+    volumes:
+      - {{ wgeasy_data_directory }}:/etc/wireguard
+    ports:
+      - "51820:51820/udp"
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
+    labels:
+      - "autoheal=true"
+      - "traefik.enable={{ wgeasyui_available_externally }}"
+      - "traefik.http.routers.wgeasy.entrypoints=web,websecure"
+      - "traefik.http.routers.wgeasy.rule=Host(`{{ wgeasyui_hostname }}.{{ ansible_nas_domain }}`)"
+      - "traefik.http.routers.wgeasy.tls.domains[0].main={{ ansible_nas_domain }}"
+      - "traefik.http.routers.wgeasy.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+      - "traefik.http.services.wgeasy.loadbalancer.server.port=51821"
+      - "com.centurylinklabs.watchtower.enable=false"
+
