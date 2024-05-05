@@ -5,18 +5,18 @@ services:
         networks:
             - nas_bridge
         environment:
-            - PUID=1000
-            - PGID=1000
+            - PUID={{ speedtesttracker_user_id }}
+            - PGID={{ speedtesttracker_group_id }}
             - DB_CONNECTION=pgsql
             - DB_HOST=speedtest-tracker-db
             - DB_PORT=5432
             - DB_DATABASE=speedtest_tracker
-            - DB_USERNAME=speedy
-            - DB_PASSWORD=password
+            - DB_USERNAME={{ speedtesttracker_db_user }}
+            - DB_PASSWORD={{ speedtesttracker_db_pass }}
+            - TZ={{ ansible_nas_timezone }}
         volumes:
             - "{{ speedtesttracker_data_directory }}/config:/config"
-            - "{{ speedtesttracker_data_directory }}/web:/etc/ssl/web"
-        image: "ghcr.io/alexjustesen/speedtest-tracker:latest"
+        image: "lscr.io/linuxserver/speedtest-tracker:latest"
         restart: unless-stopped
         depends_on:
             - speedtest-tracker-db
