@@ -4,7 +4,8 @@ speedtesttracker_available_externally: "false"
 
 # directories
 speedtesttracker_data_directory: "{{ docker_home }}/speedtesttracker"
-
+speedtesttracker_user_id: ""
+speedtesttracker_group_id: ""
 # network
 speedtesttracker_hostname: "speedtest"
 
