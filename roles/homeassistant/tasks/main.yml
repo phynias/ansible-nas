@@ -20,7 +20,7 @@
     chdir: "{{ role_path }}"
 
 - name: Deploy homeassistant Docker Compose stack
-  docker_compose:
+  community.docker.docker_compose_v2:
     recreate: "{{ 'always' if docker_recreate else 'smart' }}"
     project_src: "{{ role_path }}"
     remove_orphans: true

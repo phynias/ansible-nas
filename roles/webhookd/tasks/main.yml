@@ -4,13 +4,12 @@
     name: webhookd
     build:
       path: "{{ role_path }}/files/"
-    buildargs:
-      UID: "{{ webhookd_user_id }}"
-      GID: "{{ webhookd_group_id }}"
+      args:
+        UID: "{{ webhookd_user_id }}"
+        GID: "{{ webhookd_group_id }}"
     source: build
-    state: build
-    rm: yes
-    force: yes
+    force_source: true
+    state: present
 
 - name: webhookd Docker Container
   docker_container:

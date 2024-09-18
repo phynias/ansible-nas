@@ -31,8 +31,8 @@
     env:
       API_ID: "{{ wyze_api_id }}"
       API_KEY: "{{ wyze_api_key }}"
-      WYZE_EMAIL: "{{ wyze_auth_user }}"
-      WYZE_PASSWORD: "{{ wyze_auth_password }}"
+      WB_USERNAME: "{{ wyze_auth_user }}"
+      WB_PASSWORD: "{{ wyze_auth_password }}"
       WB_HLS_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:8888/"
       WB_RTMP_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:1935/"
       WB_RTSP_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:8554/"

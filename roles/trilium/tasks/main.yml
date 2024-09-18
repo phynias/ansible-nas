@@ -27,7 +27,7 @@
 - debug: var=shell_output.stdout
 
 - name: Deploy trilium Docker Compose stack
-  docker_compose:
+  community.docker.docker_compose_v2:
     remove_orphans: true
     recreate: "{{ 'always' if docker_recreate else 'smart' }}"
     project_src: "{{ role_path }}"

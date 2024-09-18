@@ -18,9 +18,11 @@
     volumes:
       - "{{ krusader_config_directory }}:/config:rw"
       - "{{ krusader_browse_directory }}:/mnt/fs"
-    ports:
-      - "{{ krusader_port_http }}:5800"
-      - "{{ krusader_port_vnc }}:5900"
+    networks:
+      - name: "{{ nas_bridge_network }}"
+ #   ports:
+ #     - "{{ krusader_port_http }}:5800"
+ #     - "{{ krusader_port_vnc }}:5900"
     env:
       USER_ID: "{{ krusader_user_id }}"
       GROUP_ID: "{{ krusader_group_id }}"

@@ -6,8 +6,8 @@
     state: directory
   with_items:
     - "{{ pialert_config_directory }}"
-    - "{{ pialert_config_directory }}/logs"
     - "{{ pialert_config_directory }}/config"
+    - "{{ pialert_config_directory }}/db"
 
 - name: pialert Docker Container
   docker_container:
@@ -22,8 +22,8 @@
       - name: "{{ nas_bridge_network }}"
     pull: false
     volumes:
-      - "{{ pialert_config_directory }}/config:/home/pi/pialert/config:rw"
-      - "{{ pialert_config_directory }}/logs:/home/pi/pialert/front/log:rw"
+      - "{{ pialert_config_directory }}/config:/app/config:rw"
+      - "{{ pialert_config_directory }}/db:/app/db:rw"
       - "{{ pihole_data_directory }}/pihole:/etc/pihole:ro"
 #    ports:
 #      - "{{ pialert_port }}:20211"

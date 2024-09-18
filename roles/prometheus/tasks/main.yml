@@ -216,8 +216,8 @@
 #      - "loki"
       - "alertmanager"
     user: "{{ nas_uid }}:{{ nas_gid }}"
-    labels:
-      autoheal: "true"
+#    labels:
+#      autoheal: "true"
 
 - name: Grab latest smartmon.sh
   get_url:

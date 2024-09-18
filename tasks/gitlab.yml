@@ -39,10 +39,12 @@
       - "{{ gitlab_data_directory }}/config:/etc/gitlab:rw"
       - "{{ gitlab_data_directory }}/log:/var/log/gitlab:rw"
       - "{{ gitlab_data_directory }}/data:/var/opt/gitlab:rw"
-    ports:
-      - "{{ gitlab_port_http }}:80"
-      - "{{ gitlab_port_https }}:443"
-      - "{{ gitlab_port_ssh }}:22"
+    networks:
+      - name: "{{ nas_bridge_network }}"
+ #   ports:
+ #     - "{{ gitlab_port_http }}:80"
+ #     - "{{ gitlab_port_https }}:443"
+ #     - "{{ gitlab_port_ssh }}:22"
     hostname: "gitlab.{{ ansible_nas_domain }}"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"

@@ -28,6 +28,7 @@ traefik_environment_variables:
   AWS_ACCESS_KEY_ID: "{{ aws_access }}"
   AWS_SECRET_ACCESS_KEY: "{{ aws_secret }}"
   AWS_HOSTED_ZONE_ID: "{{ aws_zone_id }}"
+  AWS_REGION: "{{ aws_region }}"
 
 # Ansible-NAS requests a wildcard certificate for your domain, so there should be no reason to have to use the staging
 # letsencrypt acme server. If you do want to flip between staging/production, you might need to stop Traefik and clear

@@ -16,13 +16,15 @@
     volumes:
       - "{{ calibre_data_directory }}/config:/config"
       - "{{ calibre_books_root }}:/books"
+    networks:
+      - name: "{{ nas_bridge_network }}"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ calibre_user_id }}"
       PGID: "{{ calibre_group_id }}"
       DOCKER_MODS: "{{ calibre_ebook_conversion }}"
-    ports:
-      - "{{ calibre_port }}:8083"
+#    ports:
+#      - "{{ calibre_port }}:8083"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g

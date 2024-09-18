@@ -1,5 +1,5 @@
-funkwhale_available_externally: false
-funkwhale_enabled: "false"
+funkwhale_available_externally: "false"
+funkwhale_enabled: false
 funkwhale_hostname: "funk"
 
 funkwhale_music_directory: "{{ music_root }}"

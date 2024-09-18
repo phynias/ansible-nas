@@ -6,32 +6,30 @@
   with_items:
     - "{{ mealie_data_directory }}/data"
 
-- name: Mealie Docker Container
-  docker_container:
-    name: mealie
-    image: hkotel/mealie:latest
-    networks:
-      - name: "{{ nas_bridge_network }}"
-    pull: true
-    volumes:
-      - "{{ mealie_data_directory }}:/app/data:rw"
-    env:
-      TZ: "{{ ansible_nas_timezone }}"
-      PUID: "{{ mealie_user_id }}"
-      PGID: "{{ mealie_group_id }}"
-      RECIPE_PUBLIC: 'true'
-      RECIPE_SHOW_NUTRITION: 'true'
-      RECIPE_SHOW_ASSETS: 'true'
-      RECIPE_LANDSCAPE_VIEW: 'true'
-      RECIPE_DISABLE_COMMENTS: 'false'
-      RECIPE_DISABLE_AMOUNT: 'false'
-      BASE_URL: "https://{{ mealie_hostname }}.{{ ansible_nas_domain }}"
-    restart_policy: unless-stopped
-    memory: "{{ mealie_memory }}"
-    labels:
-      traefik.enable: "{{ mealie_available_externally }}"
-      traefik.http.routers.mealie.rule: "Host(`{{ mealie_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.mealie.tls.domains[0].main: "{{ ansible_nas_domain }}"
-      traefik.http.routers.mealie.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
-      traefik.http.services.mealie.loadbalancer.server.port: "9000"
-      autoheal: "true"
+- name: Setup mealie docker-compose.yml
+  template:
+    src: templates/docker-compose.yml.j2
+    dest: "{{ role_path }}/docker-compose.yml"
+
+- name: Run docker compose pull
+  shell: "docker compose pull --ignore-pull-failures || true"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- name: Run docker compose build
+  shell: "docker compose build"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- debug: var=shell_output.stdout
+
+- name: Deploy mealie Docker Compose stack
+  community.docker.docker_compose_v2:
+    remove_orphans: true
+    recreate: "{{ 'always' if docker_recreate else 'smart' }}"
+    project_src: "{{ role_path }}"
+    files:
+    - docker-compose.yml
+  register: shell_output

@@ -12,10 +12,10 @@
 - name: Create a pihole network
   docker_network:
     name: piholedhcp
-    ipam_options:
-      subnet: '10.0.0.0/16'
-      gateway: 10.0.0.1
-      iprange: '10.0.0.0/24'
+    ipam_config:
+      - subnet: '10.0.0.0/16'
+        gateway: 10.0.0.1
+        iprange: '10.0.0.0/24'
 
 - name: Get name of pihole net interface
   shell: ip route|grep 10.0.0.1|awk '{print $3}'
@@ -50,9 +50,9 @@
 - debug: var=shell_output.stdout
 
 - name: Deploy pihole Docker Compose stack
-  docker_compose:
+  community.docker.docker_compose_v2:
     remove_orphans: true
-    recreate: "{{ 'always' if pihole_recreate else 'smart' }}"
+    recreate: "{{ 'always' if pihole_recreate else 'auto' }}"
     project_src: "{{ role_path }}"
     files:
     - docker-compose.yml

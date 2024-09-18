@@ -38,8 +38,10 @@
     pull: true
     volumes:
       - "{{ guacamole_data_directory }}/config:/config:rw"
-    ports:
-      - "{{ guacamole_port }}:8080"
+    networks:
+      - name: "{{ nas_bridge_network }}"
+#    ports:
+#      - "{{ guacamole_port }}:8080"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g

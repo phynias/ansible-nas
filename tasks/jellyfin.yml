@@ -21,9 +21,11 @@
       - "{{ jellyfin_tv_directory }}:/tv:{{ jellyfin_tv_permissions }}"
       - "{{ jellyfin_books_directory }}:/books:{{ jellyfin_tv_permissions }}"
       - "{{ jellyfin_audiobooks_directory }}:/audiobooks:{{ jellyfin_tv_permissions }}"
-    ports:
-      - "{{ jellyfin_port_http }}:8096"
-      - "{{ jellyfin_port_https }}:8920"
+    networks:
+      - name: "{{ nas_bridge_network }}"
+#    ports:
+#      - "{{ jellyfin_port_http }}:8096"
+#      - "{{ jellyfin_port_https }}:8920"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ jellyfin_user_id }}"

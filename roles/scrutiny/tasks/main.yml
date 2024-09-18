@@ -34,7 +34,7 @@
     devices:
       "{{ _output.stdout_lines }}"
     volumes:
-      - "{{ scrutiny_config_directory }}:/scrutiny/config:rw"
+      - "{{ scrutiny_config_directory }}:/opt/scrutiny/config:rw"
       - "/run/udev:/run/udev:ro"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"

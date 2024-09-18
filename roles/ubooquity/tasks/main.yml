@@ -16,6 +16,7 @@
       - "{{ ubooquity_data_directory }}:/config:rw"
 #    ports:
 #      - "2202:2202"
+#      - "2203:2203"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ ubooquity_user_id }}"
@@ -35,7 +36,10 @@
       traefik.http.routers.ubooquity.rule: "Host(`{{ ubooquity_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.ubooquity.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.ubooquity.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
-      traefik.http.services.ubooquity.loadbalancer.server.port: "2203"
+      traefik.http.services.ubooquity.loadbalancer.server.port: "2202"
+      traefik.http.routers.ubooquityadmin.entrypoints: "web,websecure"
+      traefik.http.routers.ubooquityadmin.rule: Host(`{{ ubooquity_hostname }}-admin.{{ ansible_nas_domain }}`) && PathPrefix(`/admin`)
+      traefik.http.routers.ubooquityadmin.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.ubooquityadmin.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.ubooquityadmin.loadbalancer.server.port: "2203"
       autoheal: "true"
-      # traefik.http.routers.ubooquity.middlewares: do-auth"
-      # traefik.http.middlewares.do-auth.basicauth.users: "{{ traefik_auth }}"
