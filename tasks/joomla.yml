@@ -43,8 +43,8 @@
 #      - "{{ joomla_port }}:80"
     networks:
       - name: "{{ nas_bridge_network }}"
-    links:
-      - "joomla_mysql:mysql"
+        links:
+          - "joomla_mysql:mysql"
     env:
       JOOMLA_DB_HOST: "mysql"
       JOOMLA_DB_USER: "root"

@@ -25,6 +25,8 @@
 - name: InfluxDB
   docker_container:
     name: influxdb
+    networks:
+      - name: "{{ nas_bridge_network }}"
     log_driver: json-file
     log_options:
       max-size: 256m
@@ -44,6 +46,8 @@
 - name: hddtemp
   docker_container:
     name: hddtemp
+    networks:
+      - name: "{{ nas_bridge_network }}"
     log_driver: json-file
     log_options:
       max-size: 256m
@@ -66,14 +70,16 @@
 - name: Telegraf
   docker_container:
     name: telegraf
+    networks:
+      - name: "{{ nas_bridge_network }}"
+        links:
+          - hddtemp:hddtemp
     log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"
     image: telegraf
     pull: true
-    links:
-      - hddtemp:hddtemp
     privileged: true
     ipc_mode: host
     volumes:
@@ -119,6 +125,8 @@
 - name: Grafana
   docker_container:
     name: grafana
+    networks:
+      - name: "{{ nas_bridge_network }}"
     log_driver: json-file
     log_options:
       max-size: 256m

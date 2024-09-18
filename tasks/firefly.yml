@@ -46,8 +46,10 @@
     volumes:
       - "{{ firefly_data_directory }}/export:/var/www/firefly-iii/storage/export:rw"
       - "{{ firefly_data_directory }}/upload:/var/www/firefly-iii/storage/upload:rw"
-    links:
-      - firefly-mysql:db
+    networks:
+      - name: "{{ nas_bridge_network }}"
+        links:
+          - firefly-mysql:db
 #    ports:
 #      - "{{ firefly_port }}:8080"
     env:
