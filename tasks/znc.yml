@@ -9,6 +9,7 @@
 - name: ZNC
   docker_container:
     name: znc
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"

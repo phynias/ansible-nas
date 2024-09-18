@@ -31,7 +31,7 @@
 - name: Deploy audiobookshelf Docker Compose stack
   community.docker.docker_compose_v2:
     remove_orphans: true
-    recreate: "{{ 'always' if pihole_recreate else 'smart' }}"
+    recreate: "{{ 'always' if pihole_recreate else 'auto' }}"
     project_src: "{{ role_path }}"
     files:
     - docker-compose.yml

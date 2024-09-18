@@ -9,6 +9,7 @@
 - name: mymedia for alexa Docker Container
   docker_container:
     name: mymediaforalexa
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"

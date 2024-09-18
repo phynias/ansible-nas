@@ -1,4 +1,4 @@
-version: "3.3"
+#version: "3.3"
 services:
     speedtest-tracker:
         container_name: speedtesttracker
@@ -25,8 +25,6 @@ services:
         restart: unless-stopped
         depends_on:
             - speedtest-tracker-db
-        restart: unless-stopped
-        restart: always
         links:
           - speedtest-tracker-db
         labels:
@@ -42,7 +40,6 @@ services:
         image: postgres:15
         networks:
             - nas_bridge
-        restart: always
         environment:
             - POSTGRES_DB=speedtest_tracker
             - POSTGRES_USER=speedy
@@ -50,7 +47,6 @@ services:
         volumes:
             - "{{ speedtesttracker_data_directory }}/db:/var/lib/postgresql/data"
         restart: unless-stopped
-        restart: always
 
 networks:
   nas_bridge:

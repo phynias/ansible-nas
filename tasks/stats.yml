@@ -25,6 +25,7 @@
 - name: InfluxDB
   docker_container:
     name: influxdb
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"
@@ -43,6 +44,7 @@
 - name: hddtemp
   docker_container:
     name: hddtemp
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"
@@ -64,6 +66,7 @@
 - name: Telegraf
   docker_container:
     name: telegraf
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"
@@ -116,6 +119,7 @@
 - name: Grafana
   docker_container:
     name: grafana
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"

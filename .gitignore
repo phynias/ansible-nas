@@ -3,6 +3,8 @@ site
 .vagrant
 *.retry
 *.log
+*.save
+*.bk
 inventories
 
 # Vim

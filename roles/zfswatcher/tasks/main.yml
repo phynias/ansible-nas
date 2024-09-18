@@ -6,9 +6,8 @@
       cache_from:
         - myzfswatcher:latest
     source: build
-    state: build
-    rm: true
-    force: true
+    state: present
+    force_source: true
 
 - name: zfswatcher
   docker_container:

@@ -4,13 +4,12 @@
     name: subsonic
     build:
       path: "{{ role_path }}/files/"
-    buildargs:
-      UID: "{{ subsonic_user_id }}"
-      GID: "{{ subsonic_group_id }}"
+      args:
+        UID: "{{ subsonic_user_id }}"
+        GID: "{{ subsonic_group_id }}"
     source: build
-    state: build
-    rm: yes
-    force: yes
+    state: present
+    force_source: yes
 
 - name: Subsonic Docker Container
   docker_container:
