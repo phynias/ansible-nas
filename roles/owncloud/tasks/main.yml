@@ -4,13 +4,12 @@
     name: mymariadb
     build:
       path: "{{ role_path }}/files/"
-    buildargs:
-      UID: "{{ owncloud_user_id }}"
-      GID: "{{ owncloud_group_id }}"
+      args:
+        UID: "{{ owncloud_user_id }}"
+        GID: "{{ owncloud_group_id }}"
     source: build
-    state: build
-    rm: yes
-    force: yes
+    state: present
+    force_source: yes
 
 
 - name: Create owncloud Directories

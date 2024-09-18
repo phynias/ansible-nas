@@ -10,6 +10,7 @@
 - name: MySQL Docker Container for Joomla
   docker_container:
     name: joomla_mysql
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"
@@ -30,6 +31,7 @@
 - name: Joomla Docker Container
   docker_container:
     name: joomla
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"

@@ -30,6 +30,7 @@
 - name: Create Gitlab container
   docker_container:
     name: gitlab
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"

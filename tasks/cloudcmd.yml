@@ -9,6 +9,7 @@
 - name: CloudCmd
   docker_container:
     name: cloudcmd
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"

@@ -1,5 +1,5 @@
 ### EXAMPLE DOCKER COMPOSE ###
-version: "3.7"
+#version: "3.7"
 
 services:
   audiobookshelf:
@@ -31,7 +31,6 @@ services:
     # the UID and GID to the correct values for your user.
     #environment:
     #  - user=1000:1000
-    restart: always
     labels:
       - "traefik.http.routers.audiobookshelf.entrypoints=websecure-ext,websecure"
       - "traefik.enable={{ audiobookshelf_available_externally }}"

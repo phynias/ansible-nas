@@ -1,10 +1,9 @@
 ---
-version: "2.1"
+#version: "2.1"
 services:
   mealie:
     image: ghcr.io/mealie-recipes/mealie:latest
     container_name: mealie
-    restart: always
     networks:
       - bridge
     volumes:

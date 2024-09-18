@@ -32,7 +32,7 @@
 - name: Deploy speedtesttracker Docker Compose stack
   community.docker.docker_compose_v2:
     remove_orphans: true
-    recreate: "{{ 'always' if docker_recreate else 'smart' }}"
+    recreate: "{{ 'always' if docker_recreate else 'auto' }}"
     project_src: "{{ role_path }}"
     files:
     - docker-compose.yml
