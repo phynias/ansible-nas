@@ -30,12 +30,12 @@
     name: miniflux
     image: miniflux/miniflux:latest
     pull: true
-    links:
-        - miniflux-postgres:db
   #  ports:
   #    - "{{ miniflux_port }}:8080"
     networks:
       - name: "{{ nas_bridge_network }}"
+        links:
+          - miniflux-postgres:db
     env:
       DATABASE_URL: "postgres://miniflux:supersecure@db/miniflux?sslmode=disable"
       RUN_MIGRATIONS: "1"
