@@ -9,6 +9,8 @@
     image: boerderij/varken
     networks:
       - name: "{{ nas_bridge_network }}"
+        links:
+          - influxdb:influxdb
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ varken_user_id }}"
@@ -19,5 +21,3 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 128m
-    links:
-        - influxdb:influxdb

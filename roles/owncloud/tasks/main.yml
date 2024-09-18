@@ -26,7 +26,7 @@
 
 - name: create mysql volume
   command: docker volume create --name mysql
-  when: 
+  when:
     - myvolume_exists is defined
     - myvolume_exists.stderr_lines is defined
     - myvolume_exists.stderr_lines is search("No such volume")
@@ -96,10 +96,10 @@
     image: owncloud/server:latest
     networks:
       - name: "{{ nas_bridge_network }}"
+        links:
+          - "owncloud_mariadb:mariadb"
+          - "owncloud_redis:redis"
     pull: true
-    links:
-      - "owncloud_mariadb:mariadb"
-      - "owncloud_redis:redis"
     volumes:
       - "{{ owncloud_data_directory }}:/mnt/data:rw"
     env:

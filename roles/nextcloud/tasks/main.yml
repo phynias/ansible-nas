@@ -39,9 +39,9 @@
     image: nextcloud:14
     networks:
       - name: "{{ nas_bridge_network }}"
+        links:
+          - nextcloud-mysql:mysql
     pull: true
-    links:
-        - nextcloud-mysql:mysql
     volumes:
       - "{{ nextcloud_data_directory }}/nextcloud:/var/www/html:rw"
 #    ports:

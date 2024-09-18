@@ -55,6 +55,9 @@
     image: reallibrephotos/librephotos:{{ librephotos_tag }}
     networks:
       - name: "{{ nas_bridge_network }}"
+        links:
+          - "redis:redis"
+          - "db:db"
     pull: true
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
@@ -84,9 +87,6 @@
       SKIP_PATTERNS: "{{ librephotos_skipPatterns }}"
       DEBUG: "0"
       HEAVYWEIGHT_PROCESS: "{{ librephotos_HEAVYWEIGHT_PROCESS }}"
-    links:
-      - "redis:redis"
-      - "db:db"
     labels:
       com.centurylinklabs.watchtower.enable: "false"
 
@@ -120,6 +120,9 @@
     image: reallibrephotos/librephotos-proxy:{{ librephotos_tag }}
     networks:
       - name: "{{ nas_bridge_network }}"
+        links:
+          - "frontend:frontend"
+          - "backend:backend"
     pull: true
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
@@ -130,9 +133,6 @@
       - "{{ librephotos_proMedia }}:/protected_media"
  #   ports:
  #     - "{{ librephotos_port }}:80"
-    links:
-      - "frontend:frontend"
-      - "backend:backend"
     labels:
       traefik.enable: "{{ librephotos_available_externally }}"
       traefik.passHostHeader: "true"

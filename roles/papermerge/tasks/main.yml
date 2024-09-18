@@ -41,9 +41,9 @@
     image: papermerge/papermerge:3.0.3
     networks:
       - name: "{{ nas_bridge_network }}"
+        links:
+          - "papermerge_redis:redis"
     pull: true
-    links:
-      - "papermerge_redis:redis"
     volumes:
       - "{{ papermerge_data_directory }}/media:/app/media:rw"
     env:
