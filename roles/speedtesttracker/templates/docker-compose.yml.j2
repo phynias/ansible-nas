@@ -14,6 +14,11 @@ services:
             - DB_USERNAME={{ speedtesttracker_db_user }}
             - DB_PASSWORD={{ speedtesttracker_db_pass }}
             - TZ={{ ansible_nas_timezone }}
+            - APP_TIMEZONE={{ ansible_nas_timezone }}
+            - DISPLAY_TIMEZONE={{ ansible_nas_timezone }}
+            - APP_KEY={{ speedtesttracker_key }}
+            - SPEEDTEST_SCHEDULE=15,30,45,0 * * * *
+            - SPEEDTEST_SERVERS=2402,2403,14236,17527,12191
         volumes:
             - "{{ speedtesttracker_data_directory }}/config:/config"
         image: "lscr.io/linuxserver/speedtest-tracker:latest"

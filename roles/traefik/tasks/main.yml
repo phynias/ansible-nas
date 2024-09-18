@@ -30,6 +30,11 @@
     src:  middleware.yml
     dest: "{{ traefik_data_directory }}/rules/middleware.yml"
 
+- name: Template Traefik ha.toml
+  template:
+    src:  ha.toml
+    dest: "{{ traefik_data_directory }}/rules/ha.toml"
+
 - name: Traefik Docker Container
   docker_container:
     name: traefik
@@ -85,16 +90,11 @@
     image: ldez/traefik-certs-dumper
     pull: true
     restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     volumes:
       - "{{ traefik_data_directory }}/certs_dump:/data"
       - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:ro"
     labels:
       autoheal: "true"
-    entrypoint: sh -c '
-      apk add jq
-      ; while ! [ -e /letsencrypt/acme.json ]
-      || ! [ `jq ".[] | .Certificates | length" /letsencrypt/acme.json` != 0 ]; do
-      sleep 1
-      ; done
-      && traefik-certs-dumper file --version v2 --watch
-      --source /letsencrypt/acme.json --dest /data/certs'
+    command: file --version v2 --watch --source /letsencrypt/acme.json --dest /data/certs
+#    entrypoint: sh -c 'sleep 3 && traefik-certs-dumper file --version v2 --watch --source /letsencrypt/acme.json --dest /data/certs'

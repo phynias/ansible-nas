@@ -15,9 +15,9 @@
       max-file: "1"
     image: pinion/docker-pytivo
     pull: true
-    ports:
-      - "9032:9032"
-      - "2190:2190/udp"
+#    ports:
+#      - "9032:9032"
+#      - "2190:2190/udp"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "{{ pytivo_config_directory }}:/config:rw"

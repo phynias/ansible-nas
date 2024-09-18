@@ -18,8 +18,10 @@
       - "{{ mylar_comics_directory }}:/comics:rw"
       - "{{ mylar_downloads_directory }}:/downloads:rw"
       - "{{ mylar_data_directory }}/config:/config:rw"
-    ports:
-      - "{{ mylar_port_http }}:8090"
+    networks:
+      - name: "{{ nas_bridge_network }}"
+ #   ports:
+ #     - "{{ mylar_port_http }}:8090"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ mylar_user_id }}"

@@ -20,7 +20,7 @@
       max-size: 256m
       max-file: "1"
 #    image: myexpressvpn:latest
-    image: misioslav/expressvpn:latest
+    image: misioslav/expressvpn:3.68.0.2
     networks:
       - name: "{{ nas_bridge_network }}"
     capabilities:

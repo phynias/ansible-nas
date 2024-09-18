@@ -15,7 +15,7 @@
       - "{{ docker_home }}/traefik/certs_dump/certs:/ssl"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-    memory: 512m
+    memory: 2048m
     env:
       SONARR_API_KEY: "{{ watchistarr_sonarr_key }}"
       RADARR_API_KEY: "{{ watchistarr_radarr_key }}"

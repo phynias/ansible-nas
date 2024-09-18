@@ -21,9 +21,11 @@
       max-file: "1"
     image: thelounge/thelounge:latest
     pull: true
-    ports:
-      - "{{ thelounge_port_one }}:9001"
-      - "{{ thelounge_port_two }}:9000"
+#    ports:
+#      - "{{ thelounge_port_one }}:9001"
+#      - "{{ thelounge_port_two }}:9000"
+    networks:
+      - name: "{{ nas_bridge_network }}"
     volumes:
       - "{{ thelounge_data_directory }}:/var/opt/thelounge"
       - "/var/run/dbus:/var/run/dbus"

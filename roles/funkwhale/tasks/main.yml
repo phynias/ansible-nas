@@ -6,6 +6,7 @@
   with_items:
     - "{{ funkwhale_data_directory }}"
 
+- debug: msg="{{ funkwhale_enabled }}"
 - name: funkwhale Docker Container
   docker_container:
     name: funkwhale

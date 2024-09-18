@@ -18,6 +18,7 @@
     pull: true
     volumes:
       - "{{ ombi_config_directory }}:/config:rw"
+    publish_all_ports: false
 #    ports:
 #      - "{{ ombi_port }}:3579"
     env:

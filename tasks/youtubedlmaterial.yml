@@ -26,8 +26,10 @@
       - "{{ youtubedlmaterial_dl_audio_directory }}:/app/audio:rw"
       - "{{ youtubedlmaterial_dl_video_directory }}:/app/video:rw"
       - "{{ youtubedlmaterial_dl_subscriptions_directory }}:/app/subscriptions:rw"
-    ports:
-      - "{{ youtubedlmaterial_port_http }}:17442"
+    networks:
+      - name: "{{ nas_bridge_network }}"
+#    ports:
+#      - "{{ youtubedlmaterial_port_http }}:17442"
     env:
       ALLOW_CONFIG_MUTATIONS: "true"
       TZ: "{{ ansible_nas_timezone }}"

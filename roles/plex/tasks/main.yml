@@ -22,6 +22,7 @@
     ports:
       - "32400:32400/tcp"
     volumes:
+      - "{{ plex_certs_directory }}:/certs:ro"
       - "{{ plex_config_directory }}:/config:rw"
       - "{{ plex_logs }}:/opt/plex/Library/Application Support/Plex Media Server/Logs:rw"
       - "{{ plex_movies_directory }}:/movies:{{ plex_movies_permissions }}"

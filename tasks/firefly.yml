@@ -18,6 +18,8 @@
     pull: true
     volumes:
       - "{{ firefly_data_directory }}/mysql:/var/lib/mysql:rw"
+    networks:
+      - name: "{{ nas_bridge_network }}"
     env:
       MYSQL_DATABASE: "firefly"
       MYSQL_USER: "firefly"
@@ -44,8 +46,8 @@
       - "{{ firefly_data_directory }}/upload:/var/www/firefly-iii/storage/upload:rw"
     links:
       - firefly-mysql:db
-    ports:
-      - "{{ firefly_port }}:8080"
+#    ports:
+#      - "{{ firefly_port }}:8080"
     env:
       APP_ENV: "local"
       APP_KEY: "S0m3R@nd0mString0f32Ch@rsEx@ct1y"

@@ -21,6 +21,8 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
+    networks:
+      - name: "{{ nas_bridge_network }}"
 
 - name: Create Miniflux container
   docker_container:
@@ -29,8 +31,10 @@
     pull: true
     links:
         - miniflux-postgres:db
-    ports:
-      - "{{ miniflux_port }}:8080"
+  #  ports:
+  #    - "{{ miniflux_port }}:8080"
+    networks:
+      - name: "{{ nas_bridge_network }}"
     env:
       DATABASE_URL: "postgres://miniflux:supersecure@db/miniflux?sslmode=disable"
       RUN_MIGRATIONS: "1"

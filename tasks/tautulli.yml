@@ -10,6 +10,7 @@
 - name: Tautulli Docker Container
   docker_container:
     name: tautulli
+    log_driver: json-file
     log_options:
       max-size: 256m
       max-file: "1"
@@ -18,8 +19,9 @@
     volumes:
       - "{{ tautulli_config_directory }}:/config:rw"
       - "{{ plex_logs }}:/logs:ro"
-    ports:
-      - "{{ tautulli_port }}:8181"
+#    ports:
+#      - "{{ tautulli_port }}:8181"
+    network_mode: "{{ 'container:' + proxy_container if lidarr_proxy else 'None' }}"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ tautulli_user_id }}"

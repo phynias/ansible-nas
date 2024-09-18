@@ -8,3 +8,4 @@ curl -s https://www.iblocklist.com/lists.json | \
     gzip > /zpool1/docker/static/files/blocklist.gz && \
     chown nasuser.nasuser /zpool1/docker/static/files/blocklist.gz && \
     chmod 664 /zpool1/docker/static/files/blocklist.gz
+docker exec pihole pihole updateGravity

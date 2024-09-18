@@ -15,3 +15,11 @@ mealie_port: "9925"
 
 # specs
 mealie_memory: 1g
+# smtp 
+mealie_smtp_host: ""
+mealie_smtp_port: "587"
+mealie_smtp_from_name: ""
+mealie_smtp_from_email: ""
+mealie_smtp_auth_strategy: ""
+mealie_smtp_user: ""
+mealie_smtp_password: ""
