@@ -35,6 +35,7 @@
     memory: 1g
     labels:
       autoheal: "true"
+
 - name: Create librenms container
   docker_container:
     name: librenms
@@ -45,6 +46,8 @@
     image: librenms
     networks:
       - name: "{{ nas_bridge_network }}"
+        links:
+          - "librenms-db:librenms-db"
     volumes:
       - "{{ librenms_data_directory }}/data:/data"
     env:
@@ -64,8 +67,6 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 250m
-    links:
-      - "librenms-db:librenms-db"
  #   ports:
  #     - 514:514/tcp
  #     - 514:514/udp

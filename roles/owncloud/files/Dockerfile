@@ -11,9 +11,9 @@ RUN apk update && \
   apk upgrade && \
   mkdir -p /var/lib/mysql && \
   groupadd -g 1000 mysql && \
-  useradd -u 1000 -d /var/lib/mysql -g mysql -s /bin/bash -m mysql && \
-  apk add mariadb==10.11.7-r0 mariadb-client==10.11.7-r0 mariadb-server-utils==10.11.7-r0 tzdata && \
-  rm -rf /var/cache/apk/* /etc/mysql/* /etc/my.cnf* /var/lib/mysql/* || true
+  useradd -u 1000 -d /var/lib/mysql -g mysql -s /bin/bash -m mysql
+RUN  apk add  mariadb mariadb-client mariadb-server-utils tzdata
+RUN  rm -rf /var/cache/apk/* /etc/mysql/* /etc/my.cnf* /var/lib/mysql/* || true
 
 COPY ./overlay /
 #  echo 'http://dl-cdn.alpinelinux.org/alpine/v3.14/main' >> /etc/apk/repositories && \

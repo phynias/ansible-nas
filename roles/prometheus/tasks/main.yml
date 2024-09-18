@@ -190,6 +190,13 @@
     image: prom/prometheus
     networks:
       - name: "{{ nas_bridge_network }}"
+        links:
+          - "grafana"
+          - "node-exporter"
+          - "cadvisor"
+          - "alertmanager"
+#          - "loki"
+    user: "{{ nas_uid }}:{{ nas_gid }}"
     pull: true
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
@@ -209,13 +216,6 @@
     force_kill: true
     restart_policy: unless-stopped
     memory: 1g
-    links:
-      - "grafana"
-      - "node-exporter"
-      - "cadvisor"
-#      - "loki"
-      - "alertmanager"
-    user: "{{ nas_uid }}:{{ nas_gid }}"
 #    labels:
 #      autoheal: "true"
 
