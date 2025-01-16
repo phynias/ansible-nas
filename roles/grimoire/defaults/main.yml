@@ -1,0 +1,13 @@
+---
+grimoire_enabled: false
+grimoire_available_externally: "false"
+
+# directories
+grimoire_data_directory: "{{ docker_home }}/grimoire"
+
+# uid / gid
+grimoire_user_id: "1000"
+grimoire_group_id: "1000"
+
+# network
+grimoire_hostname: "grim"

@@ -1,0 +1,10 @@
+---
+plextraktsync_enabled: false
+plextraktsync_available_externally: "false"
+
+# directories
+plextraktsync_data_directory: "{{ docker_home }}/plextraktsync"
+plextraktsync_user_id: ""
+plextraktsync_group_id: ""
+
+# uid / gid

@@ -1,0 +1,49 @@
+---
+- name: Create speakarr Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ speakarr_data_directory }}"
+
+- name: speakarr
+  docker_container:
+    name: speakarr
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: "1"
+    image: lscr.io/linuxserver/readarr:develop
+    pull: true
+    volumes:
+      - "{{ speakarr_audio_books_directory }}:/audiobooks:rw"
+      - "{{ speakarr_data_directory }}:/config:rw"
+      - "{{ speakarr_download_directory }}:/downloads:rw"
+#    ports:
+#      - "{{ speakarr_port }}:6767"
+    networks:
+      - name: "{{ nas_bridge_network }}"
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      PUID: "{{ speakarr_user_id }}"
+      PGID: "{{ speakarr_group_id }}"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    memory: 1g
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "-4", "{{ health_check_url }}"]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+      start_period: 90s
+    labels:
+      traefik.enable: "{{ speakarr_available_externally }}"
+      traefik.http.routers.speakarr.entrypoints: "web,websecure"
+      traefik.http.routers.speakarr.rule: "Host(`{{ speakarr_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.speakarr.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.speakarr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.speakarr.loadbalancer.server.port: "8787"
+      traefik.http.routers.speakarr.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
+      autoheal: "true"
+      # traefik.http.routers.speakarr.middlewares: do-auth"
+      # traefik.http.middlewares.do-auth.basicauth.users: "{{ traefik_auth }}"

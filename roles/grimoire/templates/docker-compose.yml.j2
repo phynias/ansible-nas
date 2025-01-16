@@ -1,0 +1,33 @@
+---
+services:
+  grimoire:
+    image: goniszewski/grimoire:latest
+    networks:
+      - bridge
+    container_name: grimoire
+    restart: unless-stopped
+    environment:
+      PORT: "5173"
+      PUBLIC_HTTPS_ONLY: "true"
+      PUBLIC_SIGNUP_DISABLED: "false"
+      PUBLIC_ORIGIN: "https://{{ grimoire_hostname }}.{{ ansible_nas_domain }}"
+    volumes:
+      - "{{ grimoire_data_directory }}:/app/data/"
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5173/api || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+        - "traefik.http.routers.grimoire.entrypoints=websecure,websecure-ext"
+        - "traefik.enable={{ grimoire_available_externally }}"
+        - "traefik.http.routers.grimoire.rule=Host(`{{ grimoire_hostname }}.{{ ansible_nas_domain }}`)"
+        - "traefik.http.routers.grimoire.tls.domains[0].main={{ ansible_nas_domain }}"
+        - "traefik.http.routers.grimoire.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+        - "traefik.http.services.grimoire.loadbalancer.server.port=5173"
+        - "com.centurylinklabs.watchtower.enable=false"
+
+networks:
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"

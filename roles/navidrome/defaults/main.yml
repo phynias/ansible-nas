@@ -1,0 +1,15 @@
+navidrome_available_externally: false
+navidrome_enabled: "false"
+navidrome_hostname: "sub"
+
+navidrome_spotify_id: ""
+navidrome_spotify_secret: ""
+
+navidrome_music_directory: "{{ music_root }}"
+navidrome_podcasts_directory: "{{ podcasts_root }}"
+navidrome_books_directory: "{{ audiobooks_root }}"
+navidrome_playlists_directory: "{{ playlists_root }}"
+navidrome_data_directory: "{{ docker_home }}/navidrome"
+
+navidrome_user_id: "0"
+navidrome_group_id: "0"

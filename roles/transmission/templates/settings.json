@@ -18,7 +18,7 @@
     "encryption": 1,
     "idle-seeding-limit": 1,
     "idle-seeding-limit-enabled": true,
-    "incomplete-dir": "/downloads/incomplete",
+    "incomplete-dir": "/downloads/Incomplete/transmission",
     "incomplete-dir-enabled": true,
     "lpd-enabled": false,
     "message-level": 2,

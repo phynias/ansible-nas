@@ -52,6 +52,7 @@ Ansible config and a bunch of Docker containers.
 * [GitLab](https://about.gitlab.com/features/) - Self-hosted GitHub clone of the highest order
 * [Glances](https://nicolargo.github.io/glances/) - for seeing the state of your system via a web browser
 * [Grafana](https://github.com/grafana/grafana) - Dashboarding tool
+* [Grimoire](https://github.com/goniszewski/grimoire) - Bookmark manager for the wizards
 * [Guacamole](https://guacamole.apache.org/) - Web based remote desktop gateway, supports VNC, RDP and SSH
 * [Heimdall](https://heimdall.site/) - Home server dashboard
 * [Home Assistant](https://www.home-assistant.io) - Open source home automation
@@ -71,7 +72,8 @@ Ansible config and a bunch of Docker containers.
 * [Mylar](https://github.com/evilhero/mylar) - An automated Comic Book downloader (cbr/cbz) for use with SABnzbd, NZBGet and torrents
 * [MyMediaForAlexa](https://www.mymediaalexa.com/) - Lets you stream your music collection to your alexa device
 * [MuxiMux](https://github.com/mescon/Muximux) - Lightweight portal to your webapps
-* [n8n](https://n8n.io") - Nodemation, a node based workflow and automation service like IFTTT.
+* [n8n](https://n8n.io") - Nodemation, a node based workflow and automation service like IFTTT
+* [Navidrome](https://github.com/navidrome/navidrome/) - Music collection server and streamer
 * [Netdata](https://my-netdata.io/) - An extremely comprehensive system monitoring solution
 * [Nextcloud](https://nextcloud.com/) - A self-hosted Dropbox alternative
 * [NZBget](https://nzbget.net/) - The most efficient usenet downloader
@@ -83,6 +85,7 @@ Ansible config and a bunch of Docker containers.
 * [OwnCloud](https://owncloud.com/) - share files and folders, easy and secure
 * [piHole](https://pi-hole.net/) - Network-wide Ad Blocking
 * [Plex](https://www.plex.tv/) - Plex Media Server
+* [PlexTraktSync](https://github.com/Taxel/PlexTraktSync) - A two-way-sync between trakt.tv and Plex Media Server
 * [Portainer](https://portainer.io/) - for managing Docker and running custom images
 * [Prometheus](https://prometheus.io/) - Monitoring system & time series database (includes: node_exporter, cadvisor)
 * [Prowlarr](https://github.com/Prowlarr/Prowlarr) - Prowlarr supports management of both Torrent Trackers and Usenet Indexers. It integrates seamlessly with Lidarr, Mylar3, Radarr, Readarr, and Sonarr

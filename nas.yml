@@ -231,6 +231,11 @@
         - readarr
       when: (readarr_enabled | default(False))
 
+    - role: speakarr
+      tags:
+        - speakarr
+      when: (speakarr_enabled | default(False))
+
     - role: scrutiny
       tags:
         - scrutiny
@@ -261,6 +266,11 @@
         - mealie
       when: (mealie_enabled | default(False))
 
+    - role: grimoire
+      tags:
+        - grimoire
+      when: (grimoire_enabled | default(False))
+
     - role: prowlarr
       tags:
         - prowlarr
@@ -285,6 +295,11 @@
       tags:
         - subsonic
       when: (subsonic_enabled | default(False))
+
+    - role: navidrome
+      tags:
+        - navidrome
+      when: (navidrome_enabled | default(False))
 
     - role: funkwhale
       tags:
@@ -315,6 +330,11 @@
       tags:
         - speedtesttracker
       when: (speedtesttracker_enabled | default(False))
+
+    - role: plextraktsync
+      tags:
+        - plextraktsync
+      when: (plextraktsync_enabled | default(False))
 
     - role: dozzle
       tags:

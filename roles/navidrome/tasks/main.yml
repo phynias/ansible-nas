@@ -1,0 +1,52 @@
+---
+- name: Create Radarr Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ navidrome_data_directory }}"
+
+- name: navidrome Docker Container
+  docker_container:
+    name: navidrome
+    log_driver: json-file
+    log_options:
+      max-size: 256m
+      max-file: "1"
+    image: deluan/navidrome:latest
+    networks:
+      - name: "{{ nas_bridge_network }}"
+    env:
+      ND_LOGLEVEL: "info"
+      ND_SPOTIFY_ID: "{{ navidrome_spotify_id }}"
+      ND_SPOTIFY_SECRET: "{{ navidrome_spotify_secret }}"
+      ND_AUTHWINDOWLENGTH: "1h"
+      ND_BASEURL: "https://{{ navidrome_hostname }}.{{ ansible_nas_domain }}"
+      ND_ENABLEINSIGHTSCOLLECTOR: "false"
+      ND_BACKUP_PATH: "/data/backups"
+      ND_BACKUP_SCHEDULE: "5 4 * * *"
+      ND_BACKUP_COUNT: "7"
+      ND_ENABLESHARING: "true"
+      ND_AUTOIMPORTPLAYLISTS: "true"
+      ND_RECENTLYADDEDBYMODTIME: "true"
+      ND_DEFAULTPLAYLISTPUBLICVISIBILITY: "true"
+    volumes:
+      - "{{ navidrome_music_directory }}:/music:ro"
+      - "{{ navidrome_data_directory }}:/data:rw"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    user: "{{ navidrome_user_id }}"
+    memory: 1g
+    labels:
+      traefik.enable: "{{ navidrome_available_externally }}"
+      traefik.passHostHeader: "true"
+      traefik.http.routers.navidrome.entrypoints: "websecure,websecure-ext"
+      traefik.http.routers.navidrome.rule: "Host(`{{ navidrome_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.navidrome.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.navidrome.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.navidrome.loadbalancer.server.port: "4533"
+#      traefik.http.services.navidrome.loadbalancer.server.scheme: "https"
+      com.centurylinklabs.watchtower.enable: "false"
+      autoheal: "true"
+
+
