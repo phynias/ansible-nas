@@ -15,7 +15,8 @@ mealie_port: "9925"
 
 # specs
 mealie_memory: 1g
-# smtp 
+
+# smtp
 mealie_smtp_host: ""
 mealie_smtp_port: "587"
 mealie_smtp_from_name: ""

@@ -1,0 +1,9 @@
+---
+kitchenowl_enabled: false
+kitchenowl_available_externally: "false"
+
+# directories
+kitchenowl_data_directory: "{{ docker_home }}/kitchenowl"
+
+# network
+kitchenowl_hostname: "kitchenowl"

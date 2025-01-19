@@ -266,6 +266,11 @@
         - mealie
       when: (mealie_enabled | default(False))
 
+    - role: kitchenowl
+      tags:
+        - kitchenowl
+      when: (kitchenowl_enabled | default(False))
+
     - role: grimoire
       tags:
         - grimoire

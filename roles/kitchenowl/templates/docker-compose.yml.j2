@@ -1,0 +1,26 @@
+---
+services:
+  back:
+    image: tombursch/kitchenowl:latest
+    container_name: kitchenowl
+    restart: unless-stopped
+    environment:
+      JWT_SECRET_KEY: "{{ kitchenowl_secret_key }}"
+      FRONT_URL: "https://{{ kitchenowl_hostname }}.{{ ansible_nas_domain }}"
+    networks:
+      - bridge
+    volumes:
+      - "{{ kitchenowl_data_directory }}:/data/"
+    labels:
+        - "traefik.http.routers.kitchenowl.entrypoints=websecure,websecure-ext"
+        - "traefik.enable={{ kitchenowl_available_externally }}"
+        - "traefik.http.routers.kitchenowl.rule=Host(`{{ kitchenowl_hostname }}.{{ ansible_nas_domain }}`)"
+        - "traefik.http.routers.kitchenowl.tls.domains[0].main={{ ansible_nas_domain }}"
+        - "traefik.http.routers.kitchenowl.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+        - "traefik.http.services.kitchenowl.loadbalancer.server.port=8080"
+        - "com.centurylinklabs.watchtower.enable=false"
+
+networks:
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"
