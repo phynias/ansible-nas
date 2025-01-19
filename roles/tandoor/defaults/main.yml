@@ -1,0 +1,9 @@
+---
+tandoor_enabled: false
+tandoor_available_externally: "false"
+
+# directories
+tandoor_data_directory: "{{ docker_home }}/tandoor"
+
+# network
+tandoor_hostname: "tandoor"

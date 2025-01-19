@@ -29,6 +29,12 @@
     ###
     ### Ansible-NAS Roles
     ###
+    - role: s3backup
+      tags:
+        - s3backup
+        - always
+      when: (s3backup_enabled | default(False))
+
     - role: ansible-nas-general
       tags:
         - ansible-nas-general
@@ -156,11 +162,6 @@
         - muximux
       when: (muximux_enabled | default(False))
 
-    - role: homeassistant
-      tags:
-        - homeassistant
-      when: (homeassistant_enabled | default(False))
-
     - role: umi
       tags:
         - umi
@@ -265,6 +266,11 @@
       tags:
         - mealie
       when: (mealie_enabled | default(False))
+
+    - role: tandoor
+      tags:
+        - tandoor
+      when: (tandoor_enabled | default(False))
 
     - role: kitchenowl
       tags:

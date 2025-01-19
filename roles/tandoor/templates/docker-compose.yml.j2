@@ -1,0 +1,60 @@
+---
+services:
+  db_recipes:
+    container_name: tandoor_db
+    restart: always
+    image: postgres:16-alpine
+    environment:
+      DB_ENGINE: "django.db.backends.postgresql"
+      POSTGRES_HOST: "db_recipes"
+      POSTGRES_DB: "djangodb"
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: "djangouser"
+      POSTGRES_PASSWORD: "{{ tandoor_postgres_password }}"
+    volumes:
+      - "{{ tandoor_data_directory }}/postgresql:/var/lib/postgresql/data"
+    networks:
+      - bridge
+
+  web_recipes:
+    container_name: tandoor
+    restart: always
+    image: vabene1111/recipes
+    environment:
+      SECRET_KEY: "{{ tandoor_secret_key }}"
+      POSTGRES_PASSWORD: "{{ tandoor_postgres_password }}"
+
+    volumes:
+      - "{{ tandoor_data_directory }}/staticfiles:/opt/recipes/staticfiles"
+      - "{{ tandoor_data_directory }}/nginx:/opt/recipes/nginx/conf.d"
+      - "{{ tandoor_data_directory }}/mediafiles:/opt/recipes/mediafiles"
+    depends_on:
+      - db_recipes
+    networks:
+      - bridge
+
+  nginx_recipes:
+    container_name: tandoor_nginx
+    image: nginx:mainline-alpine
+    restart: always
+    depends_on:
+      - web_recipes
+    volumes:
+      - "{{ tandoor_data_directory }}/nginx:/etc/nginx/conf.d:ro"  
+      - "{{ tandoor_data_directory }}/staticfiles:/static:ro"
+      - "{{ tandoor_data_directory }}/mediafiles:/media:ro"
+    networks:
+      - bridge
+    labels:
+        - "traefik.http.routers.tandoor.entrypoints=websecure,websecure-ext"
+        - "traefik.enable={{ tandoor_available_externally }}"
+        - "traefik.http.routers.tandoor.rule=Host(`{{ tandoor_hostname }}.{{ ansible_nas_domain }}`)"
+        - "traefik.http.routers.tandoor.tls.domains[0].main={{ ansible_nas_domain }}"
+        - "traefik.http.routers.tandoor.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+        - "traefik.http.services.tandoor.loadbalancer.server.port=80"
+        - "com.centurylinklabs.watchtower.enable=false"
+
+networks:
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"

@@ -1,5 +1,6 @@
 tests/test.yml
 site
+.nastmp
 .vagrant
 *.retry
 *.log

@@ -61,6 +61,7 @@ Ansible config and a bunch of Docker containers.
 * [Jackett](https://github.com/Jackett/Jackett) - API Support for your favorite torrent trackers
 * [Jellyfin](https://jellyfin.github.io) - The Free Software Media System
 * [Joomla](https://www.joomla.org/) - Open source content management system
+* [Kitchenowl](https://github.com/TomBursch/kitchenowl) - A smart grocery list and recipe manager
 * [Krusader](https://krusader.org/) - Twin panel file management for your desktop
 * [Lidarr](https://github.com/lidarr/Lidarr) - Music collection manager for Usenet and BitTorrent users
 * [Komga](https://komga.org/) - a media server for your comics, mangas, BDs and magazines
@@ -101,6 +102,7 @@ Ansible config and a bunch of Docker containers.
 * [Speedtest-tracker](retract-unwanted-celtic-aptly) - self-hosted internet performance tracking application that runs speedtest checks against Ookla's Speedtest service
 * [Syncthing](https://syncthing.net/) - sync directories with another device
 * [Subsonic](http://www.subsonic.org/) - catalog and music streaming (og)
+* [Tandoor Recipes](https://github.com/TandoorRecipes/recipes) - The recipe manager that allows you to manage your ever growing collection of digital recipes
 * [Tautulli](http://tautulli.com/) - Monitor Your Plex Media Server
 * [Telegraf](https://github.com/influxdata/telegraf) - Metrics collection agent
 * [The Lounge](https://thelounge.chat) - Web based always-on IRC client

@@ -1,0 +1,50 @@
+---
+- name: "Set timestamp of the backup"
+  set_fact: timestamp="{{ lookup('pipe', 'date +%Y-%m-%d_%H-%m') }}"
+
+- name: "set aws credintials "
+  amazon.aws.s3_bucket:
+        name: "{{ s3backup_bucket }}"
+        state: present
+        region: us-east-1
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+
+- name: Assures temp vault directory exists
+  file: 
+    path: ".nastmp" 
+    state: directory
+
+- name: Assures temp vault files exists
+  file: 
+    path: ".nastmp/nas.yml" 
+    state: touch
+  no_log: true
+  
+- name: Calculate md5 of temp vault file
+  stat: path=".nastmp/nas.yml"
+  register: temp_requirements_stat
+
+- name: Calculate md5 of current vault file
+  stat: path="inventories/my-ansible-nas/group_vars/nas.yml"
+  register: current_requirements_stat
+
+- name: Check vault file for changes
+  command: test {{ temp_requirements_stat.stat.checksum }} = {{ current_requirements_stat.stat.checksum }}
+  changed_when: "requirements_check.rc != 0"
+  failed_when: requirements_check.stderr
+  register: requirements_check
+
+- name: Copy vault file to S3
+  amazon.aws.s3_object:
+    bucket: "{{ s3backup_bucket }}"
+    object: "ansible/vault-{{ timestamp }}.yml"
+    src: "inventories/my-ansible-nas/group_vars/nas.yml"
+    mode: put
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  when: requirements_check.changed
+
+- name: Copy vault to tmp
+  command: cp -a "inventories/my-ansible-nas/group_vars/nas.yml" ".nastmp/nas.yml"
+  when: requirements_check.changed
