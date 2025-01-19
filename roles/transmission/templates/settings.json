@@ -9,7 +9,7 @@
     "bind-address-ipv4": "0.0.0.0",
     "bind-address-ipv6": "::",
     "blocklist-enabled": true,
-    "blocklist-url": "https://static.shazbot.one/blocklist.gz",
+    "blocklist-url": "https://static.{{ ansible_nas_domain }}/blocklist.gz",
     "cache-size-mb": 4,
     "dht-enabled": true,
     "download-dir": "/downloads/",
