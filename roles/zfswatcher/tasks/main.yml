@@ -36,4 +36,3 @@
       traefik.http.routers.zfswatcher.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.zfswatcher.loadbalancer.server.port: "{{ zfswatcher_port|string }}"
       com.centurylinklabs.watchtower.enable: "false"
-      autoheal: "true"

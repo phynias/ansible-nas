@@ -25,5 +25,3 @@
       REFRESH_INTERVAL_SECONDS: "5"
       ALLOW_MOVIE_DELETING: "false"
       ALLOW_ENDED_SHOW_DELETING: "false"
-    labels:
-      autoheal: "true"

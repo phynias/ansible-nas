@@ -31,8 +31,6 @@ services:
     networks:
       piholedhcp:
         ipv4_address: "10.0.0.2"
-    labels:
-      - "autoheal=false"
 
   dhcp-relay:
     container_name: dhcp-relay
@@ -61,7 +59,6 @@ services:
     cap_add:
       - NET_ADMIN
     labels:
-      - "autoheal=false"
       - "com.centurylinklabs.watchtower.enable=false"
 
   pihole:
@@ -108,7 +105,6 @@ services:
       - NET_ADMIN
     restart: always
     labels:
-      - "autoheal=false"
       - "traefik.enable={{ pihole_available_externally }}"
       - "traefik.http.routers.pihole.entrypoints=web,websecure"
       - "traefik.http.routers.pihole.rule=Host(`{{ pihole_hostname }}.{{ ansible_nas_domain }}`)"

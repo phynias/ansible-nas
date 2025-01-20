@@ -43,6 +43,5 @@
       traefik.http.routers.funkwhale.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.funkwhale.loadbalancer.server.port: "80"
       com.centurylinklabs.watchtower.enable: "true"
-      autoheal: "true"
 
 

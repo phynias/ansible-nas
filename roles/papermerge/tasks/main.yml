@@ -63,4 +63,3 @@
       traefik.http.routers.papermerge.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.papermerge.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.papermerge.loadbalancer.server.port: "80"
-      autoheal: "true"

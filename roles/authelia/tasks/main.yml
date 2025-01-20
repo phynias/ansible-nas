@@ -65,7 +65,6 @@
       traefik.http.routers.authelia.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.authelia.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.authelia.loadbalancer.server.port: "9091"
-      autoheal: "true"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:

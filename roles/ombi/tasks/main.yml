@@ -29,7 +29,6 @@
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 512m
     labels:
-      autoheal: "true"
       traefik.enable: "{{ ombi_available_externally }}"
       traefik.http.routers.ombi.entrypoints: "websecure,websecure-ext"
       traefik.http.routers.ombi.rule: "Host(`{{ ombi_hostname }}.{{ ansible_nas_domain }}`)"

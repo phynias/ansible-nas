@@ -177,8 +177,6 @@
       - "{{ prometheus_data_directory }}/promtail/etc/promtail-config.yaml:/mnt/config/promtail-config.yaml"
       - "{{ prometheus_data_directory }}/promtail/cache:/cache"
     user: "{{ nas_uid }}:{{ nas_gid }}"
-    labels:
-      autoheal: "true"
 
 - name: prometheus
   docker_container:
@@ -216,8 +214,6 @@
     force_kill: true
     restart_policy: unless-stopped
     memory: 1g
-#    labels:
-#      autoheal: "true"
 
 - name: Grab latest smartmon.sh
   get_url:

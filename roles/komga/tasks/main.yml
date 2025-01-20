@@ -35,4 +35,3 @@
       traefik.http.routers.komga.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.komga.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.komga.loadbalancer.server.port: "25600"
-      autoheal: "true"

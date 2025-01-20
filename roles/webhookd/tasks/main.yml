@@ -52,4 +52,3 @@
       traefik.http.routers.webhookd.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.webhookd.loadbalancer.server.port: "8080"
       com.centurylinklabs.watchtower.enable: "false"
-      autoheal: "true"

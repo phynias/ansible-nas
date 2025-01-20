@@ -61,6 +61,5 @@
       - "/dev/net/tun:/dev/net/tun"
     privileged: true
     labels:
-      autoheal: "true"
       com.centurylinklabs.watchtower.enable: "false"
 

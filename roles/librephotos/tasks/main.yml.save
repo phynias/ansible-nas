@@ -50,6 +50,5 @@
       traefik.http.routers.subsonic.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.subsonic.loadbalancer.server.port: "4040"
       com.centurylinklabs.watchtower.enable: "false"
-      autoheal: "true"
 
 

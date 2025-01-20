@@ -40,7 +40,7 @@ services:
     depends_on:
       - web_recipes
     volumes:
-      - "{{ tandoor_data_directory }}/nginx:/etc/nginx/conf.d:ro"  
+      - "{{ tandoor_data_directory }}/nginx:/etc/nginx/conf.d:ro"
       - "{{ tandoor_data_directory }}/staticfiles:/static:ro"
       - "{{ tandoor_data_directory }}/mediafiles:/media:ro"
     networks:
@@ -52,7 +52,6 @@ services:
         - "traefik.http.routers.tandoor.tls.domains[0].main={{ ansible_nas_domain }}"
         - "traefik.http.routers.tandoor.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
         - "traefik.http.services.tandoor.loadbalancer.server.port=80"
-        - "com.centurylinklabs.watchtower.enable=false"
 
 networks:
   bridge:

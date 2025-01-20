@@ -34,4 +34,3 @@
       traefik.http.routers.monitorr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.monitorr.loadbalancer.server.port: "80"
       traefik.http.routers.monitorr.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
-      autoheal: "true"

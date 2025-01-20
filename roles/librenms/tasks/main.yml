@@ -33,8 +33,6 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
-    labels:
-      autoheal: "true"
 
 - name: Create librenms container
   docker_container:
@@ -77,4 +75,3 @@
       traefik.http.routers.librenms.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.librenms.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.librenms.loadbalancer.server.port: "80"
-      autoheal: "true"

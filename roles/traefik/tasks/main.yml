@@ -82,7 +82,6 @@
       traefik.http.routers.traefik.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.routers.api.service: api@internal
       traefik.http.routers.api.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
-      autoheal: "true"
 
 - name: certs-dumper
   docker_container:
@@ -95,6 +94,5 @@
       - "{{ traefik_data_directory }}/certs_dump:/data"
       - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:ro"
     labels:
-      autoheal: "true"
     command: file --version v2 --watch --source /letsencrypt/acme.json --dest /data/certs
 #    entrypoint: sh -c 'sleep 3 && traefik-certs-dumper file --version v2 --watch --source /letsencrypt/acme.json --dest /data/certs'

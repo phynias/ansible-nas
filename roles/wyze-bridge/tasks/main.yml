@@ -49,4 +49,3 @@
       traefik.http.services.wyze.loadbalancer.server.port: "5000"
       com.centurylinklabs.watchtower.enable: "false"
 #      traefik.http.routers.wyze.middlewares: "authelia"
-      autoheal: "true"
