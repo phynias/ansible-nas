@@ -111,6 +111,10 @@ services:
       - "traefik.http.routers.pihole.tls.domains[0].main={{ ansible_nas_domain }}"
       - "traefik.http.routers.pihole.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
       - "traefik.http.services.pihole.loadbalancer.server.port=80"
+      # Middleware to set the Content-Security-Policy header
+      - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
+      # Attach the middleware to the router
+      - "traefik.http.routers.pihole.middlewares=csp-headers"
     depends_on:
       - cloudflared
 

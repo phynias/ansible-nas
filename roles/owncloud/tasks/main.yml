@@ -128,6 +128,10 @@
       traefik.http.routers.owncloud.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.owncloud.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.owncloud.loadbalancer.server.port: "8080"
+      # Middleware to set the Content-Security-Policy header
+      traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy: "frame-ancestors organizr.shazbot.one"
+      # Attach the middleware to the router
+      traefik.http.routers.owncloud.middlewares: "csp-headers"
     healthcheck:
       test: ["CMD", "/usr/bin/healthcheck"]
       interval: 30s

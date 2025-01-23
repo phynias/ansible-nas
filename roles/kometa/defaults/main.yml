@@ -1,0 +1,21 @@
+---
+kometa_enabled: false
+kometa_available_externally: "false"
+
+# directories
+kometa_data_directory: "{{ docker_home }}/kometa"
+
+# uid / gid
+kometa_user_id: "1000"
+kometa_group_id: "1000"
+
+# network
+kometa_hostname: "kometa"
+
+# tokens
+kometa_plex_token: ""
+kometa_tmdb_token: ""
+kometa_radarr_token: ""
+kometa_sonarr_token: ""
+kometa_trakt_id: ""
+kometa_trakt_secret: ""

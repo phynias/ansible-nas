@@ -21,9 +21,15 @@ services:
     restart: always
     image: vabene1111/recipes
     environment:
+      DEBUG: 0
       SECRET_KEY: "{{ tandoor_secret_key }}"
+      DB_ENGINE: "django.db.backends.postgresql"
+      POSTGRES_HOST: "db_recipes"
+      POSTGRES_DB: "djangodb"
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: "djangouser"
       POSTGRES_PASSWORD: "{{ tandoor_postgres_password }}"
-
+      ALLOWED_HOSTS: "{{ tandoor_hostname }}.{{ ansible_nas_domain }}"
     volumes:
       - "{{ tandoor_data_directory }}/staticfiles:/opt/recipes/staticfiles"
       - "{{ tandoor_data_directory }}/nginx:/opt/recipes/nginx/conf.d"
@@ -39,6 +45,8 @@ services:
     restart: always
     depends_on:
       - web_recipes
+    environment:
+      ALLOWED_HOSTS: "{{ tandoor_hostname }}.{{ ansible_nas_domain }}"
     volumes:
       - "{{ tandoor_data_directory }}/nginx:/etc/nginx/conf.d:ro"
       - "{{ tandoor_data_directory }}/staticfiles:/static:ro"
@@ -52,7 +60,10 @@ services:
         - "traefik.http.routers.tandoor.tls.domains[0].main={{ ansible_nas_domain }}"
         - "traefik.http.routers.tandoor.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
         - "traefik.http.services.tandoor.loadbalancer.server.port=80"
-
+        # Middleware to set the Content-Security-Policy header
+        - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
+        # Attach the middleware to the router
+        - "traefik.http.routers.tandoor.middlewares=csp-headers"
 networks:
   bridge:
     external: true

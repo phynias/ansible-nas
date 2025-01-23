@@ -153,4 +153,8 @@
       traefik.http.routers.grafana.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.grafana.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.grafana.loadbalancer.server.port: "3000"
+      # Middleware to set the Content-Security-Policy header
+      traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy: "frame-ancestors organizr.shazbot.one"
+      # Attach the middleware to the router
+      traefik.http.routers.grafana.middlewares: "csp-headers"    
       autoheal: "true"

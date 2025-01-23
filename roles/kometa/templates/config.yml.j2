@@ -1,0 +1,163 @@
+settings:
+  run_order:
+    - operations
+    - metadata
+    - collections
+    - overlays
+  cache: true
+  cache_expiration: 60
+  asset_directory: config/assets
+  asset_folders: true
+  asset_depth: 0
+  create_asset_folders: true
+  prioritize_assets: false
+  dimensional_asset_rename: false
+  download_url_assets: false
+  show_missing_season_assets: false
+  show_missing_episode_assets: false
+  show_asset_not_needed: true
+  sync_mode: append
+  minimum_items: 1
+  default_collection_order:
+  delete_below_minimum: true
+  delete_not_scheduled: false
+  run_again_delay: 2
+  missing_only_released: false
+  only_filter_missing: false
+  show_unmanaged: true
+  show_unconfigured: true
+  show_filtered: false
+  show_options: true
+  show_missing: true
+  show_missing_assets: true
+  save_report: false
+  tvdb_language: eng
+  ignore_ids:
+  ignore_imdb_ids:
+  item_refresh_delay: 0
+  playlist_sync_to_users: all
+  playlist_exclude_users:
+  playlist_report: false
+  verify_ssl: true
+  custom_repo:
+  overlay_artwork_filetype: jpg
+  overlay_artwork_quality: 75
+plex:
+  url: https://plex.{{ ansible_nas_domain }}
+  token: {{ kometa_plex_token }}
+  timeout: 60
+  db_cache:
+  clean_bundles: false
+  empty_trash: false
+  optimize: false
+  verify_ssl:
+tmdb:
+  apikey: {{ kometa_tmdb_token }}
+  language: en
+  region: US
+  cache_expiration: 60
+radarr:
+  url: https://radarr.{{ ansible_nas_domain }}
+  token: {{ kometa_radarr_token }}
+  add_missing: false
+  add_existing: false
+  upgrade_existing: false
+  monitor_existing: false
+  root_folder_path: "/movies"
+  monitor: true
+  availability: announced
+  quality_profile: myHD
+  tag:
+  search: false
+sonarr:
+  url: https://sonarr.{{ ansible_nas_domain }}
+  token: {{ kometa_sonarr_token }}
+  add_missing: false
+  add_existing: false
+  upgrade_existing: false
+  monitor_existing: false
+  root_folder_path: "/tv"
+  monitor: all
+  quality_profile: "HD 720p"
+  language_profile: English
+  series_type: standard
+  season_folder: true
+  tag:
+  search: false
+  cutoff_search: false
+trakt:
+  client_id: {{ kometa_trakt_id }}
+  client_secret: {{ kometa_trakt_secret }}
+  pin: {{ kometa_trakt_pin }}
+  authorization:
+    access_token: {{ kometa_access_token }}
+    token_type: {{ kometa_token_type }}
+    expires_in: {{ kometa_expires_in }}
+    refresh_token: {{ kometa_refresh_token }}
+    scope: {{ kometa_scope }}
+    created_at: {{ kometa_created_at }}
+libraries:
+  Movies:
+    operations:
+      mass_user_rating_update: imdb
+    remove_overlays: false
+    collection_files:
+      - default: decade
+        template_variables:
+          limit: 20
+          exclude:
+            - 1920
+            - 1930
+            - 1940
+            - 1950
+            - 1960
+      - default: seasonal
+        template_variables:
+          limit: 100
+          use_all: all
+    overlay_files:
+      - default: ratings
+        template_variables:
+          rating1: critic
+          rating1_image: rt_tomato
+          rating2: audience
+          rating2_image: rt_popcorn
+          rating3: user
+          rating3_image: imdb
+      - default: runtimes
+        template_variables:
+          builder_level: episode
+          vertical_align: bottom
+          horizontal_align: right
+          text: ""
+          horizontal_position: right
+          back_width: 300
+        font: fonts/Inter-Bold.ttf
+  TV Shows:
+    operations:
+      mass_user_rating_update: imdb
+    remove_overlays: false
+    overlay_files:
+      - default: ratings
+        template_variables:
+          rating1: critic
+          rating1_image: rt_tomato
+          rating2: audience
+          rating2_image: rt_popcorn
+          rating3: user
+          rating3_image: imdb
+      - default: status
+        template_variables:
+          horizontal_align: center
+          horizontal_offset: 0
+          vertical_align: bottom
+          vertical_offset: 15
+      - default: runtimes
+        template_variables:
+          builder_level: episode
+          vertical_align: bottom
+          horizontal_align: right
+          text: ""
+          horizontal_position: right
+          back_width: 300
+        font: fonts/Inter-Bold.ttf

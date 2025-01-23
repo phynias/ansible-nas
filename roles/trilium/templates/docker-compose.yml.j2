@@ -19,6 +19,10 @@ services:
         - "traefik.http.routers.trilium.tls.domains[0].main={{ ansible_nas_domain }}"
         - "traefik.http.routers.trilium.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
         - "traefik.http.services.trilium.loadbalancer.server.port=8080"
+        # Middleware to set the Content-Security-Policy header
+        - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
+        # Attach the middleware to the router
+        - "traefik.http.routers.trilium.middlewares=csp-headers"
 volumes:
   trilium:
 

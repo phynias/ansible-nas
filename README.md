@@ -62,6 +62,7 @@ Ansible config and a bunch of Docker containers.
 * [Jellyfin](https://jellyfin.github.io) - The Free Software Media System
 * [Joomla](https://www.joomla.org/) - Open source content management system
 * [Kitchenowl](https://github.com/TomBursch/kitchenowl) - A smart grocery list and recipe manager
+* [Kometa](https://github.com/kometa-team/Kometa) - A tool designed to give you complete control over your Plex media libraries
 * [Krusader](https://krusader.org/) - Twin panel file management for your desktop
 * [Lidarr](https://github.com/lidarr/Lidarr) - Music collection manager for Usenet and BitTorrent users
 * [Komga](https://komga.org/) - a media server for your comics, mangas, BDs and magazines
