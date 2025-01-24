@@ -76,6 +76,7 @@ Ansible config and a bunch of Docker containers.
 * [MuxiMux](https://github.com/mescon/Muximux) - Lightweight portal to your webapps
 * [n8n](https://n8n.io") - Nodemation, a node based workflow and automation service like IFTTT
 * [Navidrome](https://github.com/navidrome/navidrome/) - Music collection server and streamer
+* [NetAlertX](https://github.com/jokob-sk/NetAlertX) - Network, presence scanner and alert framework
 * [Netdata](https://my-netdata.io/) - An extremely comprehensive system monitoring solution
 * [Nextcloud](https://nextcloud.com/) - A self-hosted Dropbox alternative
 * [NZBget](https://nzbget.net/) - The most efficient usenet downloader

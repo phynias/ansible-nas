@@ -97,10 +97,10 @@
         - sabnzbd
       when: (sabnzbd_enabled | default(False))
 
-    - role: pialert
+    - role: netalert
       tags:
-        - pialert
-      when: (pialert_enabled | default(False))
+        - netalert
+      when: (netalert_enabled | default(False))
 
     - role: transmission
       tags:
