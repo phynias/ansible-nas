@@ -1,6 +1,4 @@
-# Running `docker-compose up` will create/use the "trilium-data" directory in the user home
-# Run `TRILIUM_DATA_DIR=/path/of/your/choice docker-compose up` to set a different directory
-#version: '2.1'
+---
 services:
   trilium:
     container_name: trilium
@@ -12,6 +10,11 @@ services:
       - TRILIUM_DATA_DIR=/home/node/trilium-data
     volumes:
       - {{ trilium_data_directory }}:/home/node/trilium-data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
     labels:
         - "traefik.http.routers.trilium.entrypoints=web,websecure"
         - "traefik.enable={{ trilium_available_externally }}"
@@ -23,9 +26,6 @@ services:
         - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
         # Attach the middleware to the router
         - "traefik.http.routers.trilium.middlewares=csp-headers"
-volumes:
-  trilium:
-
 
 networks:
   bridge:

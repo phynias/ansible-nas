@@ -15,6 +15,11 @@ services:
       - "{{ tandoor_data_directory }}/postgresql:/var/lib/postgresql/data"
     networks:
       - bridge
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
 
   web_recipes:
     container_name: tandoor
@@ -38,6 +43,11 @@ services:
       - db_recipes
     networks:
       - bridge
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
 
   nginx_recipes:
     container_name: tandoor_nginx
@@ -53,6 +63,11 @@ services:
       - "{{ tandoor_data_directory }}/mediafiles:/media:ro"
     networks:
       - bridge
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
     labels:
         - "traefik.http.routers.tandoor.entrypoints=websecure,websecure-ext"
         - "traefik.enable={{ tandoor_available_externally }}"
@@ -64,6 +79,7 @@ services:
         - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
         # Attach the middleware to the router
         - "traefik.http.routers.tandoor.middlewares=csp-headers"
+
 networks:
   bridge:
     external: true

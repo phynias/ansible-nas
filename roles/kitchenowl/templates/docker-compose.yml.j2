@@ -11,6 +11,11 @@ services:
       - bridge
     volumes:
       - "{{ kitchenowl_data_directory }}:/data/"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
     labels:
         - "traefik.http.routers.kitchenowl.entrypoints=websecure,websecure-ext"
         - "traefik.enable={{ kitchenowl_available_externally }}"

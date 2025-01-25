@@ -26,6 +26,11 @@ services:
     links:
       - immich_redis
       - immich_db
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
     labels:
         - "traefik.http.routers.immich.entrypoints=websecure,websecure-ext"
         - "traefik.enable={{ immich_available_externally }}"
@@ -43,6 +48,12 @@ services:
     networks:
       - bridge
     container_name: immich_redis
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
+
 # PostgreSQL 14:
   immich_db:
     image: tensorchord/pgvecto-rs:pg14-v0.2.0
@@ -53,6 +64,11 @@ services:
       POSTGRES_USER: {{ immich_db_user }}
       POSTGRES_PASSWORD: {{ immich_db_password }}
       POSTGRES_DB: {{ immich_db_name }}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
     volumes:
       - {{ immich_data_directory }}/db:/var/lib/postgresql/data
       - {{ immich_photos_directory }}/backups:/backups

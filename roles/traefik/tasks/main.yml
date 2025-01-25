@@ -35,64 +35,30 @@
     src:  ha.toml
     dest: "{{ traefik_data_directory }}/rules/ha.toml"
 
-- name: Traefik Docker Container
-  docker_container:
-    name: traefik
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
-    image: "{{ traefik_docker_image }}"
-    pull: true
-    command:
-      - "--providers.docker=true"
-      - "--docker"
-      - "--serverstransport.insecureskipverify=true"
-      - "--traefikLogsFile=/logs/traefik.log"
-    networks:
-      - name: "{{ nas_bridge_network }}"
-      - name: piholedhcp
-    ports:
-      - "{{ traefik_port_http }}:{{ traefik_port_http }}"
-      - "{{ traefik_port_https }}:{{ traefik_port_https }}"
-      - "{{ traefik_port_https_ext }}:{{ traefik_port_https_ext }}"
-      - "{{ traefik_port_ui }}:{{ traefik_port_ui }}"
-    volumes:
-      - "{{ traefik_data_directory }}/traefik.toml:/etc/traefik/traefik.toml:ro"
-      - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:rw"
-      - "{{ traefik_data_directory }}/rules:/rules:ro"
-      - "{{ traefik_data_directory }}/logs:/logs:rw"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "/etc/timezone:/etc/timezone:ro"
-    env: "{{ traefik_environment_variables }}"
-    restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-    memory: 1g
-    force_kill: true
-    labels:
-      traefik.enable: "true"
-#      traefik.frontend.headers.customFrameOptionsValue: "allow-from https://organizr.{{ ansible_nas_domain }}/"
-#      traefik.frontend.passHostHeader: "true"
-      traefik.http.routers.traefik.rule: "Host(`{{ traefik_hostname }}.{{ ansible_nas_domain }}`)"
-      traefik.http.routers.traefik.entrypoints: "traefik"
-      traefik.http.routers.traefik.tls: "true"
-      traefik.http.services.traefik.loadbalancer.server.port: "8083"
-      traefik.http.routers.traefik.tls.certresolver: "letsencrypt"
-      traefik.http.routers.traefik.tls.domains[0].main: "{{ ansible_nas_domain }}"
-      traefik.http.routers.traefik.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
-      traefik.http.routers.api.service: api@internal
-      traefik.http.routers.api.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
+- name: Setup traefik docker-compose.yml
+  template:
+    src: templates/docker-compose.yml.j2
+    dest: "{{ role_path }}/docker-compose.yml"
 
-- name: certs-dumper
-  docker_container:
-    name: certs-dumper
-    image: ldez/traefik-certs-dumper
-    pull: true
-    restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-    volumes:
-      - "{{ traefik_data_directory }}/certs_dump:/data"
-      - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:ro"
-    labels:
-    command: file --version v2 --watch --source /letsencrypt/acme.json --dest /data/certs
-#    entrypoint: sh -c 'sleep 3 && traefik-certs-dumper file --version v2 --watch --source /letsencrypt/acme.json --dest /data/certs'
+- name: Run docker compose pull
+  shell: "docker compose pull --ignore-pull-failures || true"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- name: Run docker compose build
+  shell: "docker compose build"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- debug: var=shell_output.stdout
+
+- name: Deploy traefik Docker Compose stack
+  community.docker.docker_compose_v2:
+    remove_orphans: true
+    recreate: "{{ 'always' if docker_recreate else 'auto' }}"
+    project_src: "{{ role_path }}"
+    files:
+    - docker-compose.yml
+  register: shell_output

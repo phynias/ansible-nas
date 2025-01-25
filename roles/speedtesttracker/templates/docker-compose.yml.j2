@@ -3,14 +3,14 @@ services:
     speedtest-tracker:
         container_name: speedtesttracker
         networks:
-            - nas_bridge
+            - bridge
         environment:
             - PUID={{ speedtesttracker_user_id }}
             - PGID={{ speedtesttracker_group_id }}
             - DB_CONNECTION=pgsql
             - DB_HOST=speedtest-tracker-db
             - DB_PORT=5432
-            - DB_DATABASE=speedtest_tracker
+            - DB_DATABASE={{ speedtesttracker_db_name }}
             - DB_USERNAME={{ speedtesttracker_db_user }}
             - DB_PASSWORD={{ speedtesttracker_db_pass }}
             - TZ={{ ansible_nas_timezone }}
@@ -27,6 +27,11 @@ services:
             - speedtest-tracker-db
         links:
           - speedtest-tracker-db
+        logging:
+          driver: "json-file"
+          options:
+            max-size: 256m
+            max-file: "1"
         labels:
             - "traefik.http.routers.speedtesttracker.entrypoints=web,websecure"
             - "traefik.enable={{ speedtesttracker_available_externally }}"
@@ -43,15 +48,21 @@ services:
         container_name: speedtesttracker-db
         image: postgres:15
         networks:
-            - nas_bridge
+            - bridge
         environment:
-            - POSTGRES_DB=speedtest_tracker
-            - POSTGRES_USER=speedy
-            - POSTGRES_PASSWORD=password
+            - POSTGRES_DB={{ speedtesttracker_db_name }}
+            - POSTGRES_USER={{ speedtesttracker_db_user }}
+            - POSTGRES_PASSWORD={{ speedtesttracker_db_pass }}
         volumes:
             - "{{ speedtesttracker_data_directory }}/db:/var/lib/postgresql/data"
         restart: unless-stopped
+        logging:
+          driver: "json-file"
+          options:
+            max-size: 256m
+            max-file: "1"
 
 networks:
-  nas_bridge:
+  bridge:
     external: true
+    name: "{{ nas_bridge_network }}"

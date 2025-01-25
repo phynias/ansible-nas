@@ -9,4 +9,6 @@ speedtesttracker_group_id: ""
 # network
 speedtesttracker_hostname: "speedtest"
 
-# uid / gid
+speedtesttracker_db_user: ""
+speedtesttracker_db_pass: ""
+speedtesttracker_db_name: "speedtest_tracker"

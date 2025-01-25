@@ -19,6 +19,7 @@ http:
         authResponseHeaders:
           - Remote-User
           - Remote-Groups
+
     authentik:
       forwardauth:
         address: http://authentik-server:9000/outpost.goauthentik.io/auth/traefik

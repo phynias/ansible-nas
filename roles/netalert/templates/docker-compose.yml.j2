@@ -1,0 +1,23 @@
+---
+services:
+  netalert:
+    image: jokobsk/netalertx-dev:latest
+    container_name: netalert
+    network_mode: "host"
+    volumes:
+      - "{{ netalert_config_directory }}/config:/app/config:rw"
+      - "{{ netalert_config_directory }}/db:/app/db:rw"
+      - "{{ pihole_data_directory }}/pihole:/etc/pihole:ro"
+      - type: tmpfs
+        target: /app/api
+    environment:
+      - TZ={{ ansible_nas_timezone }}
+      - APP_CONF_OVERRIDE={"LOADED_PLUGINS":"['ARPSCAN', 'PUSHOVER', 'PIHOLE', 'AVAHISCAN', 'DHCPLSS', 'INTRNT', 'NSLOOKUP', 'SMTP', 'CSVBCKP', 'CUSTPROP', 'DBCLNP', 'MAINT', 'NEWDEV', 'NTFPRCS', 'SETPWD', 'SYNC', 'UI', 'VNDRPDT', 'WORKFLOWS']","PIHOLE_RUN":"schedule","PIHOLE_DB_PATH":"/etc/pihole/pihole-FTL.db","DHCPLSS_RUN":"schedule","DHCPLSS_paths_to_check":"['/etc/pihole/dhcp.leases']"}
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"

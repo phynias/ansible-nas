@@ -18,6 +18,11 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
     labels:
         - "traefik.http.routers.grimoire.entrypoints=websecure,websecure-ext"
         - "traefik.enable={{ grimoire_available_externally }}"

@@ -22,6 +22,11 @@ services:
       AUTHENTIK_ERROR_REPORTING__ENABLED: "true"
     networks:
       - nas_bridge
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
 
   authentik_redis:
     image: redis:alpine
@@ -35,6 +40,11 @@ services:
       timeout: 3s
     networks:
       - nas_bridge
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
 
   server:
     image: ghcr.io/goauthentik/server:latest
@@ -65,6 +75,11 @@ services:
 #      - "0.0.0.0:${AUTHENTIK_PORT_HTTPS:-9443}:9443"
     networks:
       - nas_bridge
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
     labels:
       traefik.enable: {{ authentik_available_externally }}
       traefik.http.routers.authentik.entryPoints: websecure,web
@@ -101,6 +116,11 @@ services:
       - geoip:/geoip
     networks:
       - nas_bridge
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
 
   geoipupdate:
     image: "maxmindinc/geoipupdate:latest"
@@ -114,6 +134,11 @@ services:
       GEOIPUPDATE_LICENSE_KEY: "{{ geoip_license_key }}"
     networks:
       - nas_bridge
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
 
 volumes:
   database:

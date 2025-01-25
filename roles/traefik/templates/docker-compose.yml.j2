@@ -1,0 +1,103 @@
+---
+services:
+  traefik:
+    container_name: traefik
+    image: "{{ traefik_docker_image }}"
+    command:
+      - "--providers.docker=true"
+      - "--docker"
+      - "--serverstransport.insecureskipverify=true"
+      - "--traefikLogsFile=/logs/traefik.log"
+    networks:
+      - bridge
+      - piholedhcp
+    ports:
+      - "{{ traefik_port_http }}:{{ traefik_port_http }}"
+      - "{{ traefik_port_https }}:{{ traefik_port_https }}"
+      - "{{ traefik_port_https_ext }}:{{ traefik_port_https_ext }}"
+      # enable the next line to debug ui thrutraefik issues
+      # - "{{ traefik_port_ui }}:{{ traefik_port_ui }}"
+    restart: unless-stopped
+    environment:
+{% for key, value in traefik_environment_variables.items() %}
+      - {{ key }}={{ value }}
+{% endfor %}
+    volumes:
+      - "{{ traefik_data_directory }}/traefik.toml:/etc/traefik/traefik.toml:ro"
+      - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:rw"
+      - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:rw"
+      - "{{ traefik_data_directory }}/rules:/rules:ro"
+      - "{{ traefik_data_directory }}/logs:/logs:rw"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.traefik.entrypoints=websecure"
+        - "traefik.http.routers.traefik.rule=Host(`{{ traefik_hostname }}.{{ ansible_nas_domain }}`)"
+        - "traefik.http.routers.traefik.tls.domains[0].main={{ ansible_nas_domain }}"
+        - "traefik.http.routers.traefik.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+        - "traefik.http.services.traefik.loadbalancer.server.port=8083"
+        - "com.centurylinklabs.watchtower.enable=false"
+        # other
+        - "traefik.http.routers.traefik.tls=true"
+        - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+        #- "traefik.http.routers.api.service: api@internal"
+        # auth
+        - "traefik.http.routers.traefik.middlewares=traefik-forward-auth"
+#        - "traefik.http.routers.api.middlewares={{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
+ 
+  certs-dumper:
+    container_name: certs-dumper
+    image: ldez/traefik-certs-dumper:latest
+    networks:
+        - bridge
+    volumes:
+      - "{{ traefik_data_directory }}/certs_dump:/data"
+      - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:ro"
+    restart: unless-stopped
+    command: file --version v2 --watch --source /letsencrypt/acme.json --dest /data/certs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+
+  traefik-forward-auth:
+    container_name: traefik-forward-auth
+    image: thomseddon/traefik-forward-auth:latest
+    environment:
+      - PROVIDERS_GOOGLE_CLIENT_ID={{ traefik_google_client_id }}
+      - PROVIDERS_GOOGLE_CLIENT_SECRET={{ traefik_google_client_secret }}
+      - SECRET={{ traefik_google_local_secret }}
+      - INSECURE_COOKIE=true
+      - WHITELIST={{ traefik_google_whitelist_email }}
+      - LOG_LEVEL=info
+    networks:
+        - bridge
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.address=http://traefik-forward-auth:4181"
+      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User"
+      - "traefik.http.services.traefik-forward-auth.loadbalancer.server.port=4181"
+      - "com.centurylinklabs.watchtower.enable=false"
+
+networks:
+  piholedhcp:
+    external: true
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"
+
+

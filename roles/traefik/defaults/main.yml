@@ -18,7 +18,7 @@ traefik_port_ui: "8083"
 
 #traefik_docker_image: traefik:v2.4
 traefik_docker_image: traefik:latest
-traefik_log_level: "ERROR"
+traefik_log_level: "INFO"
 
 # find the relevant name and environment variables for your DNS provider at https://go-acme.github.io/lego/dns/
 traefik_dns_provider: route53

@@ -1,3 +1,4 @@
+---
 services:
   scheduler:
     image: mcuadros/ofelia:latest
@@ -10,6 +11,12 @@ services:
     labels:
       ofelia.job-run.plextraktsync.schedule: "@every 2h"
       ofelia.job-run.plextraktsync.container: "plextraktsync"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"
+
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
     command: sync
@@ -20,4 +27,8 @@ services:
       - PUID={{ plextraktsync_user_id }}
       - PGID={{ plextraktsync_group_id }}
       - TZ={{ ansible_nas_timezone }}
-
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 256m
+        max-file: "1"

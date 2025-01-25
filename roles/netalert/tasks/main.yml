@@ -9,27 +9,30 @@
     - "{{ netalert_config_directory }}/config"
     - "{{ netalert_config_directory }}/db"
 
-- name: netalert Docker Container
-  docker_container:
-    name: netalert
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
-    image: jokobsk/netalertx-dev:latest
-    network_mode: host
-    pull: false
-    volumes:
-      - "{{ netalert_config_directory }}/config:/app/config:rw"
-      - "{{ netalert_config_directory }}/db:/app/db:rw"
-      - "{{ pihole_data_directory }}/pihole:/etc/pihole:ro"
-    mounts:
-      - type: tmpfs
-        target: /app/api
-    env:
-      TZ: "{{ ansible_nas_timezone }}"
-      PORT: "{{ netalert_port }}"
-      APP_CONF_OVERRIDE: "{"PIHOLE_RUN":"schedule", "PIHOLE_DB_PATH":"/etc/pihole/pihole-FTL.db", "DHCPLSS_RUN":"schedule", "DHCPLSS_RUN_SCHD":"*/5 * * * *", "DHCPLSS_paths_to_check":"['/etc/pihole/dhcp.leases']"}"
-    restart_policy: unless-stopped
-    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-    memory: 512m
+- name: Setup netalert docker-compose.yml
+  template:
+    src: templates/docker-compose.yml.j2
+    dest: "{{ role_path }}/docker-compose.yml"
+
+- name: Run docker compose pull
+  shell: "docker compose pull --ignore-pull-failures || true"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- name: Run docker compose build
+  shell: "docker compose build"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- debug: var=shell_output.stdout
+
+- name: Deploy netalert Docker Compose stack
+  community.docker.docker_compose_v2:
+    remove_orphans: true
+    recreate: "{{ 'always' if docker_recreate else 'auto' }}"
+    project_src: "{{ role_path }}"
+    files:
+    - docker-compose.yml
+  register: shell_output
