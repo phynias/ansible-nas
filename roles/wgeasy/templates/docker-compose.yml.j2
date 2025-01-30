@@ -6,7 +6,7 @@ services:
       # Change this to your host's public address
       - WG_HOST={{ wgeasy_hostname }}.{{ ansible_nas_domain }}
       # Optional:
-      - PASSWORD={{ wgeasy_password }}
+      - "PASSWORD_HASH='{{ wgeasy_password_hash }}'"
       # - WG_PORT=51820
       - WG_DEFAULT_ADDRESS=192.168.1.x
       - WG_DEFAULT_DNS={{ wgeasy_default_dns }}
