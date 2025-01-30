@@ -9,6 +9,7 @@
     ###
     ### Requirements
     ###
+    # removed for now until i can convert my working samba
     # - role: bertvv.samba
     #   tags:
     #     - samba
@@ -38,15 +39,15 @@
     ###
     ### Ansible-NAS Roles
     ###
-#    - role: ansible-nas-general
-#      tags:
-#        - ansible-nas-general
-#        - ansible-nas
+    - role: ansible-nas-general
+      tags:
+        - ansible-nas-general
+        - ansible-nas
 
-#    - role: ansible-nas-docker
-#      tags:
-#        - ansible-nas-docker
-#        - ansible-nas
+    - role: ansible-nas-docker
+      tags:
+        - ansible-nas-docker
+        - ansible-nas
 
     ###
     ### needs to be towards the top
