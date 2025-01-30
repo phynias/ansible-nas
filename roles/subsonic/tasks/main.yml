@@ -10,14 +10,9 @@
     source: build
     state: present
     force_source: yes
-
 - name: Subsonic Docker Container
   docker_container:
     name: subsonic
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: subsonic
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -37,10 +32,10 @@
     memory: 2g
     labels:
       traefik.enable: "{{ subsonic_available_externally }}"
-#      traefik.http.middlewares.subsonic.redirectscheme.scheme: "https"
-#      traefik.http.middlewares.subsonic.redirectscheme.permanent: "true"
-#      traefik.http.middlewares.subsonic.headers.sslproxyheaders.X-Forwarded-Proto: "https"
-#      traefik.http.routers.subsonic.middlewares: "subsonic@docker"
+      #      traefik.http.middlewares.subsonic.redirectscheme.scheme: "https"
+      #      traefik.http.middlewares.subsonic.redirectscheme.permanent: "true"
+      #      traefik.http.middlewares.subsonic.headers.sslproxyheaders.X-Forwarded-Proto: "https"
+      #      traefik.http.routers.subsonic.middlewares: "subsonic@docker"
       traefik.passHostHeader: "true"
       traefik.http.routers.subsonic.entrypoints: "websecure,websecure-ext"
       traefik.http.routers.subsonic.rule: "Host(`{{ subsonic_hostname }}.{{ ansible_nas_domain }}`)"
@@ -49,5 +44,3 @@
       traefik.http.services.subsonic.loadbalancer.server.port: "4141"
       traefik.http.services.subsonic.loadbalancer.server.scheme: "https"
       com.centurylinklabs.watchtower.enable: "false"
-
-

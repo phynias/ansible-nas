@@ -5,14 +5,9 @@
     state: directory
   with_items:
     - "{{ homebridge_config_directory }}"
-
 - name: Homebridge Docker Container
   docker_container:
     name: homebridge
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: oznu/homebridge
     pull: true
     volumes:

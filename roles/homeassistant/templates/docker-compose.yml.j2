@@ -1,0 +1,13 @@
+---
+services:
+  mariadb:
+    container_name: ha_db
+    image: mariadb:11
+    network_mode: host
+    volumes:
+      - {{ homeassistant_data_directory }}/mariadb:/var/lib/mysql
+    environment:
+      - "MARIADB_ROOT_PASSWORD={{ homeassistant_mysql_root_password }}"
+      - "MYSQL_PASSWORD={{ homeassistant_mysql_password }}"
+      - "MYSQL_USER={{ homeassistant_mysql_user }}"
+      - "MYSQL_DATABASE={{ homeassistant_mysql_db }}"

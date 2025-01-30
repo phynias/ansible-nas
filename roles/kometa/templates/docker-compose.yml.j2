@@ -13,11 +13,6 @@ services:
     volumes:
       - "{{ kometa_data_directory }}/config:/config"
     restart: unless-stopped
-    logging:
-      driver: "json-file"
-      options:
-        max-size: 256m
-        max-file: "1"
   # labels:
   #     - "traefik.http.routers.kometa.entrypoints=websecure,websecure-ext"
   #     - "traefik.enable={{ kometa_available_externally }}"
@@ -26,7 +21,6 @@ services:
   #     - "traefik.http.routers.kometa.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
   #     - "traefik.http.services.kometa.loadbalancer.server.port=9000"
   #     - "com.centurylinklabs.watchtower.enable=false"
-
 networks:
   bridge:
     external: true

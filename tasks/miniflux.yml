@@ -4,14 +4,9 @@
     state: directory
   with_items:
     - "{{ miniflux_data_directory }}/postgres"
-
 - name: Create Postgres for Miniflux
   docker_container:
     name: miniflux-postgres
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: postgres:11.1
     pull: true
     volumes:
@@ -24,14 +19,13 @@
     memory: 1g
     networks:
       - name: "{{ nas_bridge_network }}"
-
 - name: Create Miniflux container
   docker_container:
     name: miniflux
     image: miniflux/miniflux:latest
     pull: true
-  #  ports:
-  #    - "{{ miniflux_port }}:8080"
+    #  ports:
+    #    - "{{ miniflux_port }}:8080"
     networks:
       - name: "{{ nas_bridge_network }}"
         links:

@@ -37,3 +37,7 @@
     - docker-compose.yml
   register: shell_output
 
+- name: Remove docker-compose.yml
+  file:
+    path: "{{ role_path }}/docker-compose.yml"
+    state: absent

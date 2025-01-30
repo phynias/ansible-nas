@@ -8,14 +8,9 @@
     - "{{ transmission_config_directory }}"
     - "{{ transmission_download_directory }}"
     - "{{ transmission_watch_directory }}"
-
 - name: Transmission Docker Container
   docker_container:
     name: transmission
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: linuxserver/transmission
     pull: true
     volumes:

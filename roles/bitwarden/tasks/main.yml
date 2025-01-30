@@ -4,21 +4,16 @@
     state: directory
   with_items:
     - "{{ bitwarden_data_directory }}"
-
 - name: Bitwarden Docker Container
   docker_container:
     name: bitwarden
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: bitwardenrs/server:latest
     networks:
       - name: "{{ nas_bridge_network }}"
     pull: true
-#    ports:
-#      - "{{ bitwarden_port_a }}:80"
-#      - "{{ bitwarden_port_b }}:3012"
+    #    ports:
+    #      - "{{ bitwarden_port_a }}:80"
+    #      - "{{ bitwarden_port_b }}:3012"
     volumes:
       - "{{ bitwarden_data_directory }}:/data:rw"
     env:
@@ -36,14 +31,9 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     #memory: 1g
-
 - name: Bitwarden Backup Container
   docker_container:
     name: bitwarden-backup
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: bruceforce/bw_backup:latest
     pull: true
     restart_policy: unless-stopped

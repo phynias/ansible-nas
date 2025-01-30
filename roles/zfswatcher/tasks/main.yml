@@ -8,14 +8,9 @@
     source: build
     state: present
     force_source: true
-
 - name: zfswatcher
   docker_container:
     name: zfswatcher
-    log_driver: json-file
-    log_options:
-      max-size: "256m"
-      max-file: "1"
     image: myzfswatcher
     networks:
       - name: "{{ nas_bridge_network }}"

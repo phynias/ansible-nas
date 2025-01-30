@@ -5,14 +5,9 @@
     state: directory
   with_items:
     - "{{ nzbget_data_directory }}"
-
 - name: NZBGet
   docker_container:
     name: nzbget
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: linuxserver/nzbget
     pull: true
     volumes:
@@ -20,8 +15,8 @@
       - "{{ nzbget_data_directory }}:/config:rw"
     networks:
       - name: "{{ nas_bridge_network }}"
-  #  ports:
-  #    - "{{ nzbget_port }}:6789"
+        #  ports:
+        #    - "{{ nzbget_port }}:6789"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ nzbget_user_id }}"

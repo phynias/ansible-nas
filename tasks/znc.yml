@@ -5,21 +5,16 @@
     state: directory
   with_items:
     - "{{ znc_data_directory }}"
-
 - name: ZNC
   docker_container:
     name: znc
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: znc
     pull: true
     volumes:
       - "{{ znc_data_directory }}:/znc-data:rw"
       - "/etc/timezone:/etc/timezone:ro"
-#    ports:
-#      - "{{ znc_port }}:6677"
+      #    ports:
+      #      - "{{ znc_port }}:6677"
     networks:
       - name: "{{ nas_bridge_network }}"
     env:

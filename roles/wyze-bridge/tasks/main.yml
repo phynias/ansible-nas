@@ -5,14 +5,9 @@
     state: directory
   with_items:
     - "{{ wyze_data_directory }}"
-
 - name: wyze Docker Container
   docker_container:
     name: wyze
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: mrlt8/wyze-bridge:latest
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -38,7 +33,7 @@
       WB_RTSP_URL: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}:8554/"
       LLHLS: "True"
       RTSP_HLSENCRYPTION: "yes"
-      RTSP_HLSSERVERKEY : "/ssl/private/{{ ansible_nas_domain }}.key"
+      RTSP_HLSSERVERKEY: "/ssl/private/{{ ansible_nas_domain }}.key"
       RTSP_HLSSERVERCERT: "/ssl/certs/{{ ansible_nas_domain }}.crt"
     labels:
       traefik.enable: "{{ wyze_available_externally }}"

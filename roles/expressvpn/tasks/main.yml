@@ -15,42 +15,23 @@
 - name: ExpressVPN
   docker_container:
     name: expressvpn
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
-#    image: myexpressvpn:latest
     image: misioslav/expressvpn:3.68.0.2
+    pull: true
     networks:
       - name: "{{ nas_bridge_network }}"
     capabilities:
       - NET_ADMIN
     restart_policy: unless-stopped
-#    dns_servers:
-#      - 1.1.1.1
-#      - 1.0.0.1
+    #    dns_servers:
+    #      - 1.1.1.1
+    #      - 1.0.0.1
     volumes:
       - "/dev/net/tun:/dev/net/tun:z"
- #   ports:
- #     - 51413:51413
- #     - 51413:51413/udp
+      #   ports:
+      #     - 51413:51413
+      #     - 51413:51413/udp
     memory: 1g
-    etc_hosts: >
-      { 
-        "{{ sabnzbd_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ transmission_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ jackett_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ bazarr_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ sonarr_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ radarr_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ lidarr_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ mylar_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ webhookd_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ static_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ plex_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ emby_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}",
-        "{{ subsonic_hostname }}.{{ ansible_nas_domain }}": "{{ nas_ip }}"
-      }
+    etc_hosts: "{ \n  \"{{ sabnzbd_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ transmission_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ jackett_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ bazarr_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ sonarr_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ radarr_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ lidarr_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ mylar_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ webhookd_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ static_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ plex_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ emby_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ subsonic_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\"\n}\n"
     env:
       WHITELIST_DNS: "{{ expressvpn_whitelist_dns }}"
       SERVER: "SMART"
@@ -58,11 +39,10 @@
       DDSN: "{{ ansible_nas_hostname }}.{{ ansible_nas_domain }}"
       NETWORK: "on"
     tty: true
-#    interactive: true
+    #    interactive: true
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     devices:
       - "/dev/net/tun:/dev/net/tun"
     privileged: true
     labels:
       com.centurylinklabs.watchtower.enable: "false"
-

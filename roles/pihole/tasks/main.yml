@@ -8,7 +8,6 @@
     - "{{ pihole_data_directory }}/logs"
     - "{{ pihole_data_directory }}/pihole"
     - "{{ pihole_data_directory }}/dnsmasq.d"
-
 - name: Create a pihole network
   docker_network:
     name: piholedhcp
@@ -16,63 +15,56 @@
       - subnet: '10.0.0.0/16'
         gateway: 10.0.0.1
         iprange: '10.0.0.0/24'
-
 - name: Get name of pihole net interface
   shell: ip route|grep 10.0.0.1|awk '{print $3}'
   register: pihole_int
-
 - name: Get name of default interface
   shell: ip route|grep static|awk '{print $5}'
   register: default_int
-
 - name: Setup dnsmasq fix
   template:
     src: templates/03-pihole-dhcp-dns-fix.conf.j2
     dest: "{{ pihole_data_directory }}/dnsmasq.d/03-pihole-dhcp-dns-fix.conf"
-
 - name: Setup pihole docker-compose.yml
   template:
     src: templates/docker-compose.yml.j2
     dest: "{{ role_path }}/docker-compose.yml"
-
 - name: Run docker compose pull
   shell: "docker compose pull --ignore-pull-failures || true"
   register: shell_output
   args:
     chdir: "{{ role_path }}"
-
 - name: Run docker compose build
   shell: "docker compose build"
   register: shell_output
   args:
     chdir: "{{ role_path }}"
-
 - debug: var=shell_output.stdout
-
 - name: Deploy pihole Docker Compose stack
   community.docker.docker_compose_v2:
     remove_orphans: true
     recreate: "{{ 'always' if pihole_recreate else 'auto' }}"
     project_src: "{{ role_path }}"
     files:
-    - docker-compose.yml
+      - docker-compose.yml
   register: shell_output
-
 #- debug: var=shell_output
 
-########
+- name: Remove docker-compose.yml
+  file:
+    path: "{{ role_path }}/docker-compose.yml"
+    state: absent
 
+########
 - name: check if config is a dir
   stat:
     path: "{{ pihole_data_directory }}/pihole/custom.list"
   register: dir_to_check
-
 - name: Delete custom.list if directory
   file:
     state: absent
     path: "{{ pihole_data_directory }}/pihole/custom.list"
-  when:  dir_to_check.stat.isdir is defined and dir_to_check.stat.isdir
-
+  when: dir_to_check.stat.isdir is defined and dir_to_check.stat.isdir
 - name: set custom dns list
   template:
     src: templates/custom.list.j2
@@ -91,7 +83,6 @@
     - pihole
     - ihole_dns
   when: diff.changed
-
 #
 #- name: cloudflared
 #  docker_container:

@@ -6,14 +6,9 @@
   with_items:
     - "{{ nextcloud_data_directory }}/nextcloud"
     - "{{ nextcloud_data_directory }}/mysql"
-
 - name: Nextcloud Mysql Docker Container
   docker_container:
     name: nextcloud-mysql
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: mysql:5.7
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -28,14 +23,9 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
-
 - name: Nextcloud Docker Container
   docker_container:
     name: nextcloud
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: nextcloud:14
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -44,8 +34,8 @@
     pull: true
     volumes:
       - "{{ nextcloud_data_directory }}/nextcloud:/var/www/html:rw"
-#    ports:
-#      - "{{ nextcloud_port }}:80"
+      #    ports:
+      #      - "{{ nextcloud_port }}:80"
     env:
       MYSQL_HOST: "mysql"
       MYSQL_DATABASE: "nextcloud"
@@ -62,4 +52,3 @@
       traefik.http.routers.nextcloud.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.nextcloud.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.nextcloud.loadbalancer.server.port: "80"
-

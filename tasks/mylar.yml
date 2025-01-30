@@ -5,14 +5,9 @@
     state: directory
   with_items:
     - "{{ mylar_data_directory }}/config"
-
 - name: Mylar
   docker_container:
     name: mylar
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: linuxserver/mylar3
     pull: true
     volumes:
@@ -21,8 +16,8 @@
       - "{{ mylar_data_directory }}/config:/config:rw"
     networks:
       - name: "{{ nas_bridge_network }}"
- #   ports:
- #     - "{{ mylar_port_http }}:8090"
+        #   ports:
+        #     - "{{ mylar_port_http }}:8090"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ mylar_user_id }}"

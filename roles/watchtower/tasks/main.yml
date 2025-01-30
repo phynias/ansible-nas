@@ -2,10 +2,6 @@
 - name: Watchtower Docker Container
   docker_container:
     name: watchtower
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: containrrr/watchtower
     networks:
       - name: "{{ nas_bridge_network }}"

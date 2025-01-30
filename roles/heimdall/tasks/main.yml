@@ -4,7 +4,6 @@
     name: heimdall
     gid: "{{ heimdall_group_id }}"
     state: present
-
 - name: Create Heimdall user
   user:
     name: heimdall
@@ -14,7 +13,6 @@
     update_password: on_create
     create_home: no
     group: heimdall
-
 - name: Create Heimdall Directories
   file:
     path: "{{ item }}"
@@ -23,14 +21,9 @@
     group: heimdall
   with_items:
     - "{{ heimdall_data_directory }}"
-
 - name: Create Heimdall container
   docker_container:
     name: heimdall
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: "{{ heimdall_docker_image }}"
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -41,9 +34,9 @@
       PUID: "{{ heimdall_user_id }}"
       PGID: "{{ heimdall_group_id }}"
       TZ: "{{ ansible_nas_timezone }}"
- #   ports:
- #     - "{{ heimdall_port_http }}:80"
- #     - "{{ heimdall_port_https }}:443"
+      #   ports:
+      #     - "{{ heimdall_port_http }}:80"
+      #     - "{{ heimdall_port_https }}:443"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 128m

@@ -27,7 +27,7 @@
         - skip_ansible_lint
 
     ###
-    ### Ansible-NAS Roles
+    ### backup our vault file if updated
     ###
     - role: s3backup
       tags:
@@ -35,15 +35,18 @@
         - always
       when: (s3backup_enabled | default(False))
 
-    - role: ansible-nas-general
-      tags:
-        - ansible-nas-general
-        - ansible-nas
+    ###
+    ### Ansible-NAS Roles
+    ###
+#    - role: ansible-nas-general
+#      tags:
+#        - ansible-nas-general
+#        - ansible-nas
 
-    - role: ansible-nas-docker
-      tags:
-        - ansible-nas-docker
-        - ansible-nas
+#    - role: ansible-nas-docker
+#      tags:
+#        - ansible-nas-docker
+#        - ansible-nas
 
     ###
     ### needs to be towards the top
@@ -266,6 +269,11 @@
       tags:
         - mealie
       when: (mealie_enabled | default(False))
+
+    - role: homeassistant
+      tags:
+        - homeassistant
+      when: (homeassistant_enabled | default(False))
 
     - role: graylog
       tags:

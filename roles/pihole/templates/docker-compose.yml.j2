@@ -3,11 +3,6 @@
 services:
   cloudflared:
     container_name: cloudflared
-    logging:
-      driver: "json-file"
-      options:
-        max-size: 256m
-        max-file: "1"
     image: visibilityspots/cloudflared:latest
     ports:
       - target: 49312
@@ -30,14 +25,8 @@ services:
     networks:
       piholedhcp:
         ipv4_address: "10.0.0.2"
-
   dhcp-relay:
     container_name: dhcp-relay
-    logging:
-      driver: "json-file"
-      options:
-        max-size: 256m
-        max-file: "1"
     build:
       context: .
       dockerfile: files/dhcp-relay.dockerfile
@@ -59,14 +48,8 @@ services:
       - NET_ADMIN
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
-
   pihole:
     container_name: pihole
-    logging:
-      driver: "json-file"
-      options:
-        max-size: 256m
-        max-file: "1"
     image: phynias/pihole-regex:latest
     networks:
       piholedhcp:
@@ -91,10 +74,10 @@ services:
       DNSMASQ_USER: root
     # Volumes store your data between container upgrades
     volumes:
-       - "{{ pihole_data_directory }}/logs:/var/log:rw"
-       - "{{ pihole_data_directory }}/pihole:/etc/pihole"
-       - "{{ pihole_data_directory }}/dnsmasq.d:/etc/dnsmasq.d"
-       - "/tools/pihole:/tools:ro"
+      - "{{ pihole_data_directory }}/logs:/var/log:rw"
+      - "{{ pihole_data_directory }}/pihole:/etc/pihole"
+      - "{{ pihole_data_directory }}/dnsmasq.d:/etc/dnsmasq.d"
+      - "/tools/pihole:/tools:ro"
     dns:
       - 127.0.0.1
       - 1.1.1.1
@@ -116,7 +99,6 @@ services:
       - "traefik.http.routers.pihole.middlewares=csp-headers"
     depends_on:
       - cloudflared
-
 networks:
-    piholedhcp:
-        external: true
+  piholedhcp:
+    external: true

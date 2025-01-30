@@ -2,10 +2,6 @@
 - name: dozzle Docker Container
   docker_container:
     name: dozzle
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: amir20/dozzle:latest
     pull: true
     networks:

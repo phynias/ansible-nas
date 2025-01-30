@@ -5,14 +5,9 @@
     state: directory
   with_items:
     - "{{ ubooquity_data_directory }}"
-
 - name: Ubooquity Docker Container
   docker_container:
     name: ubooquity
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: linuxserver/ubooquity:latest
     pull: true
     volumes:
@@ -25,9 +20,9 @@
       PUID: "{{ ubooquity_user_id|quote }}"
       PGID: "{{ ubooquity_group_id|quote }}"
       MAXMEM: "1024"
-#    ports:
-#      - "{{ ubooquity_port_webui }}:2202"
-#      - "{{ ubooquity_port_admin }}:2203"
+      #    ports:
+      #      - "{{ ubooquity_port_webui }}:2202"
+      #      - "{{ ubooquity_port_admin }}:2203"
     networks:
       - name: "{{ nas_bridge_network }}"
     restart_policy: unless-stopped
@@ -40,7 +35,6 @@
       traefik.http.routers.ubooquity.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.ubooquity.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.ubooquity.loadbalancer.server.port: "2202"
-
 #      traefik.http.routers.ubooquity-admin.entrypoints: "web,websecure"
 #      traefik.http.routers.ubooquity-admin.rule: "Host(`{{ ubooquity_hostname }}-admin.{{ ansible_nas_domain }}`) && PathPrefix(`/admin`)"
 #      traefik.http.routers.ubooquity-admin.tls.domains[0].main: "{{ ansible_nas_domain }}"

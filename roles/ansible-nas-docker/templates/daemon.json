@@ -3,6 +3,9 @@
   "debug" : false
   "log-driver": "gelf",
   "log-opts": {
-    "gelf-address": "udp://graylog-log:122011",
+    "gelf-address": "udp://localhost:122011",
+    "tag": "{{.Name}}",
+    "mode": "non-blocking",
+    "max-buffer-size": "8m"
   }
 }

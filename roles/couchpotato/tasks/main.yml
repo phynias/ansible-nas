@@ -6,14 +6,9 @@
     # mode: 0755
   with_items:
     - "{{ docker_home }}/couchpotato/config"
-
 - name: Couchpotato Docker Container
   docker_container:
     name: couchpotato
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: linuxserver/couchpotato
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -23,8 +18,8 @@
       - "{{ couchpotato_downloads_directory }}:/downloads:rw"
       - "{{ couchpotato_movies_directory }}:/movies:rw"
       - "{{ couchpotato_torrents_directory }}:/torrents:rw"
-#    ports:
-#      - "{{ couchpotato_port }}:5050"
+      #    ports:
+      #      - "{{ couchpotato_port }}:5050"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ couchpotato_user_id }}"

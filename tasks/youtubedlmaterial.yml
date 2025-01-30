@@ -12,14 +12,9 @@
     - "{{ youtubedlmaterial_dl_audio_directory }}"
     - "{{ youtubedlmaterial_dl_video_directory }}"
     - "{{ youtubedlmaterial_dl_subscriptions_directory }}"
-
 - name: YouTubeDL-Material Docker Container
   docker_container:
     name: youtubedlmaterial
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: tzahi12345/youtubedl-material:latest
     pull: true
     volumes:
@@ -29,8 +24,8 @@
       - "{{ youtubedlmaterial_dl_subscriptions_directory }}:/app/subscriptions:rw"
     networks:
       - name: "{{ nas_bridge_network }}"
-#    ports:
-#      - "{{ youtubedlmaterial_port_http }}:17442"
+        #    ports:
+        #      - "{{ youtubedlmaterial_port_http }}:17442"
     env:
       ALLOW_CONFIG_MUTATIONS: "true"
       TZ: "{{ ansible_nas_timezone }}"

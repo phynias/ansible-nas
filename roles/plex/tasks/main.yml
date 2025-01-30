@@ -7,14 +7,9 @@
   with_items:
     - "{{ plex_config_directory }}"
     - "{{ plex_logs }}"
-
 - name: plex Docker Container
   docker_container:
     name: plex
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: linuxserver/plex
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -42,13 +37,12 @@
     memory: "{{ plex_memory }}"
     labels:
       traefik.enable: "{{ plex_available_externally }}"
-#      traefik.http.routers.plex.entrypoints: "web,websecure"
+      #      traefik.http.routers.plex.entrypoints: "web,websecure"
       traefik.http.routers.plex.entrypoints: "websecure,websecure-ext"
       traefik.http.routers.plex.rule: "Host(`{{ plex_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.plex.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.plex.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.plex.loadbalancer.server.port: "32400"
-
 #- name: kitana
 #  docker_container:
 #    image: pannal/kitana:latest
@@ -71,5 +65,3 @@
 #      traefik.http.routers.kitana.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
 #      traefik.http.services.kitana.loadbalancer.server.port: "31337"
 #      autoheal: "true"
-
-

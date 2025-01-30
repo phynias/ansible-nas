@@ -4,14 +4,9 @@
     state: directory
   with_items:
     - "{{ emby_config_directory }}"
-
 - name: emby Docker Container
   docker_container:
     name: emby
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: linuxserver/emby
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -22,9 +17,9 @@
       - "{{ emby_tv_directory }}:/data/tv:{{ emby_tv_permissions }}"
       - "{{ emby_music_directory }}:/data/music:{{ emby_music_permissions }}"
       - "/tools:/tools:ro"
- #   ports:
- #     - "{{ emby_port_http }}:8096"
- #     - "{{ emby_port_https }}:8920"
+      #   ports:
+      #     - "{{ emby_port_http }}:8096"
+      #     - "{{ emby_port_https }}:8920"
     env:
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ emby_user_id }}"

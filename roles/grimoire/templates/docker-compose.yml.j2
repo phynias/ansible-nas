@@ -18,20 +18,14 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    logging:
-      driver: "json-file"
-      options:
-        max-size: 256m
-        max-file: "1"
     labels:
-        - "traefik.http.routers.grimoire.entrypoints=websecure,websecure-ext"
-        - "traefik.enable={{ grimoire_available_externally }}"
-        - "traefik.http.routers.grimoire.rule=Host(`{{ grimoire_hostname }}.{{ ansible_nas_domain }}`)"
-        - "traefik.http.routers.grimoire.tls.domains[0].main={{ ansible_nas_domain }}"
-        - "traefik.http.routers.grimoire.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
-        - "traefik.http.services.grimoire.loadbalancer.server.port=5173"
-        - "com.centurylinklabs.watchtower.enable=false"
-
+      - "traefik.http.routers.grimoire.entrypoints=websecure,websecure-ext"
+      - "traefik.enable={{ grimoire_available_externally }}"
+      - "traefik.http.routers.grimoire.rule=Host(`{{ grimoire_hostname }}.{{ ansible_nas_domain }}`)"
+      - "traefik.http.routers.grimoire.tls.domains[0].main={{ ansible_nas_domain }}"
+      - "traefik.http.routers.grimoire.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+      - "traefik.http.services.grimoire.loadbalancer.server.port=5173"
+      - "com.centurylinklabs.watchtower.enable=false"
 networks:
   bridge:
     external: true

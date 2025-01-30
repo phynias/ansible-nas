@@ -5,10 +5,8 @@
     state: directory
   with_items:
     - "{{ scrutiny_config_directory }}"
-
 - shell: ls -d -- /dev/sd*[!0-9]
   register: _output
-
 - name: Template scrutiny files
   template:
     src: "{{ item }}"
@@ -16,14 +14,9 @@
   vars:
     devList: "{{ _output.stdout_lines|join(',') }}"
   with_fileglob: "files/*.j2"
-
 - name: scrutiny Docker Container
   docker_container:
     name: scrutiny
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: ghcr.io/analogj/scrutiny
     pull: true
     networks:
@@ -31,18 +24,17 @@
     capabilities:
       - SYS_RAWIO
       - SYS_ADMIN
-    devices:
-      "{{ _output.stdout_lines }}"
+    devices: "{{ _output.stdout_lines }}"
     volumes:
       - "{{ scrutiny_config_directory }}:/opt/scrutiny/config:rw"
       - "/run/udev:/run/udev:ro"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-#    env:
-#      TZ: "{{ ansible_nas_timezone }}"
-#      DEBUG: "true"
-#      SCOLLECTOR_LOG_FILE: /tmp/collector.log
-#      SCRUTINY_LOG_FILE: /tmp/web.log
+    #    env:
+    #      TZ: "{{ ansible_nas_timezone }}"
+    #      DEBUG: "true"
+    #      SCOLLECTOR_LOG_FILE: /tmp/collector.log
+    #      SCRUTINY_LOG_FILE: /tmp/web.log
     memory: 512m
     healthcheck:
       test: ["CMD", "curl", "-L", "--fail", "-4", "localhost:{{ scrutiny_port }}/web"]

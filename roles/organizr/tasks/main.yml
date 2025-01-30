@@ -5,14 +5,9 @@
     state: directory
   with_items:
     - "{{ organizr_data_directory }}"
-
 - name: Create Organizr container
   docker_container:
     name: organizr
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: organizr/organizr:latest
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -24,9 +19,9 @@
       PGID: "{{ organizr_group_id }}"
       TZ: "{{ ansible_nas_timezone }}"
       branch: "v2-master"
-#    ports:
-#      - "{{ organizr_port_http }}:80"
-#      - "{{ organizr_port_https }}:443"
+      #    ports:
+      #      - "{{ organizr_port_http }}:80"
+      #      - "{{ organizr_port_https }}:443"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 256m

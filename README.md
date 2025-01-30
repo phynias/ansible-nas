@@ -52,6 +52,7 @@ Ansible config and a bunch of Docker containers.
 * [GitLab](https://about.gitlab.com/features/) - Self-hosted GitHub clone of the highest order
 * [Glances](https://nicolargo.github.io/glances/) - for seeing the state of your system via a web browser
 * [Grafana](https://github.com/grafana/grafana) - Dashboarding tool
+* [Graylog](https://github.com/Graylog2/graylog2-server) - A free and open log management platform
 * [Grimoire](https://github.com/goniszewski/grimoire) - Bookmark manager for the wizards
 * [Guacamole](https://guacamole.apache.org/) - Web based remote desktop gateway, supports VNC, RDP and SSH
 * [Heimdall](https://heimdall.site/) - Home server dashboard

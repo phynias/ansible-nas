@@ -5,14 +5,9 @@
     state: directory
   with_items:
     - "{{ monitorr_data_directory }}"
-
 - name: monitorr Docker Container
   docker_container:
     name: monitorr
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: monitorr/monitorr
     networks:
       - name: "{{ nas_bridge_network }}"

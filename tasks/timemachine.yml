@@ -3,14 +3,9 @@
   file:
     path: "{{ timemachine_data_directory }}"
     state: directory
-
 - name: Time Machine Docker Container
   docker_container:
     name: timemachine
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: awlnx/samba-timemachine:latest
     pull: true
     ports:
@@ -27,19 +22,16 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
-
 - name: Install avahi
   apt:
     name: "avahi-daemon"
     state: present
   register: result
   until: result is succeeded
-
 - name: Setup timemachine service for avahi
   template:
     src: timemachine/timemachine.service
     dest: "/etc/avahi/services/timemachine.service"
-
 - name: Reload avahi configuration
   service:
     name: avahi-daemon

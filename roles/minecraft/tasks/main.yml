@@ -2,19 +2,15 @@
 - name: minecraft
   docker_container:
     name: minecraft
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: bymatej/minecraft-server
     networks:
       - name: "{{ nas_bridge_network }}"
     pull: true
     volumes:
       - "{{ minecraft_data_directory }}/mymcadmin:/McMyAdmin:rw"
- #   ports:
- #     - "{{ minecraft_my_port }}:8080"
- #     - "{{ minecraft_port }}:25565"
+      #   ports:
+      #     - "{{ minecraft_my_port }}:8080"
+      #     - "{{ minecraft_port }}:25565"
     stop_timeout: 30
     env:
       TZ: "{{ ansible_nas_timezone }}"

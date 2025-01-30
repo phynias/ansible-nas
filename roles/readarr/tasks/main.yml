@@ -5,22 +5,17 @@
     state: directory
   with_items:
     - "{{ readarr_data_directory }}"
-
 - name: readarr
   docker_container:
     name: readarr
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: lscr.io/linuxserver/readarr:develop
     pull: true
     volumes:
       - "{{ readarr_books_directory }}:/books:rw"
       - "{{ readarr_data_directory }}:/config:rw"
       - "{{ readarr_download_directory }}:/downloads:rw"
-#    ports:
-#      - "{{ readarr_port }}:6767"
+      #    ports:
+      #      - "{{ readarr_port }}:6767"
     networks:
       - name: "{{ nas_bridge_network }}"
     env:

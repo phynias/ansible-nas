@@ -7,21 +7,15 @@
     - "{{ mosquitto_data_directory }}/config"
     - "{{ mosquitto_data_directory }}/data"
     - "{{ mosquitto_data_directory }}/log"
-
 - name: Template mosquitto.conf
   copy:
     src: mosquitto/mosquitto.conf
     dest: "{{ mosquitto_data_directory }}/config/mosquitto.conf"
-
 - name: Create Mosquitto container
   docker_container:
     name: mosquitto
     networks:
       - name: "{{ nas_bridge_network }}"
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: eclipse-mosquitto:latest
     pull: true
     volumes:

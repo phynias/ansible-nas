@@ -5,14 +5,9 @@
     state: directory
   with_items:
     - "{{ syncthing_data_directory }}"
-
 - name: Syncthing Docker Container
   docker_container:
     name: syncthing
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: syncthing/syncthing:latest
     networks:
       - name: "{{ nas_bridge_network }}"

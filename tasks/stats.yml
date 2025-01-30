@@ -6,7 +6,6 @@
   with_items:
     - "{{ influxdb_data_directory }}"
     - "{{ telegraf_data_directory }}"
-
 - name: Create Grafana Directories
   file:
     path: "{{ item }}"
@@ -21,16 +20,11 @@
     - "{{ grafana_data_directory }}/config/provisioning"
     - "{{ grafana_data_directory }}/config/provisioning/datasources"
     - "{{ grafana_data_directory }}/config/provisioning/dashboards"
-
 - name: InfluxDB
   docker_container:
     name: influxdb
     networks:
       - name: "{{ nas_bridge_network }}"
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: influxdb:1.8
     pull: true
     volumes:
@@ -42,16 +36,11 @@
     env:
       INFLUXDB_LOGGING_LEVEL: "error"
     memory: 1g
-
 - name: hddtemp
   docker_container:
     name: hddtemp
     networks:
       - name: "{{ nas_bridge_network }}"
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: drewster727/hddtemp-docker
     pull: true
     privileged: true
@@ -61,12 +50,10 @@
       HDDTEMP_ARGS: "-q -d -F /dev/sd*"
       TZ: "{{ ansible_nas_timezone }}"
     memory: 128m
-
 - name: Template telegraf.conf
   template:
     src: telegraf/telegraf.conf
     dest: "{{ telegraf_data_directory }}/telegraf.conf"
-
 - name: Telegraf
   docker_container:
     name: telegraf
@@ -74,10 +61,6 @@
       - name: "{{ nas_bridge_network }}"
         links:
           - hddtemp:hddtemp
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: telegraf
     pull: true
     privileged: true
@@ -101,36 +84,27 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
-
 - name: Template grafana.ini
   template:
     src: grafana/grafana.ini
     dest: "{{ grafana_data_directory }}/etc/grafana.ini"
-
 - name: Template Grafana data source
   template:
     src: grafana/provisioning/datasources/ansible-nas.yml
     dest: "{{ grafana_data_directory }}/config/provisioning/datasources/ansible-nas.yml"
-
 - name: Copy Ansible-NAS Dashboard Provisioner
   copy:
     src: grafana/provisioning/dashboards/ansible-nas.yml
     dest: "{{ grafana_data_directory }}/config/provisioning/dashboards/ansible-nas.yml"
-
 - name: Copy Ansible-NAS Dashboard
   copy:
     src: grafana/dashboards/ansible-nas/ansible-nas-overview.json
     dest: "{{ grafana_data_directory }}/data/dashboards/ansible-nas/ansible-nas-overview.json"
-
 - name: Grafana
   docker_container:
     name: grafana
     networks:
       - name: "{{ nas_bridge_network }}"
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: grafana/grafana
     pull: true
     volumes:
@@ -143,7 +117,7 @@
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
     env:
-#      GF_LOG_LEVEL: debug
+      #      GF_LOG_LEVEL: debug
       GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel,grafana-worldmap-panel,camptocamp-prometheus-alertmanager-datasource"
     labels:
       traefik.enable: "{{ grafana_available_externally }}"
@@ -156,4 +130,4 @@
       # Middleware to set the Content-Security-Policy header
       traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy: "frame-ancestors organizr.shazbot.one"
       # Attach the middleware to the router
-      traefik.http.routers.grafana.middlewares: "csp-headers"    
+      traefik.http.routers.grafana.middlewares: "csp-headers"

@@ -5,15 +5,10 @@
     state: directory
   with_items:
     - "{{ funkwhale_data_directory }}"
-
 - debug: msg="{{ funkwhale_enabled }}"
 - name: funkwhale Docker Container
   docker_container:
     name: funkwhale
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: funkwhale/all-in-one
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -32,8 +27,8 @@
       NESTED_PROXY: "1"
       FUNKWHALE_HOSTNAME: "{{ funkwhale_hostname }}.{{ ansible_nas_domain }}"
     memory: 1g
-#    ports:
-#      - "{{ funkwhale_port }}:80"
+    #    ports:
+    #      - "{{ funkwhale_port }}:80"
     labels:
       traefik.enable: "{{ funkwhale_available_externally }}"
       traefik.passHostHeader: "true"
@@ -43,5 +38,3 @@
       traefik.http.routers.funkwhale.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.funkwhale.loadbalancer.server.port: "80"
       com.centurylinklabs.watchtower.enable: "true"
-
-

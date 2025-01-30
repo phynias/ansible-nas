@@ -5,7 +5,6 @@
     name: gitlab
     gid: 998
     state: present
-
 - name: Create Gitlab user account
   user:
     name: gitlab
@@ -15,7 +14,6 @@
     update_password: on_create
     create_home: no
     group: gitlab
-
 - name: Create Gitlab Directories
   file:
     path: "{{ item }}"
@@ -26,14 +24,9 @@
     - "{{ gitlab_data_directory }}/config"
     - "{{ gitlab_data_directory }}/log"
     - "{{ gitlab_data_directory }}/data"
-
 - name: Create Gitlab container
   docker_container:
     name: gitlab
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: gitlab/gitlab-ce:latest
     pull: true
     volumes:
@@ -42,10 +35,10 @@
       - "{{ gitlab_data_directory }}/data:/var/opt/gitlab:rw"
     networks:
       - name: "{{ nas_bridge_network }}"
- #   ports:
- #     - "{{ gitlab_port_http }}:80"
- #     - "{{ gitlab_port_https }}:443"
- #     - "{{ gitlab_port_ssh }}:22"
+        #   ports:
+        #     - "{{ gitlab_port_http }}:80"
+        #     - "{{ gitlab_port_https }}:443"
+        #     - "{{ gitlab_port_ssh }}:22"
     hostname: "gitlab.{{ ansible_nas_domain }}"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"

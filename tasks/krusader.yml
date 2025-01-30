@@ -6,14 +6,9 @@
     state: directory
   with_items:
     - "{{ krusader_config_directory }}/krusader"
-
 - name: Krusader Docker Container
   docker_container:
     name: krusader
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: djaydev/krusader:latest
     pull: true
     volumes:
@@ -21,9 +16,9 @@
       - "{{ krusader_browse_directory }}:/mnt/fs"
     networks:
       - name: "{{ nas_bridge_network }}"
- #   ports:
- #     - "{{ krusader_port_http }}:5800"
- #     - "{{ krusader_port_vnc }}:5900"
+        #   ports:
+        #     - "{{ krusader_port_http }}:5800"
+        #     - "{{ krusader_port_vnc }}:5900"
     env:
       USER_ID: "{{ krusader_user_id }}"
       GROUP_ID: "{{ krusader_group_id }}"

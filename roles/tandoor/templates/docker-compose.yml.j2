@@ -15,12 +15,6 @@ services:
       - "{{ tandoor_data_directory }}/postgresql:/var/lib/postgresql/data"
     networks:
       - bridge
-    logging:
-      driver: "json-file"
-      options:
-        max-size: 256m
-        max-file: "1"
-
   web_recipes:
     container_name: tandoor
     restart: always
@@ -43,12 +37,6 @@ services:
       - db_recipes
     networks:
       - bridge
-    logging:
-      driver: "json-file"
-      options:
-        max-size: 256m
-        max-file: "1"
-
   nginx_recipes:
     container_name: tandoor_nginx
     image: nginx:mainline-alpine
@@ -63,23 +51,17 @@ services:
       - "{{ tandoor_data_directory }}/mediafiles:/media:ro"
     networks:
       - bridge
-    logging:
-      driver: "json-file"
-      options:
-        max-size: 256m
-        max-file: "1"
     labels:
-        - "traefik.http.routers.tandoor.entrypoints=websecure,websecure-ext"
-        - "traefik.enable={{ tandoor_available_externally }}"
-        - "traefik.http.routers.tandoor.rule=Host(`{{ tandoor_hostname }}.{{ ansible_nas_domain }}`)"
-        - "traefik.http.routers.tandoor.tls.domains[0].main={{ ansible_nas_domain }}"
-        - "traefik.http.routers.tandoor.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
-        - "traefik.http.services.tandoor.loadbalancer.server.port=80"
-        # Middleware to set the Content-Security-Policy header
-        - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
-        # Attach the middleware to the router
-        - "traefik.http.routers.tandoor.middlewares=csp-headers"
-
+      - "traefik.http.routers.tandoor.entrypoints=websecure,websecure-ext"
+      - "traefik.enable={{ tandoor_available_externally }}"
+      - "traefik.http.routers.tandoor.rule=Host(`{{ tandoor_hostname }}.{{ ansible_nas_domain }}`)"
+      - "traefik.http.routers.tandoor.tls.domains[0].main={{ ansible_nas_domain }}"
+      - "traefik.http.routers.tandoor.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+      - "traefik.http.services.tandoor.loadbalancer.server.port=80"
+      # Middleware to set the Content-Security-Policy header
+      - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
+      # Attach the middleware to the router
+      - "traefik.http.routers.tandoor.middlewares=csp-headers"
 networks:
   bridge:
     external: true

@@ -5,21 +5,16 @@
   with_items:
     - "{{ wallabag_data_directory }}/data"
     - "{{ wallabag_data_directory }}/images"
-
 - name: Wallabag Docker Container
   docker_container:
     name: wallabag
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: wallabag/wallabag:latest
     pull: true
     volumes:
       - "{{ wallabag_data_directory }}/data:/var/www/wallabag/data:rw"
       - "{{ wallabag_data_directory }}/images:/var/www/wallabag/web/assets/images:rw"
- #   ports:
- #     - "{{ wallabag_port }}:80"
+      #   ports:
+      #     - "{{ wallabag_port }}:80"
     networks:
       - name: "{{ nas_bridge_network }}"
     env:

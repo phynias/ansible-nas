@@ -6,25 +6,19 @@
   with_items:
     - "{{ thelounge_data_directory }}"
     - "{{ thelounge_data_directory }}/users"
-
 - name: Set up admin user
   copy:
     src: files/thelounge/users/admin.json
     dest: "{{ thelounge_data_directory }}/users/admin.json"
     mode: 0777
-
 - name: The Lounge Docker Container
   docker_container:
     name: thelounge
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: thelounge/thelounge:latest
     pull: true
-#    ports:
-#      - "{{ thelounge_port_one }}:9001"
-#      - "{{ thelounge_port_two }}:9000"
+    #    ports:
+    #      - "{{ thelounge_port_one }}:9001"
+    #      - "{{ thelounge_port_two }}:9000"
     networks:
       - name: "{{ nas_bridge_network }}"
     volumes:
@@ -41,4 +35,3 @@
       traefik.http.routers.thelounge.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.thelounge.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.thelounge.loadbalancer.server.port: "9000"
-

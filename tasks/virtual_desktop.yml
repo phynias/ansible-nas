@@ -6,21 +6,15 @@
   with_items:
     - "{{ vd_data_directory }}"
     - "{{ vd_data_directory }}/home"
-
 - name: Create users file
   template:
     src: "templates/virtual_desktop/users.txt.j2"
     dest: "{{ vd_data_directory }}/users.txt"
-
 - name: Virtual Desktop Container
   docker_container:
     name: virtual_desktop
     networks:
       - name: "{{ nas_bridge_network }}"
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: "{{ vd_docker_image }}"
     pull: true
     volumes:

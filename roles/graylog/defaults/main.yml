@@ -1,0 +1,22 @@
+---
+graylog_enabled: false
+graylog_available_externally: "false"
+
+# directories
+graylog_data_directory: "{{ docker_home }}/graylog"
+
+# uid / gid
+graylog_user_id: "1000"
+graylog_group_id: "1000"
+
+# network
+graylog_hostname: "graylog"
+
+# smtp
+graylog_smtp_host: ""
+graylog_smtp_port: "587"
+graylog_smtp_from_name: ""
+graylog_smtp_from_email: ""
+graylog_smtp_auth_strategy: ""
+graylog_smtp_user: ""
+graylog_smtp_password: ""

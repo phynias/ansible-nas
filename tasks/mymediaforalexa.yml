@@ -5,14 +5,9 @@
   with_items:
     - "{{ mymediaforalexa_media_directory }}"
     - "{{ mymediaforalexa_data_directory }}"
-
 - name: mymedia for alexa Docker Container
   docker_container:
     name: mymediaforalexa
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: bizmodeller/mymediaforalexa
     pull: true
     volumes:
@@ -22,4 +17,3 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
-

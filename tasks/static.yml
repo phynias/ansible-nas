@@ -4,14 +4,9 @@
     state: directory
   with_items:
     - "{{ static_data_directory }}/files"
-
 - name: Create static container
   docker_container:
     name: static
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: nginx
     pull: true
     restart_policy: unless-stopped

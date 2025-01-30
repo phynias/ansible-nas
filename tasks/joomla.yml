@@ -6,14 +6,9 @@
   with_items:
     - "{{ joomla_data_directory }}"
     - "{{ joomla_data_directory }}/db"
-
 - name: MySQL Docker Container for Joomla
   docker_container:
     name: joomla_mysql
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: mysql:5.7
     pull: true
     networks:
@@ -27,20 +22,15 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
-
 - name: Joomla Docker Container
   docker_container:
     name: joomla
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: joomla
     pull: true
     volumes:
       - "{{ joomla_data_directory }}:/var/www/html:rw"
-#    ports:
-#      - "{{ joomla_port }}:80"
+      #    ports:
+      #      - "{{ joomla_port }}:80"
     networks:
       - name: "{{ nas_bridge_network }}"
         links:

@@ -6,14 +6,9 @@
   with_items:
     - "{{ overseerr_data_directory }}"
     - "{{ overseerr_data_directory }}/config"
-
 - name: overseerr Docker Container
   docker_container:
     name: overseerr
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: sctx/overseerr
     networks:
       - name: "{{ nas_bridge_network }}"

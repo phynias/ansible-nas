@@ -2,10 +2,6 @@
 - name: watchlistarr Docker Container
   docker_container:
     name: watchlistarr
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: nylonee/watchlistarr
     networks:
       - name: "{{ nas_bridge_network }}"

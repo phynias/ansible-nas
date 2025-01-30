@@ -8,7 +8,6 @@
     - librephotos_dbLocation
     - librephotos_logLocation
     - librephotos_proMedia
-
 - name: librephotos [redis] Docker Container
   docker_container:
     name: redis
@@ -20,14 +19,9 @@
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     labels:
       com.centurylinklabs.watchtower.enable: "false"
-
 - name: librephotos [postgres] Docker Container
   docker_container:
     name: db
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: postgres:13
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -44,14 +38,9 @@
     command: postgres -c fsync=off -c synchronous_commit=off -c full_page_writes=off -c random_page_cost=1.0
     labels:
       com.centurylinklabs.watchtower.enable: "false"
-
 - name: librephotos [backend] Docker Container
   docker_container:
     name: backend
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: reallibrephotos/librephotos:{{ librephotos_tag }}
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -66,7 +55,6 @@
       - "{{ librephotos_proMedia }}:/protected_media"
       - "{{ librephotos_logLocation }}:/logs"
       - "{{ librephotos_cachedir }}:/root/.cache"
-
     env:
       SECRET_KEY: "{{ librephotos_shhhhKey }}"
       BACKEND_HOST: "backend"
@@ -89,14 +77,9 @@
       HEAVYWEIGHT_PROCESS: "{{ librephotos_HEAVYWEIGHT_PROCESS }}"
     labels:
       com.centurylinklabs.watchtower.enable: "false"
-
 - name: librephotos [frontend] Docker Container
   docker_container:
     name: frontend
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: reallibrephotos/librephotos-frontend:{{ librephotos_tag }}
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -109,14 +92,9 @@
       - "backend:backend"
     labels:
       com.centurylinklabs.watchtower.enable: "false"
-
 - name: librephotos [proxy] Docker Container
   docker_container:
     name: proxy
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: reallibrephotos/librephotos-proxy:{{ librephotos_tag }}
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -131,8 +109,8 @@
     volumes:
       - "{{ librephotos_myPhotos }}:/data"
       - "{{ librephotos_proMedia }}:/protected_media"
- #   ports:
- #     - "{{ librephotos_port }}:80"
+      #   ports:
+      #     - "{{ librephotos_port }}:80"
     labels:
       traefik.enable: "{{ librephotos_available_externally }}"
       traefik.passHostHeader: "true"

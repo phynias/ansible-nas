@@ -5,16 +5,11 @@
   with_items:
     - "{{ get_iplayer_config_directory }}"
     - "{{ get_iplayer_download_directory }}"
-
 - name: get_iplayer Docker Container
   docker_container:
     name: get_iplayer
     networks:
       - name: "{{ nas_bridge_network }}"
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: kolonuk/get_iplayer
     pull: true
     volumes:
@@ -25,4 +20,3 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
-

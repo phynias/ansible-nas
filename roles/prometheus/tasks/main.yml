@@ -5,30 +5,23 @@
     state: directory
   with_items:
     - "{{ prometheus_data_directory }}"
-
 - name: prometheus.yml;
   template:
     src: prometheus.yml.j2
     dest: "{{prometheus_data_directory }}/prometheus.yml"
   notify:
     - restart prometheus
-
 - name: blackbox.yml;
   template:
     src: blackbox.yml.j2
     dest: "{{prometheus_data_directory }}/blackbox.yml"
   notify:
     - restart blackbox
-
 - name: node_exporter
   docker_container:
     pid_mode: host
     pull: true
     name: node-exporter
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: prom/node-exporter
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -54,33 +47,24 @@
   docker_container:
     name: blackbox
     pull: true
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: prom/blackbox-exporter:latest
     networks:
       - name: "{{ nas_bridge_network }}"
     volumes:
       - "{{ prometheus_data_directory }}/blackbox.yml:/etc/blackbox_exporter/config.yml"
-#    ports:
-#      - 9115:9115
+      #    ports:
+      #      - 9115:9115
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     force_kill: true
-
 - name: alertmanager
   docker_container:
     name: alertmanager
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: prom/alertmanager
     networks:
       - name: "{{ nas_bridge_network }}"
-#    ports:
-#      - 9093:9093
+        #    ports:
+        #      - 9093:9093
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "{{ prometheus_data_directory }}/alertmanager/storage:/alertmanager"
@@ -92,10 +76,9 @@
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
       - "--web.external-url=http://192.168.1.200:9393/"
-#      - "--web.hostname="
+      #      - "--web.hostname="
     memory: 64m
     user: "{{ nas_uid }}:{{ nas_gid }}"
-
 # - name: zfs_exporter
 #   docker_container:
 #     pid_mode: host
@@ -104,14 +87,9 @@
 #     image: derekgottlieb/zfs-exporter
 #     restart_policy: unless-stopped
 #     privileged: true  
-
 - name: cadvisor
   docker_container:
     name: cadvisor
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: gcr.io/google-containers/cadvisor
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -131,7 +109,6 @@
       - --disable_metrics=disk,tcp,udp
       - --docker_only=true
     memory: 1g
-
 #- name: loki
 #  docker_container:
 #    name: loki
@@ -154,22 +131,17 @@
 #      start_period: 1m
 #    labels:
 #      autoheal: "true"
-
 - name: promtail
   docker_container:
     name: promtail
     pull: true
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: grafana/promtail
     networks:
       - name: "{{ nas_bridge_network }}"
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     force_kill: true
     restart_policy: unless-stopped
-    command: 
+    command:
       - "-config.file=/mnt/config/promtail-config.yaml"
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
@@ -177,14 +149,9 @@
       - "{{ prometheus_data_directory }}/promtail/etc/promtail-config.yaml:/mnt/config/promtail-config.yaml"
       - "{{ prometheus_data_directory }}/promtail/cache:/cache"
     user: "{{ nas_uid }}:{{ nas_gid }}"
-
 - name: prometheus
   docker_container:
     name: prometheus
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: prom/prometheus
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -193,7 +160,7 @@
           - "node-exporter"
           - "cadvisor"
           - "alertmanager"
-#          - "loki"
+          #          - "loki"
     user: "{{ nas_uid }}:{{ nas_gid }}"
     pull: true
     command:
@@ -214,7 +181,6 @@
     force_kill: true
     restart_policy: unless-stopped
     memory: 1g
-
 - name: Grab latest smartmon.sh
   get_url:
     url: https://raw.githubusercontent.com/olegeech-me/S.M.A.R.T-disk-monitoring-for-Prometheus/master/smartmon.sh
@@ -222,7 +188,6 @@
     mode: 0755
     group: root
     owner: root
-
 - name: Setup cron
   cron:
     name: "Smartmon to textcollector"
@@ -230,4 +195,3 @@
     minute: "*"
     hour: "*"
     job: "/usr/local/bin/smartmon.sh > {{ prometheus_data_directory }}/textcollector/smart_metrics.prom"
-

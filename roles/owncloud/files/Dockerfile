@@ -12,7 +12,7 @@ RUN apk update && \
   mkdir -p /var/lib/mysql && \
   groupadd -g 1000 mysql && \
   useradd -u 1000 -d /var/lib/mysql -g mysql -s /bin/bash -m mysql
-RUN  apk add  mariadb mariadb-client mariadb-server-utils tzdata
+RUN  apk add  mariadb=~11.4 mariadb-client=~11.4 mariadb-server-utils=~11.4 tzdata
 RUN  rm -rf /var/cache/apk/* /etc/mysql/* /etc/my.cnf* /var/lib/mysql/* || true
 
 COPY ./overlay /

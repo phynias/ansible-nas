@@ -1,0 +1,14 @@
+---
+homeassistant_enabled: false
+homeassistant_available_externally: "false"
+
+# directories
+homeassistant_data_directory: "{{ docker_home }}/homeassistant"
+
+# uid / gid
+homeassistant_user_id: "1000"
+homeassistant_group_id: "1000"
+
+# mysql
+homeassistant_mysql_user: "homeassistant"
+homeassistant_mysql_db: "ha_db"

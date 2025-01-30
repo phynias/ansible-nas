@@ -4,14 +4,9 @@
     state: directory
   with_items:
     - "{{ calibre_data_directory }}/config"
-
 - name: Calibre-web Docker Container
   docker_container:
     name: calibre
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: linuxserver/calibre-web:latest
     pull: true
     volumes:
@@ -24,8 +19,8 @@
       PUID: "{{ calibre_user_id }}"
       PGID: "{{ calibre_group_id }}"
       DOCKER_MODS: "{{ calibre_ebook_conversion }}"
-#    ports:
-#      - "{{ calibre_port }}:8083"
+      #    ports:
+      #      - "{{ calibre_port }}:8083"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g

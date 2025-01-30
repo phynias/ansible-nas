@@ -11,7 +11,6 @@
     state: present
     force_source: yes
 
-
 - name: Create owncloud Directories
   file:
     path: "{{ item }}"
@@ -34,10 +33,6 @@
 - name: redis
   docker_container:
     name: owncloud_redis
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: webhippie/redis:latest
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -57,12 +52,8 @@
 - name: mariadb
   docker_container:
     name: owncloud_mariadb
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: mymariadb:latest
-#    image: mariadb:10.6
+    #    image: mariadb:10.6
     networks:
       - name: "{{ nas_bridge_network }}"
     restart_policy: unless-stopped
@@ -74,6 +65,7 @@
       MARIADB_DATABASE: "owncloud"
       MARIADB_MAX_ALLOWED_PACKET: "128M"
       MARIADB_INNODB_LOG_FILE_SIZE: "64M"
+      MARIADB_AUTO_UPGRADE: "1"
     healthcheck:
       test: ["CMD", "/usr/bin/healthcheck"]
       interval: 30s
@@ -89,10 +81,6 @@
 - name: owncloud
   docker_container:
     name: owncloud
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: owncloud/server:latest
     networks:
       - name: "{{ nas_bridge_network }}"

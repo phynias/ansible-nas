@@ -7,14 +7,9 @@
     - "{{ firefly_data_directory }}/mysql"
     - "{{ firefly_data_directory }}/upload"
     - "{{ firefly_data_directory }}/export"
-
 - name: Create MySQL container for Firefly
   docker_container:
     name: firefly-mysql
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: mysql:5.7
     pull: true
     volumes:
@@ -29,18 +24,12 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
-
 - name: Wait for MySQL to init
   pause:
     seconds: 30
-
 - name: Create Firefly III container
   docker_container:
     name: firefly
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: jc5x/firefly-iii:latest
     pull: true
     volumes:
@@ -50,8 +39,8 @@
       - name: "{{ nas_bridge_network }}"
         links:
           - firefly-mysql:db
-#    ports:
-#      - "{{ firefly_port }}:8080"
+          #    ports:
+          #      - "{{ firefly_port }}:8080"
     env:
       APP_ENV: "local"
       APP_KEY: "S0m3R@nd0mString0f32Ch@rsEx@ct1y"

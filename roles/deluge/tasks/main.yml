@@ -7,14 +7,9 @@
   with_items:
     - "{{ deluge_config_directory }}"
     - "{{ deluge_download_directory }}"
-
 - name: Deluge Docker Container
   docker_container:
     name: deluge
-    log_driver: json-file
-    log_options:
-      max-size: 256m
-      max-file: "1"
     image: linuxserver/deluge
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -22,8 +17,8 @@
     volumes:
       - "{{ deluge_config_directory }}:/config:rw"
       - "{{ deluge_download_directory }}:/root/Downloads:rw"
-#    ports:
-#      - "{{ deluge_port }}:8112"
+      #    ports:
+      #      - "{{ deluge_port }}:8112"
     env:
       TZ: "{{ deluge_timezone }}"
       PUID: "{{ deluge_user_id }}"
