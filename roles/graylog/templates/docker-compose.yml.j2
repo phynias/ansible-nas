@@ -91,6 +91,11 @@ services:
       # http sticky sessions
       - "traefik.http.services.graylog.loadbalancer.sticky=true"
       - "com.centurylinklabs.watchtower.enable=false"
+      # Middleware to set the Content-Security-Policy header
+      - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
+      # Attach the middleware to the router
+      - "traefik.http.routers.navidrome.middlewares=csp-headers"
+
 networks:
   bridge:
     external: true

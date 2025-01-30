@@ -6,6 +6,7 @@
   with_items:
     - "{{ influxdb_data_directory }}"
     - "{{ telegraf_data_directory }}"
+
 - name: Create Grafana Directories
   file:
     path: "{{ item }}"
@@ -20,6 +21,7 @@
     - "{{ grafana_data_directory }}/config/provisioning"
     - "{{ grafana_data_directory }}/config/provisioning/datasources"
     - "{{ grafana_data_directory }}/config/provisioning/dashboards"
+
 - name: InfluxDB
   docker_container:
     name: influxdb
@@ -29,13 +31,14 @@
     pull: true
     volumes:
       - "{{ influxdb_data_directory }}:/var/lib/influxdb:rw"
-    ports:
-      - "{{ grafana_influxdb_port }}:8086"
+#    ports:
+#      - "{{ grafana_influxdb_port }}:8086"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:
       INFLUXDB_LOGGING_LEVEL: "error"
     memory: 1g
+
 - name: hddtemp
   docker_container:
     name: hddtemp
@@ -50,13 +53,16 @@
       HDDTEMP_ARGS: "-q -d -F /dev/sd*"
       TZ: "{{ ansible_nas_timezone }}"
     memory: 128m
+
 - name: Template telegraf.conf
   template:
     src: telegraf/telegraf.conf
     dest: "{{ telegraf_data_directory }}/telegraf.conf"
+
 - name: Telegraf
   docker_container:
     name: telegraf
+    user: telegraf:998
     networks:
       - name: "{{ nas_bridge_network }}"
         links:
@@ -84,22 +90,27 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     memory: 1g
+
 - name: Template grafana.ini
   template:
     src: grafana/grafana.ini
     dest: "{{ grafana_data_directory }}/etc/grafana.ini"
+
 - name: Template Grafana data source
   template:
     src: grafana/provisioning/datasources/ansible-nas.yml
     dest: "{{ grafana_data_directory }}/config/provisioning/datasources/ansible-nas.yml"
+
 - name: Copy Ansible-NAS Dashboard Provisioner
   copy:
     src: grafana/provisioning/dashboards/ansible-nas.yml
     dest: "{{ grafana_data_directory }}/config/provisioning/dashboards/ansible-nas.yml"
+
 - name: Copy Ansible-NAS Dashboard
   copy:
     src: grafana/dashboards/ansible-nas/ansible-nas-overview.json
     dest: "{{ grafana_data_directory }}/data/dashboards/ansible-nas/ansible-nas-overview.json"
+
 - name: Grafana
   docker_container:
     name: grafana

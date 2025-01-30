@@ -63,8 +63,8 @@
     image: prom/alertmanager
     networks:
       - name: "{{ nas_bridge_network }}"
-        #    ports:
-        #      - 9093:9093
+    ports:
+      - 9093:9093
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "{{ prometheus_data_directory }}/alertmanager/storage:/alertmanager"
