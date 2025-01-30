@@ -21,6 +21,7 @@
     - "{{ grafana_data_directory }}/config/provisioning"
     - "{{ grafana_data_directory }}/config/provisioning/datasources"
     - "{{ grafana_data_directory }}/config/provisioning/dashboards"
+    - "{{ grafana_data_directory }}/config/provisioning/alerting"
 
 - name: InfluxDB
   docker_container:
