@@ -1,4 +1,8 @@
 {
   "dns" : ["{{ dns|join('", "') }}"],
   "debug" : false
+  "log-driver": "gelf",
+  "log-opts": {
+    "gelf-address": "udp://graylog-log:122011",
+  }
 }

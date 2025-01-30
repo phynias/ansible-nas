@@ -14,3 +14,5 @@
       AUTOHEAL_CONTAINER_LABEL: all
     restart_policy: unless-stopped
     memory: 64m
+    networks:
+      - name: "{{ nas_bridge_network }}"

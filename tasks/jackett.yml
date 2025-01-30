@@ -33,7 +33,6 @@
       start_period: 90s 
     memory: 256m
     labels:
-      autoheal: "true"
       traefik.enable: "{{ jackett_available_externally }}"
       traefik.http.routers.jackett.entrypoints: "web,websecure"
       traefik.http.routers.jackett.rule: "Host(`{{ jackett_hostname }}.{{ ansible_nas_domain }}`)"

@@ -14,3 +14,5 @@
     volumes:
       - "{{ gddns_data_directory }}:/config"
       - "/etc/localtime:/etc/localtime"
+    networks:
+      - name: "{{ nas_bridge_network }}"

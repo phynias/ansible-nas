@@ -6,6 +6,8 @@ services:
     depends_on:
       - plextraktsync
     command: daemon --docker
+    networks:
+      - bridge
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
@@ -20,6 +22,8 @@ services:
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
     command: sync
+    networks:
+      - bridge
     container_name: plextraktsync
     volumes:
       - "{{ plextraktsync_data_directory }}/config:/app/config"
@@ -32,3 +36,8 @@ services:
       options:
         max-size: 256m
         max-file: "1"
+
+networks:
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"

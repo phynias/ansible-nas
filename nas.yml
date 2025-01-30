@@ -9,11 +9,11 @@
     ###
     ### Requirements
     ###
-    - role: bertvv.samba
-      tags:
-        - samba
-        - skip_ansible_lint
-      when: (samba_enabled | default(False))
+    # - role: bertvv.samba
+    #   tags:
+    #     - samba
+    #     - skip_ansible_lint
+    #   when: (samba_enabled | default(False))
 
     - role: geerlingguy.nfs
       tags:
@@ -266,6 +266,11 @@
       tags:
         - mealie
       when: (mealie_enabled | default(False))
+
+    - role: graylog
+      tags:
+        - graylog
+      when: (graylog_enabled | default(False))
 
     - role: kometa
       tags:
