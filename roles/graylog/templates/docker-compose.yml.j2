@@ -94,7 +94,7 @@ services:
       # Middleware to set the Content-Security-Policy header
       - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
       # Attach the middleware to the router
-      - "traefik.http.routers.navidrome.middlewares=csp-headers"
+      - "traefik.http.routers.graylog.middlewares=csp-headers"
 
 networks:
   bridge:

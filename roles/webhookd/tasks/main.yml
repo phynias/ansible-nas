@@ -26,10 +26,10 @@
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:
-      #      WHD_LISTEN_ADDR: ":8787"
       TZ: "{{ ansible_nas_timezone }}"
       PUID: "{{ webhookd_user_id }}"
       PGID: "{{ webhookd_group_id }}"
+      # WHD_LISTEN_ADDR: ":8787"
     user: "{{ webhookd_user_id }}"
     memory: 128m
     healthcheck:

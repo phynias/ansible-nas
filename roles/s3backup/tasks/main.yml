@@ -2,7 +2,7 @@
 - name: "Set timestamp of the backup"
   set_fact: timestamp="{{ lookup('pipe', 'date +%Y-%m-%d_%H-%m') }}"
 
-- name: "set aws credintials "
+- name: "set aws credentials "
   amazon.aws.s3_bucket:
         name: "{{ s3backup_bucket }}"
         state: present

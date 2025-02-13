@@ -54,12 +54,12 @@ services:
   certs-dumper:
     container_name: certs-dumper
     image: ldez/traefik-certs-dumper:latest
+    restart: unless-stopped
     networks:
         - bridge
     volumes:
       - "{{ traefik_data_directory }}/certs_dump:/data"
       - "{{ traefik_data_directory }}/letsencrypt:/letsencrypt:ro"
-    restart: unless-stopped
     command: file --version v2 --watch --source /letsencrypt/acme.json --dest /data/certs
     logging:
       driver: "json-file"
@@ -72,6 +72,7 @@ services:
   traefik-forward-auth:
     container_name: traefik-forward-auth
     image: thomseddon/traefik-forward-auth:latest
+    restart: unless-stopped
     environment:
       - PROVIDERS_GOOGLE_CLIENT_ID={{ traefik_google_client_id }}
       - PROVIDERS_GOOGLE_CLIENT_SECRET={{ traefik_google_client_secret }}

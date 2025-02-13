@@ -11,3 +11,4 @@ services:
       - "MYSQL_PASSWORD={{ homeassistant_mysql_password }}"
       - "MYSQL_USER={{ homeassistant_mysql_user }}"
       - "MYSQL_DATABASE={{ homeassistant_mysql_db }}"
+    restart: unless-stopped

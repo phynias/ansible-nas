@@ -48,6 +48,7 @@ services:
     networks:
       - bridge
     container_name: immich_redis
+    restart: unless-stopped
     logging:
       driver: "json-file"
       options:
@@ -60,6 +61,7 @@ services:
     networks:
       - bridge
     container_name: immich_db
+    restart: unless-stopped
     environment:
       POSTGRES_USER: {{ immich_db_user }}
       POSTGRES_PASSWORD: {{ immich_db_password }}
