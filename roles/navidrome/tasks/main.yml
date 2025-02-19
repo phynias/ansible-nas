@@ -35,7 +35,7 @@
     labels:
       traefik.enable: "{{ navidrome_available_externally }}"
       traefik.passHostHeader: "true"
-      traefik.http.routers.navidrome.entrypoints: "websecure,websecure-ext"
+      traefik.http.routers.navidrome.entrypoints: "websecure"
       traefik.http.routers.navidrome.rule: "Host(`{{ navidrome_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.navidrome.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.navidrome.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"

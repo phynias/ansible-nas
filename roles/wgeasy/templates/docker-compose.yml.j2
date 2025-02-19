@@ -25,6 +25,7 @@ services:
     network_mode: bridge
     volumes:
       - {{ wgeasy_data_directory }}:/etc/wireguard
+      - /lib/modules:/lib/modules:ro
     ports:
       - "51820:51820/udp"
     restart: unless-stopped
