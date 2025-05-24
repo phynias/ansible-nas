@@ -1,0 +1,9 @@
+---
+jellyfin_enabled: false
+jellyfin_available_externally: "false"
+
+# directories
+jellyfin_data_directory: "{{ docker_home }}/jellyfin"
+
+# network
+jellyfin_hostname: "jellyfin"

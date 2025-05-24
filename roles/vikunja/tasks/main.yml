@@ -1,20 +1,16 @@
 ---
-- name: Create homeassistant Directories
+- name: Create vikunja Directories
   file:
     path: "{{ item }}"
     state: directory
   with_items:
-    - "{{ homeassistant_data_directory }}/mariadb"
+    - "{{ vikunja_data_directory }}/files"
+    - "{{ vikunja_data_directory }}/db"
 
-- name: Setup homeassistant docker-compose.yml
+- name: Setup vikunja docker-compose.yml
   template:
     src: templates/docker-compose.yml.j2
     dest: "{{ role_path }}/docker-compose.yml"
-
-- name: Create init.sql
-  template:
-    src: templates/init.sql.j2
-    dest: "{{ homeassistant_data_directory }}/mariadb/init.sql"
 
 - name: Run docker compose pull
   shell: "docker compose pull --ignore-pull-failures || true"
@@ -30,7 +26,7 @@
 
 - debug: var=shell_output.stdout
 
-- name: Deploy homeassistant Docker Compose stack
+- name: Deploy vikunja Docker Compose stack
   community.docker.docker_compose_v2:
     remove_orphans: true
     recreate: "{{ 'always' if docker_recreate else 'auto' }}"

@@ -226,6 +226,11 @@
         - plex
       when: (plex_enabled | default(False))
 
+    - role: jellyfin
+      tags:
+        - jellyfin
+      when: (jellyfin_enabled | default(False))
+
     - role: radarr
       tags:
         - radarr
@@ -270,6 +275,16 @@
       tags:
         - mealie
       when: (mealie_enabled | default(False))
+
+    - role: vikunja
+      tags:
+        - vikunja
+      when: (vikunja_enabled | default(False))
+
+    - role: eigenfocus
+      tags:
+        - eigenfocus
+      when: (eigenfocus_enabled | default(False))
 
     - role: homeassistant
       tags:
@@ -525,10 +540,6 @@
   - import_tasks: tasks/openhab.yml
     when: (openhab_enabled | default(False))
     tags: openhab
-
-  - import_tasks: tasks/jellyfin.yml
-    when: (jellyfin_enabled | default(False))
-    tags: jellyfin
 
   - import_tasks: tasks/cloudcmd.yml
     when: (cloudcmd_enabled | default(False))

@@ -1,20 +1,17 @@
 ---
-- name: Create homeassistant Directories
+- name: Create jellyfin Directories
   file:
     path: "{{ item }}"
     state: directory
   with_items:
-    - "{{ homeassistant_data_directory }}/mariadb"
+    - "{{ jellyfin_data_directory }}"
+    - "{{ jellyfin_data_directory }}/config"
+    - "{{ jellyfin_data_directory }}/cache"
 
-- name: Setup homeassistant docker-compose.yml
+- name: Setup jellyfin docker-compose.yml
   template:
     src: templates/docker-compose.yml.j2
     dest: "{{ role_path }}/docker-compose.yml"
-
-- name: Create init.sql
-  template:
-    src: templates/init.sql.j2
-    dest: "{{ homeassistant_data_directory }}/mariadb/init.sql"
 
 - name: Run docker compose pull
   shell: "docker compose pull --ignore-pull-failures || true"
@@ -30,7 +27,7 @@
 
 - debug: var=shell_output.stdout
 
-- name: Deploy homeassistant Docker Compose stack
+- name: Deploy jellyfin Docker Compose stack
   community.docker.docker_compose_v2:
     remove_orphans: true
     recreate: "{{ 'always' if docker_recreate else 'auto' }}"

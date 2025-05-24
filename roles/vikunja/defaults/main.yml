@@ -1,0 +1,19 @@
+---
+vikunja_enabled: false
+vikunja_available_externally: "false"
+
+# directories
+vikunja_data_directory: "{{ docker_home }}/vikunja"
+
+# uid / gid
+vikunja_user_id: "1000"
+vikunja_group_id: "1000"
+
+# network
+vikunja_hostname: "vikunja"
+
+vikunja_db_name: "vikunja"
+vikunja_db_user: "vikunja"
+vikunja_db_password: "CHANGEME"
+vikunja_secret: ""
+vikunja_mysql_root_password: "CHANGEME"

@@ -1,5 +1,5 @@
 ---
-- name: Create Radarr Directories
+- name: Create navidrome Directories
   file:
     path: "{{ item }}"
     state: directory

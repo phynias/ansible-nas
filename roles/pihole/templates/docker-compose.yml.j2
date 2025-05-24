@@ -63,20 +63,14 @@ services:
       - "53/udp"
       - "853"
     environment:
-      PIHOLE_DNS: 10.0.0.2#5054
+      FTLCONF_dns_upstreams: 10.0.0.2#5054
       TZ: "{{ ansible_nas_timezone }}"
-      WEBPASSWORD: "{{ pihole_password }}"
-      DNS1: "10.0.0.2#5054"
-      DNS2: "no"
-      ServerIP: "{{ pihole_ip }}"
-      VIRTUAL_HOST: "{{ pihole_hostname }}.{{ ansible_nas_domain }}"
-      DNSMASQ_LISTENING: all
-      DNSMASQ_USER: root
+      FTLCONF_webserver_api_password: "{{ pihole_password }}"
+      FTLCONF_dns_listeningMode: all
     # Volumes store your data between container upgrades
     volumes:
       - "{{ pihole_data_directory }}/logs:/var/log:rw"
       - "{{ pihole_data_directory }}/pihole:/etc/pihole"
-      - "{{ pihole_data_directory }}/dnsmasq.d:/etc/dnsmasq.d"
       - "/tools/pihole:/tools:ro"
     dns:
       - 127.0.0.1

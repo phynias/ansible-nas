@@ -1,0 +1,45 @@
+---
+services:
+ jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    user: "{{ nas_uid }}:{{ nas_gid }}"
+    group_add:
+      - '109'
+    networks:
+      - bridge
+    restart: 'unless-stopped'
+    # Optional - alternative address used for autodiscovery
+    environment:
+      - JELLYFIN_PublishedServerUrl=https://{{ jellyfin_hostname }}.{{ ansible_nas_domain }}
+    volumes:
+      - "{{ jellyfin_data_directory }}/config:/config"
+      - "{{ jellyfin_data_directory }}/cache:/cache"
+      - type: bind
+        source: "{{ plex_movies_directory }}"
+        target: /media/movies
+        read_only: true
+      - type: bind
+        source: "{{ plex_tv_directory }}"
+        target: /media/tv
+      - type: bind
+        source: "{{ plex_music_directory }}"
+        target: /media/music
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    labels:
+      - "traefik.http.routers.jellyfin.entrypoints=websecure,websecure-ext"
+      - "traefik.enable={{ jellyfin_available_externally }}"
+      - "traefik.http.routers.jellyfin.rule=Host(`{{ jellyfin_hostname }}.{{ ansible_nas_domain }}`)"
+      - "traefik.http.routers.jellyfin.tls.domains[0].main={{ ansible_nas_domain }}"
+      - "traefik.http.routers.jellyfin.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+      # Middleware to set the Content-Security-Policy header
+      - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
+      # Attach the middleware to the router
+      - "traefik.http.routers.jellyfin.middlewares=csp-headers"
+
+networks:
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"

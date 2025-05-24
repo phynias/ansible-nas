@@ -6,6 +6,7 @@ services:
     network_mode: host
     volumes:
       - {{ homeassistant_data_directory }}/mariadb:/var/lib/mysql
+      - {{ homeassistant_data_directory }}/init.sql:/docker-entrypoint-initdb.d/setup.sql
     environment:
       - "MARIADB_ROOT_PASSWORD={{ homeassistant_mysql_root_password }}"
       - "MYSQL_PASSWORD={{ homeassistant_mysql_password }}"

@@ -44,6 +44,7 @@ Ansible config and a bunch of Docker containers.
 * [Deluge](https://dev.deluge-torrent.org/) - A lightweight, Free Software, cross-platform BitTorrent client.
 * [Dozzle](https://github.com/amir20/dozzle) - Dozzle is a small lightweight application with a web based interface to monitor Docker logs
 * [Duplicati](https://www.duplicati.com/) - for backing up your stuff
+* [Eigenfocus](https://github.com/eigenfocus/eigenfocus?utm_source=eigenfocus-plans) - Project Management, Planning and Time Tracker
 * [Emby](https://emby.media/) - Media streaming and management
 * [ExpressVPN](https://www.expressvpn.com/) - ExpressVPN client
 * [Firefly III](https://firefly-iii.org/) - Free and open source personal finance manager
@@ -118,6 +119,7 @@ Ansible config and a bunch of Docker containers.
 * [Uptime-Kuma](https://github.com/louislam/uptime-kuma) - Uptime Kuma is an easy-to-use self-hosted monitoring tool
 * [uTorrent](https://www.utorrent.com/) - The best torrent downloading app for beginners
 * [Varken](https://github.com/Boerderij/Varken) - aggregate data from the Plex ecosystem into InfluxDB
+* [Vikunja](https://github.com/go-vikunja/vikunja) - The Todo-app to organize your life
 * [Virtual Desktop](https://github.com/RattyDAVE/docker-ubuntu-xrdp-mate-custom) - A virtual desktop running on your NAS.
 * [Wallabag](https://wallabag.org/) - Save and classify articles. Read them later.
 * [Watchlistarr](https://github.com/nylonee/watchlistarr) - Sync plex watchlists in realtime with Sonarr and Radarr

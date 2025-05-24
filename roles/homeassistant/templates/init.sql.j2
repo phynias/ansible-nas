@@ -1,0 +1,3 @@
+CREATE DATABASE IF NOT EXISTS ha_db;
+GRANT ALL PRIVILEGES on {{ homeassistant_mysql_db }}.* to '{{ homeassistant_mysql_user }}'
+

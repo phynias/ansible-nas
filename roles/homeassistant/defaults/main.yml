@@ -12,3 +12,4 @@ homeassistant_group_id: "1000"
 # mysql
 homeassistant_mysql_user: "homeassistant"
 homeassistant_mysql_db: "ha_db"
+homeassistant_mysql_password: "CHANGEME"

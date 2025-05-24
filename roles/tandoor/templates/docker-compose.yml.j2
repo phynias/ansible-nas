@@ -29,6 +29,12 @@ services:
       POSTGRES_USER: "djangouser"
       POSTGRES_PASSWORD: "{{ tandoor_postgres_password }}"
       ALLOWED_HOSTS: "{{ tandoor_hostname }}.{{ ansible_nas_domain }}"
+      EMAIL_HOST: "{{ smtp_host }}"
+      EMAIL_PORT: "{{ smtp_port }}"
+      DEFAULT_FROM_EMAIL: "{{ smtp_from_email }}"
+      EMAIL_USE_TLS: "1"
+      EMAIL_HOST_USER: "{{ smtp_host }}"
+      EMAIL_HOST_PASSWORD: "{{ smtp_password }}"
     volumes:
       - "{{ tandoor_data_directory }}/staticfiles:/opt/recipes/staticfiles"
       - "{{ tandoor_data_directory }}/nginx:/opt/recipes/nginx/conf.d"

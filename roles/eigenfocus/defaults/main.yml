@@ -1,0 +1,26 @@
+---
+eigenfocus_enabled: false
+eigenfocus_available_externally: "false"
+
+# directories
+eigenfocus_data_directory: "{{ docker_home }}/eigenfocus"
+
+# uid / gid
+eigenfocus_user_id: "1000"
+eigenfocus_group_id: "1000"
+
+# network
+eigenfocus_hostname: "focus"
+eigenfocus_port: "9925"
+
+# specs
+eigenfocus_memory: 1g
+
+# smtp
+eigenfocus_smtp_host: ""
+eigenfocus_smtp_port: "587"
+eigenfocus_smtp_from_name: ""
+eigenfocus_smtp_from_email: ""
+eigenfocus_smtp_auth_strategy: ""
+eigenfocus_smtp_user: ""
+eigenfocus_smtp_password: ""

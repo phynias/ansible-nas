@@ -1,0 +1,48 @@
+---
+services:
+  vikunja:
+    image: vikunja/vikunja
+    container_name: vikunja
+    environment:
+      VIKUNJA_SERVICE_PUBLICURL: https://{{ vikunja_hostname }}.{{ ansible_nas_domain }}
+      VIKUNJA_DATABASE_HOST: vikunja-db
+      VIKUNJA_DATABASE_PASSWORD: {{ vikunja_db_password }}
+      VIKUNJA_DATABASE_TYPE: mysql
+      VIKUNJA_DATABASE_USER: {{ vikunja_db_user }}
+      VIKUNJA_DATABASE_DATABASE: {{ vikunja_db_name }}
+      VIKUNJA_SERVICE_JWTSECRET: {{ vikunja_secret }}
+    networks:
+      - bridge
+    volumes:
+      - "{{ vikunja_data_directory }}/files:/app/vikunja/files"
+    depends_on:
+      - vikunja-db
+    restart: unless-stopped
+    labels:
+      - "traefik.http.routers.vikunja.entrypoints=websecure,websecure-ext"
+      - "traefik.enable={{ vikunja_available_externally }}"
+      - "traefik.http.routers.vikunja.rule=Host(`{{ vikunja_hostname }}.{{ ansible_nas_domain }}`)"
+      - "traefik.http.routers.vikunja.tls.domains[0].main={{ ansible_nas_domain }}"
+      - "traefik.http.routers.vikunja.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+      - "traefik.http.services.vikunja.loadbalancer.server.port=3456"
+      - "com.centurylinklabs.watchtower.enable=false"
+
+  vikunja-db:
+    image: mariadb:10
+    container_name: vikunja-db
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: {{ vikunja_mysql_root_password }}
+      MYSQL_USER: {{ vikunja_db_user }}
+      MYSQL_PASSWORD: {{ vikunja_db_password }}
+      MYSQL_DATABASE: {{ vikunja_db_name }}
+    networks:
+      - bridge
+    volumes:
+      - "{{ vikunja_data_directory }}/db:/var/lib/mysql"
+    restart: unless-stopped
+
+networks:
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"
