@@ -58,17 +58,17 @@
 ########
 - name: check if config is a dir
   stat:
-    path: "{{ pihole_data_directory }}/pihole/custom.list"
+    path: "{{ pihole_data_directory }}/pihole/hosts/mine.list"
   register: dir_to_check
-- name: Delete custom.list if directory
+- name: Delete mine.list if directory
   file:
     state: absent
-    path: "{{ pihole_data_directory }}/pihole/custom.list"
+    path: "{{ pihole_data_directory }}/pihole/hosts/mine.list"
   when: dir_to_check.stat.isdir is defined and dir_to_check.stat.isdir
 - name: set custom dns list
   template:
     src: templates/custom.list.j2
-    dest: "{{ pihole_data_directory }}/pihole/custom.list"
+    dest: "{{ pihole_data_directory }}/pihole/hosts/mine.list"
     owner: nasuser
     group: nasuser
     mode: '0666'

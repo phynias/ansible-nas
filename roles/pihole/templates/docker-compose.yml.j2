@@ -71,6 +71,7 @@ services:
     volumes:
       - "{{ pihole_data_directory }}/logs:/var/log:rw"
       - "{{ pihole_data_directory }}/pihole:/etc/pihole"
+      - "{{ pihole_data_directory }}/dnsmasq.d:/etc/dnsmasq.d"
       - "/tools/pihole:/tools:ro"
     dns:
       - 127.0.0.1
