@@ -12,10 +12,12 @@
     name: plex
     image: linuxserver/plex
     networks:
-      - name: "{{ nas_bridge_network }}"
+      - name: host
+#    networks:
+#      - name: "{{ nas_bridge_network }}"
     pull: true
-    ports:
-      - "32400:32400/tcp"
+#    ports:
+#      - "32400:32400/tcp"
     volumes:
       - "{{ plex_certs_directory }}:/certs:ro"
       - "{{ plex_config_directory }}:/config:rw"
@@ -41,7 +43,9 @@
       traefik.http.routers.plex.rule: "Host(`{{ plex_hostname }}.{{ ansible_nas_domain }}`)"
       traefik.http.routers.plex.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.plex.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
-      traefik.http.services.plex.loadbalancer.server.port: "32400"
+#      traefik.http.services.plex.loadbalancer.server.port: "32400"
+      traefik.http.services.plex.loadbalancer.server.url: "http://192.168.1.200:32400"
+
 #- name: kitana
 #  docker_container:
 #    image: pannal/kitana:latest

@@ -69,9 +69,9 @@
   template:
     src: templates/custom.list.j2
     dest: "{{ pihole_data_directory }}/pihole/hosts/mine.list"
-    owner: nasuser
-    group: nasuser
-    mode: '0666'
+    owner: 1000
+    group: 1000
+    mode: '0640'
   tags:
     - pihole
     - pihole_dns
