@@ -131,24 +131,24 @@
 #      start_period: 1m
 #    labels:
 #      autoheal: "true"
-- name: promtail
-  docker_container:
-    name: promtail
-    pull: true
-    image: grafana/promtail
-    networks:
-      - name: "{{ nas_bridge_network }}"
-    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
-    force_kill: true
-    restart_policy: unless-stopped
-    command:
-      - "-config.file=/mnt/config/promtail-config.yaml"
-    volumes:
-      - "/etc/timezone:/etc/timezone:ro"
-      - "/zpool1/docker/traefik/logs/:/logs/traefik"
-      - "{{ prometheus_data_directory }}/promtail/etc/promtail-config.yaml:/mnt/config/promtail-config.yaml"
-      - "{{ prometheus_data_directory }}/promtail/cache:/cache"
-    user: "{{ nas_uid }}:{{ nas_gid }}"
+#- name: promtail
+#  docker_container:
+#    name: promtail
+#    pull: true
+#    image: grafana/promtail
+#    networks:
+#      - name: "{{ nas_bridge_network }}"
+#    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+#    force_kill: true
+#    restart_policy: unless-stopped
+#    command:
+#      - "-config.file=/mnt/config/promtail-config.yaml"
+#    volumes:
+#      - "/etc/timezone:/etc/timezone:ro"
+#      - "/zpool1/docker/traefik/logs/:/logs/traefik"
+#      - "{{ prometheus_data_directory }}/promtail/etc/promtail-config.yaml:/mnt/config/promtail-config.yaml"
+#      - "{{ prometheus_data_directory }}/promtail/cache:/cache"
+#    user: "{{ nas_uid }}:{{ nas_gid }}"
 - name: prometheus
   docker_container:
     name: prometheus

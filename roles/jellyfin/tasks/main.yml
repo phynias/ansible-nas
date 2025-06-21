@@ -13,6 +13,11 @@
     src: templates/docker-compose.yml.j2
     dest: "{{ role_path }}/docker-compose.yml"
 
+- name: Setup jellyfin dockerfile
+  template:
+    src: templates/Dockerfile.j2
+    dest: "{{ role_path }}/Dockerfile"
+
 - name: Run docker compose pull
   shell: "docker compose pull --ignore-pull-failures || true"
   register: shell_output

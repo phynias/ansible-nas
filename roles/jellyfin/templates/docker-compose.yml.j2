@@ -1,7 +1,10 @@
 ---
 services:
  jellyfin:
-    image: jellyfin/jellyfin
+    image: local/jellyfin:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: jellyfin
     user: "{{ nas_uid }}:{{ nas_gid }}"
     group_add:
@@ -18,13 +21,12 @@ services:
       - type: bind
         source: "{{ plex_movies_directory }}"
         target: /media/movies
-        read_only: true
       - type: bind
         source: "{{ plex_tv_directory }}"
         target: /media/tv
       - type: bind
         source: "{{ plex_music_directory }}"
-        target: /media/music
+        target: /music
     devices:
       - /dev/dri/renderD128:/dev/dri/renderD128
     labels:
@@ -36,6 +38,7 @@ services:
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
       # Middleware to set the Content-Security-Policy header
       - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
+      - "traefik.http.middlewares.jellyfin.headers.contentsecuritypolicy=default-src https: data: blob:; style-src 'self' 'unsafe-inline' https://ctalvio.github.io/Monochromic/default_style.css https://ctalvio.github.io/Monochromic/jfblue_style.css https://ctalvio.github.io/Monochromic/jfpurple_style.css https://ctalvio.github.io/Monochromic/bottom-progress_style.css https://ctalvio.github.io/Monochromic/customcolor-advanced_style.css https://ctalvio.github.io/Monochromic/improve-performance_style.css https://ctalvio.github.io/Kaleidochromic/default_style.css https://fonts.googleapis.com/css2; script-src 'self' 'unsafe-inline' https://www.gstatic.com/cv/js/sender/v1/cast_sender.js https://www.youtube.com/iframe_api https://s.ytimg.com worker-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'self'"
       # Attach the middleware to the router
       - "traefik.http.routers.jellyfin.middlewares=csp-headers"
 
