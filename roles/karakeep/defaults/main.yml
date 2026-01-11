@@ -1,0 +1,19 @@
+---
+karakeep_enabled: false
+karakeep_available_externally: "false"
+
+# directories
+karakeep_data_directory: "{{ docker_home }}/karakeep"
+
+# uid / gid
+karakeep_user_id: "1000"
+karakeep_group_id: "1000"
+
+# network
+karakeep_hostname: "karakeep"
+
+karakeep_db_name: "karakeep"
+karakeep_db_user: "karakeep"
+karakeep_db_password: "CHANGEME"
+karakeep_secret: ""
+karakeep_mysql_root_password: "CHANGEME"

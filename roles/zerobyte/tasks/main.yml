@@ -1,0 +1,47 @@
+---
+- name: Include immich vars
+  include_vars: "{{ role_path }}/../immich/defaults/main.yml"
+
+- name: Create zerobyte Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ zerobyte_user_id }}"
+  with_items:
+    - "{{ zerobyte_data_directory }}"
+    - "{{ zerobyte_data_directory }}/valkey"
+    - "{{ zerobyte_data_directory }}/data"
+    - "{{ zerobyte_data_directory }}/etc"
+
+- name: Setup zerobyte docker-compose.yml
+  template:
+    src: templates/docker-compose.yml.j2
+    dest: "{{ role_path }}/docker-compose.yml"
+
+- name: Run docker compose pull
+  shell: "docker compose pull --ignore-pull-failures || true"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- name: Run docker compose build
+  shell: "docker compose build"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- debug: var=shell_output.stdout
+
+- name: Deploy zerobyte Docker Compose stack
+  community.docker.docker_compose_v2:
+    remove_orphans: true
+    recreate: "{{ 'always' if docker_recreate else 'auto' }}"
+    project_src: "{{ role_path }}"
+    files:
+    - docker-compose.yml
+  register: shell_output
+
+- name: Remove docker-compose.yml
+  file:
+    path: "{{ role_path }}/docker-compose.yml"
+    state: absent

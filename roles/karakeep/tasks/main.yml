@@ -1,0 +1,41 @@
+---
+- name: Create karakeep Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ karakeep_data_directory }}/files"
+    - "{{ karakeep_data_directory }}/db"
+
+- name: Setup karakeep docker-compose.yml
+  template:
+    src: templates/docker-compose.yml.j2
+    dest: "{{ role_path }}/docker-compose.yml"
+
+- name: Run docker compose pull
+  shell: "docker compose pull --ignore-pull-failures || true"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- name: Run docker compose build
+  shell: "docker compose build"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- debug: var=shell_output.stdout
+
+- name: Deploy karakeep Docker Compose stack
+  community.docker.docker_compose_v2:
+    remove_orphans: true
+    recreate: "{{ 'always' if docker_recreate else 'auto' }}"
+    project_src: "{{ role_path }}"
+    files:
+    - docker-compose.yml
+  register: shell_output
+
+- name: Remove docker-compose.yml
+  file:
+    path: "{{ role_path }}/docker-compose.yml"
+    state: absent

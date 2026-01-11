@@ -1,0 +1,14 @@
+---
+zerobyte_enabled: false
+zerobyte_available_externally: "false"
+
+# directories
+zerobyte_data_directory: "{{ docker_home }}/zerobyte"
+
+# uid / gid
+zerobyte_user_id: "1000"
+zerobyte_group_id: "1000"
+
+# network
+zerobyte_hostname: "zero"
+

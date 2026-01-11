@@ -1,0 +1,27 @@
+---
+services:
+  flame:
+    image: ghcr.io/fdarveau/flame:latest
+    container_name: flame
+    volumes:
+      - "{{ flame_data_directory }}:/app/data"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    environment:
+      - "PASSWORD={{ flame_password }}"
+    group_add:
+      - "998"
+    networks:
+      - bridge
+    restart: unless-stopped
+    labels:
+      - "traefik.http.routers.flame.entrypoints=websecure"
+      - "traefik.enable={{ flame_available_externally }}"
+      - "traefik.http.routers.flame.rule=Host(`{{ flame_hostname }}.{{ ansible_nas_domain }}`)"
+      - "traefik.http.routers.flame.tls.domains[0].main={{ ansible_nas_domain }}"
+      - "traefik.http.routers.flame.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+      - "traefik.http.services.flame.loadbalancer.server.port=5005"
+
+networks:
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"

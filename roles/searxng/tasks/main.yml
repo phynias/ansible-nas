@@ -1,0 +1,55 @@
+---
+- name: Create searxng Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ searxng_user_id }}"
+  with_items:
+    - "{{ searxng_data_directory }}"
+    - "{{ searxng_data_directory }}/valkey"
+    - "{{ searxng_data_directory }}/data"
+    - "{{ searxng_data_directory }}/etc"
+
+- name: Setup searxng docker-compose.yml
+  template:
+    src: templates/docker-compose.yml.j2
+    dest: "{{ role_path }}/docker-compose.yml"
+
+
+- name: Setup searxng seaxng settings file
+  template:
+    src: templates/searxng_settings.yml.j2
+    dest: "{{ searxng_data_directory }}/etc/settings.yml"
+
+- name: Setup searxng seaxng limiter file
+  template:
+    src: templates/searxng_limiter.toml.j2
+    dest: "{{ searxng_data_directory }}/etc/limiter.toml"
+
+- name: Run docker compose pull
+  shell: "docker compose pull --ignore-pull-failures || true"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- name: Run docker compose build
+  shell: "docker compose build"
+  register: shell_output
+  args:
+    chdir: "{{ role_path }}"
+
+- debug: var=shell_output.stdout
+
+- name: Deploy searxng Docker Compose stack
+  community.docker.docker_compose_v2:
+    remove_orphans: true
+    recreate: "{{ 'always' if docker_recreate else 'auto' }}"
+    project_src: "{{ role_path }}"
+    files:
+    - docker-compose.yml
+  register: shell_output
+
+- name: Remove docker-compose.yml
+  file:
+    path: "{{ role_path }}/docker-compose.yml"
+    state: absent

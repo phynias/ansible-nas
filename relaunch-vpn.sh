@@ -9,4 +9,4 @@ if [ "$1" == "all" ]; then
 fi
 
 
-ansible-playbook --ask-vault-pass -i inventories/my-ansible-nas/inventory -D  -e docker_recreate=1 -t traefik,webhookd,papermerge,librephotos,transmission,sabnzbd,librenms,papermerge,webhookd,komga nas.yml 
+ansible-playbook --ask-vault-pass -i inventories/my-ansible-nas/inventory -D  -e docker_recreate=1 -t transmission,sabnzbd,searxng nas.yml 

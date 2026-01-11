@@ -46,6 +46,7 @@ services:
       - pihole
     cap_add:
       - NET_ADMIN
+      - CAP_SYS_NICE
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
   pihole:

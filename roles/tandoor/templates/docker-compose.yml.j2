@@ -43,20 +43,6 @@ services:
       - db_recipes
     networks:
       - bridge
-  nginx_recipes:
-    container_name: tandoor_nginx
-    image: nginx:mainline-alpine
-    restart: always
-    depends_on:
-      - web_recipes
-    environment:
-      ALLOWED_HOSTS: "{{ tandoor_hostname }}.{{ ansible_nas_domain }}"
-    volumes:
-      - "{{ tandoor_data_directory }}/nginx:/etc/nginx/conf.d:ro"
-      - "{{ tandoor_data_directory }}/staticfiles:/static:ro"
-      - "{{ tandoor_data_directory }}/mediafiles:/media:ro"
-    networks:
-      - bridge
     labels:
       - "traefik.http.routers.tandoor.entrypoints=websecure,websecure-ext"
       - "traefik.enable={{ tandoor_available_externally }}"

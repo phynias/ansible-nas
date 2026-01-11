@@ -1,2 +1,2 @@
 FROM jellyfin/jellyfin
-RUN chown -R {{ nas_uid }}.{{ nas_gid }} /jellyfin
+RUN chown -R {{ nas_uid }}:{{ nas_gid }} /jellyfin

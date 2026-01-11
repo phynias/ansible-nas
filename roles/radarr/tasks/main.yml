@@ -39,5 +39,7 @@
       traefik.http.routers.radarr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.radarr.loadbalancer.server.port: "7878"
       traefik.http.routers.radarr.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
-#- debug: msg="{{ docker_container_output }}"
-#  when: docker_container_output is defined
+      flame.type: application
+      flame.name: radarr
+      flame.url: "https://{{ radarr_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "`Arr"

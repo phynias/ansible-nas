@@ -281,6 +281,11 @@
         - vikunja
       when: (vikunja_enabled | default(False))
 
+    - role: timetracker
+      tags:
+        - timetracker
+      when: (timetracker_enabled | default(False))
+
     - role: eigenfocus
       tags:
         - eigenfocus
@@ -301,10 +306,30 @@
         - kometa
       when: (kometa_enabled | default(False))
 
+    - role: flame
+      tags:
+        - flame
+      when: (flame_enabled | default(False))
+
     - role: tandoor
       tags:
         - tandoor
       when: (tandoor_enabled | default(False))
+
+    - role: zerobyte
+      tags:
+        - zerobyte
+      when: (zerobyte_enabled | default(False))
+
+    - role: searxng
+      tags:
+        - searxng
+      when: (searxng_enabled | default(False))
+
+    - role: postiz
+      tags:
+        - postiz
+      when: (postiz_enabled | default(False))
 
     - role: kitchenowl
       tags:

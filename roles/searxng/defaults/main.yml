@@ -1,0 +1,16 @@
+---
+searxng_enabled: false
+searxng_available_externally: "false"
+
+# directories
+searxng_data_directory: "{{ docker_home }}/searxng"
+
+# uid / gid
+searxng_user_id: "977"
+searxng_group_id: "977"
+
+# network
+searxng_hostname: "search"
+
+searxng_secret: "CHANGEME"
+searxng_proxy: false

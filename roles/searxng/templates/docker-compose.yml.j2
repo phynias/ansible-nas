@@ -1,0 +1,45 @@
+---
+services:
+  searxng-redis:
+    container_name: searxng-redis
+    image: docker.io/valkey/valkey:8-alpine
+    command: valkey-server --save 30 1 --loglevel warning
+    restart: unless-stopped
+    network_mode: "{{ 'container:' + proxy_container if searxng_proxy else 'none' }}"
+    volumes:
+      - "{{ searxng_data_directory }}/valkey:/data"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "256m"
+        max-file: "1"
+
+  searxng:
+    container_name: searxng
+    image: docker.io/searxng/searxng:latest
+    restart: unless-stopped
+    volumes:
+      - "{{ searxng_data_directory }}/etc:/etc/searxng:rw"
+      - "{{ searxng_data_directory }}/data:/var/cache/searxng:rw"
+    environment:
+      - "SEARXNG_BASE_URL=https://{{ searxng_hostname }}.{{ ansible_nas_domain }}/"
+      - "GRANIAN_HOST=0.0.0.0"
+      - "GRANIAN_PORT=8081"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "256m"
+        max-file: "1"
+    network_mode: "{{ 'container:' + proxy_container if searxng_proxy else 'none' }}"
+    labels:
+      - "traefik.http.routers.searxng.entrypoints=websecure,websecure-ext"
+      - "traefik.enable={{ searxng_available_externally }}"
+      - "traefik.http.routers.searxng.rule=Host(`{{ searxng_hostname }}.{{ ansible_nas_domain }}`)"
+      - "traefik.http.routers.searxng.tls.domains[0].main={{ ansible_nas_domain }}"
+      - "traefik.http.routers.searxng.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+      - "traefik.http.services.searxng.loadbalancer.server.port=8081"
+
+networks:
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"

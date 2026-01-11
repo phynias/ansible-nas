@@ -4,7 +4,7 @@ immich_available_externally: "false"
 
 # directories
 immich_data_directory: "{{ docker_home }}/immich"
-immich_photos_directory: ""
+immich_photos_directory: "/zpool1/data/Stuff/!Photos"
 immich_db_password: "changeme"
 immich_db_user: "postgres"
 immich_db_name: "immich"

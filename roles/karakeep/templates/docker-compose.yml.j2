@@ -1,0 +1,51 @@
+services:
+  web:
+    image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-release}
+    restart: unless-stopped
+    volumes:
+      # By default, the data is stored in a docker volume called "data".
+      # If you want to mount a custom directory, change the volume mapping to:
+      # - /path/to/your/directory:/data
+      - "{{ karakeep_data_directory }}/data:/data"
+    ports:
+      - 3000:3000
+    environment:
+      MEILI_ADDR=http://127.0.0.1:7700
+      MEILI_MASTER_KEY=[generate with <openssl rand -base64 36 | tr -dc 'A-Za-z0-9'>]
+      NEXTAUTH_URL=http://localhost:3000
+      NEXTAUTH_SECRET=[generate with <openssl rand -base64 36>]
+      MEILI_ADDR: http://meilisearch:7700
+      BROWSER_WEB_URL: http://chrome:9222
+      # OPENAI_API_KEY:
+    labels:
+      - "traefik.http.routers.karakeep.entrypoints=websecure,websecure-ext"
+      - "traefik.enable={{ karakeep_available_externally }}"
+      - "traefik.http.routers.karakeep.rule=Host(`{{ karakeep_hostname }}.{{ ansible_nas_domain }}`)"
+      - "traefik.http.routers.karakeep.tls.domains[0].main={{ ansible_nas_domain }}"
+      - "traefik.http.routers.karakeep.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+      - "traefik.http.services.karakeep.loadbalancer.server.port=3456"
+      - "com.centurylinklabs.watchtower.enable=false"
+  chrome:
+    image: gcr.io/zenika-hub/alpine-chrome:124
+    restart: unless-stopped
+    command:
+      - --no-sandbox
+      - --disable-gpu
+      - --disable-dev-shm-usage
+      - --remote-debugging-address=0.0.0.0
+      - --remote-debugging-port=9222
+      - --hide-scrollbars
+  meilisearch:
+    image: getmeili/meilisearch:v1.13.3
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MEILI_NO_ANALYTICS: "true"
+    volumes:
+      - "{{ tandoor_data_directory }}/meilisearch:/meili_data"
+
+networks:
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"

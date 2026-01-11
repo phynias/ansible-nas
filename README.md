@@ -47,6 +47,7 @@ Ansible config and a bunch of Docker containers.
 * [Eigenfocus](https://github.com/eigenfocus/eigenfocus?utm_source=eigenfocus-plans) - Project Management, Planning and Time Tracker
 * [Emby](https://emby.media/) - Media streaming and management
 * [ExpressVPN](https://www.expressvpn.com/) - ExpressVPN client
+* [Flame](https://github.com/fdarveau/flame) - Self-hosted startpage for your server
 * [Firefly III](https://firefly-iii.org/) - Free and open source personal finance manager
 * [get_iplayer](https://github.com/get-iplayer/get_iplayer) - download programmes from BBC iplayer
 * [Gitea](https://gitea.io/en-us/) - Simple self-hosted GitHub clone
@@ -63,6 +64,7 @@ Ansible config and a bunch of Docker containers.
 * [Jackett](https://github.com/Jackett/Jackett) - API Support for your favorite torrent trackers
 * [Jellyfin](https://jellyfin.github.io) - The Free Software Media System
 * [Joomla](https://www.joomla.org/) - Open source content management system
+* [KaraKeep](https://github.com/karakeep-app/karakeep) - A self-hostable bookmark-everything app
 * [Kitchenowl](https://github.com/TomBursch/kitchenowl) - A smart grocery list and recipe manager
 * [Kometa](https://github.com/kometa-team/Kometa) - A tool designed to give you complete control over your Plex media libraries
 * [Krusader](https://krusader.org/) - Twin panel file management for your desktop
@@ -101,6 +103,7 @@ Ansible config and a bunch of Docker containers.
 * [Readarr](https://github.com/Readarr/Readarr) - Readarr is an ebook and audiobook collection manager for Usenet and BitTorrent users
 * [Sabnzbd](https://sabnzbd.org/) - Free and easy binary newsreader
 * [Scrutiny](https://github.com/AnalogJ/scrutiny) - WebUI for smartd S.M.A.R.T monitoring
+* [SearXNG](https://github.com/searxng/searxng) - A free internet metasearch engine
 * [Sickchill](https://sickchill.github.io/) - for managing TV episodes
 * [Sonarr](https://sonarr.tv/) - for downloading and managing TV episodes
 * [Speedtest-tracker](retract-unwanted-celtic-aptly) - self-hosted internet performance tracking application that runs speedtest checks against Ookla's Speedtest service
@@ -127,6 +130,7 @@ Ansible config and a bunch of Docker containers.
 * [wg-easy](https://github.com/wg-easy/wg-easy) - The easiest way to install & manage WireGuard on any Linux host
 * [wyze-bridge](https://github.com/mrlt8/docker-wyze-bridge) - https://github.com/mrlt8/docker-wyze-bridge
 * [YouTubeDL-Material](https://github.com/Tzahi12345/YoutubeDL-Material) - Self-hosted YouTube downloader built on Material Design
+* [Zerobyte](https://github.com/nicotsx/zerobyte) - Backup automation for self-hosters
 * [ZNC](https://wiki.znc.in/ZNC) - IRC bouncer to stay connected to favourite IRC networks and channels
 
 ## What This Could Do
