@@ -34,3 +34,8 @@
       traefik.http.routers.couchpotato.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.couchpotato.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.couchpotato.loadbalancer.server.port: "5050"
+      flame.type: application
+      flame.name: couchpotato
+      flame.url: "https://{{ couchpotato_host }}.{{ ansible_nas_domain }}"
+      flame.category: "Downloaders"
+      flame.icon: couchpotato.png

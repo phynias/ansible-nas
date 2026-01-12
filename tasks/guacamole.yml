@@ -44,6 +44,12 @@
       traefik.http.routers.guacamole.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.guacamole.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.guacamole.loadbalancer.server.port: "8080"
+      flame.type: application
+      flame.name: guacamole
+      flame.url: "https://guacamole.{{ ansible_nas_domain }}"
+      flame.category: "Productivity"
+      flame.icon: "guacamole.png"
+
 - name: Restart Guacamole Container
   docker_container:
     name: guacamole

@@ -29,3 +29,8 @@
       traefik.http.routers.duplicati.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.duplicati.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.duplicati.loadbalancer.server.port: "8200"
+      flame.type: application
+      flame.name: duplicati
+      flame.url: "https://{{ duplicati_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Backup & Sync"
+      flame.icon: duplicati.png

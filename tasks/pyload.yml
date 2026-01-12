@@ -34,3 +34,8 @@
       traefik.http.routers.pyload.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.pyload.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.pyload.loadbalancer.server.port: "8000"
+      flame.type: application
+      flame.name: pyload
+      flame.url: "https://pyload.{{ ansible_nas_domain }}"
+      flame.category: "Downloaders"
+      flame.icon: "pyload.png"

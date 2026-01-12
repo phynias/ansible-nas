@@ -43,6 +43,11 @@ services:
       - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
       # Attach the middleware to the router
       - "traefik.http.routers.audiobookshelf.middlewares=csp-headers"
+      - "flame.type=application"
+      - "flame.name=audiobookshelf"
+      - "flame.url=https://{{ audiobookshelf_hostname }}.{{ ansible_nas_domain }}"
+      - "flame.category=Books & Comics"
+      - "flame.icon=audiobookshelf.png"
     logging:
       driver: "json-file"
       options:

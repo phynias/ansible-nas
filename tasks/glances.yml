@@ -28,3 +28,8 @@
       traefik.http.routers.glances.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.glances.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.glances.loadbalancer.server.port: "61208"
+      flame.type: application
+      flame.name: glances
+      flame.url: "https://glances.{{ ansible_nas_domain }}"
+      flame.category: "Monitoring"
+      flame.icon: "glances.png"

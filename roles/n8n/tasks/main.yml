@@ -36,3 +36,8 @@
       traefik.http.routers.n8n.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.n8n.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.n8n.loadbalancer.server.port: "5678"
+      flame.type: application
+      flame.name: n8n
+      flame.url: "https://{{ n8n_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Automation"
+      flame.icon: n8n.png

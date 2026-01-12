@@ -38,3 +38,8 @@
       traefik.http.routers.pytivo.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.pytivo.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.pytivo.loadbalancer.server.port: "9032"
+      flame.type: application
+      flame.name: pytivo
+      flame.url: "https://pytivo.{{ ansible_nas_domain }}"
+      flame.category: "pytivo"
+      flame.icon: "pytivo.png"

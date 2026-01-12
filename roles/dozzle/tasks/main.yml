@@ -18,3 +18,8 @@
       traefik.http.routers.dozzle.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.dozzle.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.dozzle.loadbalancer.server.port: "{{ dozzle_port }}"
+      flame.type: application
+      flame.name: dozzle
+      flame.url: "https://{{ dozzle_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Monitoring"
+      flame.icon: dozzle.png

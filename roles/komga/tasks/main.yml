@@ -35,3 +35,8 @@
       traefik.http.routers.komga.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.komga.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.komga.loadbalancer.server.port: "25600"
+      flame.type: application
+      flame.name: komga
+      flame.url: "https://{{ komga_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Books & Comics"
+      flame.icon: komga.png

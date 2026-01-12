@@ -40,3 +40,8 @@
       traefik.http.routers.youtubedlmaterial.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.youtubedlmaterial.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.youtubedlmaterial.loadbalancer.server.port: "17442"
+      flame.type: application
+      flame.name: youtubedlmaterial
+      flame.url: "https://youtubedlmaterial..{{ ansible_nas_domain }}"
+      flame.category: Downloaders"
+      flame.icon: "youtubedlmaterial.png"

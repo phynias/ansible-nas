@@ -81,6 +81,11 @@
         - traefik
       when: (traefik_enabled | default(False))
 
+    - role: graylog
+      tags:
+        - graylog
+      when: (graylog_enabled | default(False))
+
     - role: pihole
       tags:
         - always
@@ -295,11 +300,6 @@
       tags:
         - homeassistant
       when: (homeassistant_enabled | default(False))
-
-    - role: graylog
-      tags:
-        - graylog
-      when: (graylog_enabled | default(False))
 
     - role: kometa
       tags:

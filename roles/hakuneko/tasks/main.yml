@@ -34,3 +34,8 @@
       traefik.http.routers.hakuneko.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.hakuneko.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.hakuneko.loadbalancer.server.port: "8080"
+      flame.type: application
+      flame.name: hakuneko
+      flame.url: "https://{{ hakuneko_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Books & Comics"
+      flame.icon: hakuneko.png

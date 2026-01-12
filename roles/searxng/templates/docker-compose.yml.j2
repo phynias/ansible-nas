@@ -38,6 +38,11 @@ services:
       - "traefik.http.routers.searxng.tls.domains[0].main={{ ansible_nas_domain }}"
       - "traefik.http.routers.searxng.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
       - "traefik.http.services.searxng.loadbalancer.server.port=8081"
+      - "flame.type=application"
+      - "flame.name=searxng"
+      - "flame.url=https://{{ searxng_hostname }}.{{ ansible_nas_domain }}"
+      - "flame.category=Search"
+      - "flame.icon=searxng.png"
 
 networks:
   bridge:

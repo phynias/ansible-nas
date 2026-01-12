@@ -41,6 +41,11 @@ services:
       - "traefik.http.middlewares.jellyfin.headers.contentsecuritypolicy=default-src https: data: blob:; style-src 'self' 'unsafe-inline' https://ctalvio.github.io/Monochromic/default_style.css https://ctalvio.github.io/Monochromic/jfblue_style.css https://ctalvio.github.io/Monochromic/jfpurple_style.css https://ctalvio.github.io/Monochromic/bottom-progress_style.css https://ctalvio.github.io/Monochromic/customcolor-advanced_style.css https://ctalvio.github.io/Monochromic/improve-performance_style.css https://ctalvio.github.io/Kaleidochromic/default_style.css https://fonts.googleapis.com/css2; script-src 'self' 'unsafe-inline' https://www.gstatic.com/cv/js/sender/v1/cast_sender.js https://www.youtube.com/iframe_api https://s.ytimg.com worker-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'self'"
       # Attach the middleware to the router
       - "traefik.http.routers.jellyfin.middlewares=csp-headers"
+      - "flame.type=application"
+      - "flame.name=jellyfin"
+      - "flame.url=https://{{ jellyfin_hostname }}.{{ ansible_nas_domain }}"
+      - "flame.category=Media Servers"
+      - "flame.icon=jellyfin.png"
 
 networks:
   bridge:

@@ -38,6 +38,11 @@ services:
       - "traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy=frame-ancestors organizr.shazbot.one"
       # Attach the middleware to the router
       - "traefik.http.routers.speedtesttracker.middlewares=csp-headers"
+      - "flame.type=application"
+      - "flame.name=speedtesttracker"
+      - "flame.url=https://{{ speedtesttracker_hostname }}.{{ ansible_nas_domain }}"
+      - "flame.category=Monitoring"
+      - "flame.icon=speedtesttracker.png"
   speedtest-tracker-db:
     container_name: speedtesttracker-db
     image: postgres:15

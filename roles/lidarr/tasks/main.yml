@@ -35,3 +35,8 @@
       traefik.http.routers.lidarr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.lidarr.loadbalancer.server.port: "8686"
       traefik.http.routers.lidarr.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
+      flame.type: application
+      flame.name: lidarr
+      flame.url: "https://{{ lidarr_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "`Arr"
+      flame.icon: lidarr.png

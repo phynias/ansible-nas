@@ -42,3 +42,8 @@
       traefik.http.routers.transmission.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.transmission.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.transmission.loadbalancer.server.port: "9091"
+      flame.type: application
+      flame.name: transmission
+      flame.url: "https://{{ transmission_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Downloaders"
+      flame.icon: transmission.png

@@ -36,3 +36,8 @@
       traefik.http.routers.krusader.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.krusader.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.krusader.loadbalancer.server.port: "5800"
+      flame.type: application
+      flame.name: krusader
+      flame.url: "https://krusader.{{ ansible_nas_domain }}"
+      flame.category: "Productivity"
+      flame.icon: "krusader.png"

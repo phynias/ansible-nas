@@ -2,3 +2,11 @@
   docker_network:
     name: "{{ nas_bridge_network }}"
     driver: bridge
+
+- name: Create a pihole network
+  docker_network:
+    name: piholedhcp
+    ipam_config:
+      - subnet: '10.0.0.0/16'
+        gateway: 10.0.0.1
+        iprange: '10.0.0.0/24'

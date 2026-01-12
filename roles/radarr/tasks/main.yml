@@ -43,3 +43,4 @@
       flame.name: radarr
       flame.url: "https://{{ radarr_hostname }}.{{ ansible_nas_domain }}"
       flame.category: "`Arr"
+      flame.icon: radarr.png

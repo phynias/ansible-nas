@@ -32,3 +32,8 @@
       traefik.http.routers.nzbget.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.nzbget.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.nzbget.loadbalancer.server.port: "6789"
+      flame.type: application
+      flame.name: nzbget
+      flame.url: "https://nzbget.{{ ansible_nas_domain }}"
+      flame.category: "Downloaders"
+      flame.icon: "nzbget.png"

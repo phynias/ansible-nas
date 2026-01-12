@@ -50,3 +50,8 @@
       traefik.http.routers.joomla.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.joomla.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.joomla.loadbalancer.server.port: "80"
+      flame.type: application
+      flame.name: joomla
+      flame.url: "https://joomla.{{ ansible_nas_domain }}"
+      flame.category: "Productivity"
+      flame.icon: "joomla.png"

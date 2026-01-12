@@ -61,3 +61,8 @@
       traefik.http.routers.firefly.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.firefly.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.firefly.loadbalancer.server.port: "8080"
+      flame.type: application
+      flame.name: firefly
+      flame.url: "https://firefly.{{ ansible_nas_domain }}"
+      flame.category: "Finance"
+      flame.icon: "firefly.png"

@@ -87,6 +87,11 @@ services:
       traefik.http.routers.authentik.tls.domains[0].main: {{ ansible_nas_domain }}
       traefik.http.routers.authentik.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.authentik.loadbalancer.server.port: 9000
+      flame.type: application
+      flame.name: authentik
+      flame.url: https://{{ authentik_hostname }}.{{ ansible_nas_domain }}
+      flame.category: Authentication
+      flame.icon: authentik.png
 
   worker:
     image: ghcr.io/goauthentik/server:latest

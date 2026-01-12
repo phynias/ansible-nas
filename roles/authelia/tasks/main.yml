@@ -65,6 +65,11 @@
       traefik.http.routers.authelia.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.authelia.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.authelia.loadbalancer.server.port: "9091"
+      flame.type: application
+      flame.name: authelia
+      flame.url: "https://{{ authelia_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Authentication"
+      flame.icon: authelia.png
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:

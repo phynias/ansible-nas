@@ -1,18 +1,59 @@
 ---
 services:
-  netalert:
+  netalertx:
+    network_mode: host   # Use host networking for ARP scanning and other services
     image: jokobsk/netalertx-dev:latest
-    container_name: netalert
-    network_mode: "host"
+    container_name: netalertx                       # The name when you docker contiainer ls
+    read_only: true                                 # Make the container filesystem read-only
+    
+    # It is most secure to start with user 20211, but then we lose provisioning capabilities.
+    # user: "${NETALERTX_UID:-20211}:${NETALERTX_GID:-20211}"
+    cap_drop:                                       # Drop all capabilities for enhanced security
+      - ALL
+    cap_add:                                        # Add only the necessary capabilities
+      - NET_ADMIN                                   # Required for scanning with arp-scan, nmap, nbtscan, traceroute, and zero-conf
+      - NET_RAW                                     # Required for raw socket operations with arp-scan, nmap, nbtscan, traceroute and zero-conf
+      - NET_BIND_SERVICE                            # Required to bind to privileged ports with nbtscan
+      - CHOWN                                       # Required for root-entrypoint to chown /data + /tmp before dropping privileges
+      - SETUID                                      # Required for root-entrypoint to switch to non-root user
+      - SETGID                                      # Required for root-entrypoint to switch to non-root group                  
     volumes:
-      - "{{ netalert_config_directory }}/config:/app/config:rw"
-      - "{{ netalert_config_directory }}/db:/app/db:rw"
+      - "{{ netalert_config_directory }}/data:/data:rw"
       - "{{ pihole_data_directory }}/pihole:/etc/pihole:ro"
-      - type: tmpfs
-        target: /app/api
+      - type: bind
+        source: /etc/localtime
+        target: /etc/localtime
+        read_only: true
+
+    # tmpfs mounts for writable directories in a read-only container and improve system performance
+    # All writes now live under /tmp/* subdirectories which are created dynamically by entrypoint.d scripts
+    # mode=1700 gives rwx------ permissions; ownership is set by /root-entrypoint.sh
+    tmpfs:
+      - "/tmp:mode=1700,uid=0,gid=0,rw,noexec,nosuid,nodev,async,noatime,nodiratime"
     environment:
+      - APP_CONF_OVERRIDE={"LOADED_PLUGINS":"['ARPSCAN', 'PUSHOVER', 'PIHOLE', 'AVAHISCAN', 'DHCPLSS', 'INTRNT', 'NSLOOKUP', 'SMTP', 'CSVBCKP', 'CUSTPROP', 'DBCLNP', 'MAINT', 'NEWDEV', 'NTFPRCS', 'SETPWD', 'SYNC', 'UI', 'VNDRPDT', 'WORKFLOWS']", "PIHOLE_RUN":"schedule","PIHOLE_DB_PATH":"/etc/pihole/pihole-FTL.db","DHCPLSS_RUN":"schedule","DHCPLSS_paths_to_check":"['/etc/pihole/dhcp.leases']"}
       - TZ={{ ansible_nas_timezone }}
-      - APP_CONF_OVERRIDE={"LOADED_PLUGINS":"['ARPSCAN', 'PUSHOVER', 'PIHOLE', 'AVAHISCAN', 'DHCPLSS', 'INTRNT', 'NSLOOKUP', 'SMTP', 'CSVBCKP', 'CUSTPROP', 'DBCLNP', 'MAINT', 'NEWDEV', 'NTFPRCS', 'SETPWD', 'SYNC', 'UI', 'VNDRPDT', 'WORKFLOWS']","PIHOLE_RUN":"schedule","PIHOLE_DB_PATH":"/etc/pihole/pihole-FTL.db","DHCPLSS_RUN":"schedule","DHCPLSS_paths_to_check":"['/etc/pihole/dhcp.leases']"}
+      - PUID={{ netalert_user_id | int }}
+      - PGID={{ netalert_group_id | int }}
+      - LISTEN_ADDR=0.0.0.0
+      - PORT=20211
+      - ALWAYS_FRESH_INSTALL=false
+
+    # Resource limits to prevent resource exhaustion
+    mem_limit: 2048m            # Maximum memory usage
+    mem_reservation: 1024m      # Soft memory limit
+    cpu_shares: 512             # Relative CPU weight for CPU contention scenarios
+    pids_limit: 512             # Limit the number of processes/threads to prevent fork bombs
+    logging:
+      options:
+        max-size: "256m"         # Rotate log files after they reach 10MB
+        max-file: "1"           # Keep a maximum of 3 log files
+
+    # Always restart the container unless explicitly stopped
     restart: unless-stopped
     labels:
-      - "com.centurylinklabs.watchtower.enable=false"
+      - "flame.type=application"
+      - "flame.name=netalertx"
+      - "flame.url=https://netalert.{{ ansible_nas_domain }}"
+      - "flame.category=Monitoring"
+      - "flame.icon=netalertx.png"

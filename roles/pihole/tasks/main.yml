@@ -8,13 +8,6 @@
     - "{{ pihole_data_directory }}/logs"
     - "{{ pihole_data_directory }}/pihole"
     - "{{ pihole_data_directory }}/dnsmasq.d"
-- name: Create a pihole network
-  docker_network:
-    name: piholedhcp
-    ipam_config:
-      - subnet: '10.0.0.0/16'
-        gateway: 10.0.0.1
-        iprange: '10.0.0.0/24'
 - name: Get name of pihole net interface
   shell: ip route|grep 10.0.0.1|awk '{print $3}'
   register: pihole_int

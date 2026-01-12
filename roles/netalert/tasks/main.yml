@@ -3,10 +3,11 @@
   file:
     path: "{{ item }}"
     state: directory
+    owner: "{{ netalert_user_id }}"
+    group: "{{ netalert_group_id }}"
   with_items:
     - "{{ netalert_config_directory }}"
-    - "{{ netalert_config_directory }}/config"
-    - "{{ netalert_config_directory }}/db"
+    - "{{ netalert_config_directory }}/data"
 
 - name: Setup netalert docker-compose.yml
   template:

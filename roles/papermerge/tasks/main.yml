@@ -53,3 +53,8 @@
       traefik.http.routers.papermerge.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.papermerge.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.papermerge.loadbalancer.server.port: "80"
+      flame.type: application
+      flame.name: papermerge
+      flame.url: "https://{{ papermerge_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Productivity"
+      flame.icon: papermerge.png

@@ -76,3 +76,8 @@
       traefik.http.routers.gitea.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.gitea.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.gitea.loadbalancer.server.port: "3000"
+      flame.type: application
+      flame.name: gitea
+      flame.url: "https://{{ gitea_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Development"
+      flame.icon: gitea.png

@@ -143,3 +143,8 @@
       traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy: "frame-ancestors organizr.shazbot.one"
       # Attach the middleware to the router
       traefik.http.routers.grafana.middlewares: "csp-headers"
+      flame.type: application
+      flame.name: grafana
+      flame.url: "https://grafana.{{ ansible_nas_domain }}"
+      flame.category: "Monitoring"
+      flame.icon: "grafana.png"

@@ -30,3 +30,8 @@
       traefik.http.routers.ombi.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.ombi.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.ombi.loadbalancer.server.port: "3579"
+      flame.type: application
+      flame.name: ombi
+      flame.url: "https://{{ ombi_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Media Requests"
+      flame.icon: ombi.png

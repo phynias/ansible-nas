@@ -57,3 +57,8 @@
       traefik.http.routers.transmission_openvpn.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.transmission_openvpn.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.transmission_openvpn.loadbalancer.server.port: "9091"
+      flame.type: application
+      flame.name: transmission-with-openvpn
+      flame.url: "https://{{ transmission_openvpn_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Downloaders"
+      flame.icon: transmission-with-openvpn.png

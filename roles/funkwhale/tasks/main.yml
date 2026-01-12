@@ -38,3 +38,8 @@
       traefik.http.routers.funkwhale.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.funkwhale.loadbalancer.server.port: "80"
       com.centurylinklabs.watchtower.enable: "true"
+      flame.type: application
+      flame.name: funkwhale
+      flame.url: "https://{{ funkwhale_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Music Streaming"
+      flame.icon: funkwhale.png

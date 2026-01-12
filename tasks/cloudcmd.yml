@@ -32,3 +32,8 @@
       traefik.http.routers.cloudcmd.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.cloudcmd.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.cloudcmd.loadbalancer.server.port: "8000"
+      flame.type: application
+      flame.name: cloudcm
+      flame.url: "https://cloudcm.{{ ansible_nas_domain }}"
+      flame.category: "Home Automation"
+      flame.icon: "cloudcm.png"

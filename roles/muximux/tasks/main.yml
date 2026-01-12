@@ -23,6 +23,11 @@
       traefik.http.routers.muximux.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.muximux.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.muximux.loadbalancer.server.port: "80"
+      flame.type: application
+      flame.name: muximux
+      flame.url: "https://{{ muximux_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Dashboards"
+      flame.icon: muximux.png
 #    ports:
 #      - "{{ muximux_port }}:80"
     restart_policy: unless-stopped

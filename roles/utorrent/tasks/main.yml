@@ -39,3 +39,8 @@
       traefik.http.routers.utorrent.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.utorrent.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.utorrent.loadbalancer.server.port: "8080"
+      flame.type: application
+      flame.name: utorrent
+      flame.url: "https://{{ utorrent_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Downloaders"
+      flame.icon: utorrent.png

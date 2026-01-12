@@ -1,11 +1,9 @@
 {
-  "dns" : ["{{ dns|join('", "') }}"],
-  "debug" : false
-  "log-driver": "gelf",
+  "dns": {{ dns | to_json }},
+  "debug" : false,
+  "log-driver": "json-file",
   "log-opts": {
-    "gelf-address": "udp://localhost:122011",
-    "tag": "{{.Name}}",
-    "mode": "non-blocking",
-    "max-buffer-size": "8m"
+    "max-size": "256m",
+    "max-file": "1"
   }
 }

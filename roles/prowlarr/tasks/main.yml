@@ -35,3 +35,8 @@
       traefik.http.routers.prowlarr.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.prowlarr.loadbalancer.server.port: "9696"
       traefik.http.routers.prowlarr.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
+      flame.type: application
+      flame.name: prowlarr
+      flame.url: "https://{{ prowlarr_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "`Arr"
+      flame.icon: prowlarr.png

@@ -43,4 +43,9 @@
       traefik.http.routers.wyze.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.wyze.loadbalancer.server.port: "5000"
       com.centurylinklabs.watchtower.enable: "false"
+      flame.type: application
+      flame.name: wyze-bridge
+      flame.url: "https://{{ wyze_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Home Automation"
+      flame.icon: wyze-bridge.png
 #      traefik.http.routers.wyze.middlewares: "authelia"

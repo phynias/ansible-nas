@@ -31,3 +31,8 @@
       traefik.http.routers.znc.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.znc.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.znc.loadbalancer.server.port: "6677"
+      flame.type: application
+      flame.name: znc
+      flame.url: "https://znc.{{ ansible_nas_domain }}"
+      flame.category: "Misc"
+      flame.icon: "znc.png"

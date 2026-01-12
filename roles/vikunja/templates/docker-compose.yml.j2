@@ -26,6 +26,11 @@ services:
       - "traefik.http.routers.vikunja.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
       - "traefik.http.services.vikunja.loadbalancer.server.port=3456"
       - "com.centurylinklabs.watchtower.enable=false"
+      - "flame.type=application"
+      - "flame.name=vikunja"
+      - "flame.url=https://{{ vikunja_hostname }}.{{ ansible_nas_domain }}"
+      - "flame.category=Productivity"
+      - "flame.icon=vikunja.png"
 
   vikunja-db:
     image: mariadb:10

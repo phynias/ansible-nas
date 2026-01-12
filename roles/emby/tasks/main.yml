@@ -34,3 +34,8 @@
       traefik.http.routers.emby.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.emby.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.emby.loadbalancer.server.port: "8096"
+      flame.type: application
+      flame.name: emby
+      flame.url: "https://{{ emby_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Media Servers"
+      flame.icon: emby.png

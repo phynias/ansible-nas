@@ -41,3 +41,8 @@
       traefik.http.routers.readarr.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
       # traefik.http.routers.readarr.middlewares: do-auth"
       # traefik.http.middlewares.do-auth.basicauth.users: "{{ traefik_auth }}"
+      flame.type: application
+      flame.name: readarr
+      flame.url: "https://{{ readarr_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "`Arr"
+      flame.icon: readarr.png

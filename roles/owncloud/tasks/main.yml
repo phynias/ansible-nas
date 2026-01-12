@@ -120,6 +120,11 @@
       traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy: "frame-ancestors organizr.shazbot.one"
       # Attach the middleware to the router
       traefik.http.routers.owncloud.middlewares: "csp-headers"
+      flame.type: application
+      flame.name: owncloud
+      flame.url: "https://{{ owncloud_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Cloud Storage"
+      flame.icon: owncloud.png
     healthcheck:
       test: ["CMD", "/usr/bin/healthcheck"]
       interval: 30s

@@ -10,5 +10,5 @@ netalert_port: "20211"
 netalert_hostname: netalert
 
 # uid / gid
-netalert_user_id: "0"
-netalert_group_id: "0"
+netalert_user_id: "1000"
+netalert_group_id: "1000"

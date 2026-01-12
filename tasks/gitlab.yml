@@ -51,3 +51,8 @@
       traefik.http.routers.gitlab.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.gitlab.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.gitlab.loadbalancer.server.port: "80"
+      flame.type: application
+      flame.name: gitlab
+      flame.url: "https://gitlab.{{ ansible_nas_domain }}"
+      flame.category: "Development"
+      flame.icon: "gitlab.png"

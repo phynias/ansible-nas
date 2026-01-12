@@ -26,6 +26,11 @@ services:
       - "traefik.http.routers.grimoire.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
       - "traefik.http.services.grimoire.loadbalancer.server.port=5173"
       - "com.centurylinklabs.watchtower.enable=false"
+      - "flame.type=application"
+      - "flame.name=grimoire"
+      - "flame.url=https://{{ grimoire_hostname }}.{{ ansible_nas_domain }}"
+      - "flame.category=Productivity"
+      - "flame.icon=grimoire.png"
 networks:
   bridge:
     external: true

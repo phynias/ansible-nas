@@ -17,3 +17,8 @@
       traefik.http.routers.umi.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.umi.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.umi.loadbalancer.server.port: "8080"
+      flame.type: application
+      flame.name: umi
+      flame.url: "https://{{ umi_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Misc"
+      flame.icon: umi.png

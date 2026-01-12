@@ -52,3 +52,8 @@
       traefik.http.routers.nextcloud.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.nextcloud.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.nextcloud.loadbalancer.server.port: "80"
+      flame.type: application
+      flame.name: nextcloud
+      flame.url: "https://{{ nextcloud_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Cloud Storage"
+      flame.icon: nextcloud.png

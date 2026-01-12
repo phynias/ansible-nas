@@ -47,3 +47,8 @@
       traefik.http.routers.miniflux.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.miniflux.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.miniflux.loadbalancer.server.port: "8080"
+      flame.type: application
+      flame.name: miniflux
+      flame.url: "https://miniflux.{{ ansible_nas_domain }}"
+      flame.category: "Productivity"
+      flame.icon: "miniflux.png"

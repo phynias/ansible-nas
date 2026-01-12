@@ -50,6 +50,11 @@ services:
         # auth
         - "traefik.http.routers.traefik.middlewares=traefik-forward-auth"
 #        - "traefik.http.routers.api.middlewares={{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
+        - "flame.type=application"
+        - "flame.name=traefik"
+        - "flame.url=https://{{ traefik_hostname }}.{{ ansible_nas_domain }}"
+        - "flame.category=Container Management"
+        - "flame.icon=traefik.png"
  
   certs-dumper:
     container_name: certs-dumper

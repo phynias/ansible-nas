@@ -48,4 +48,9 @@ services:
       - "traefik.http.routers.wgeasy.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
       - "traefik.http.services.wgeasy.loadbalancer.server.port=51821"
       - "com.centurylinklabs.watchtower.enable=false"
+      - "flame.type=application"
+      - "flame.name=wgeasy"
+      - "flame.url=https://{{ wgeasyui_hostname }}.{{ ansible_nas_domain }}"
+      - "flame.category=Network & Security"
+      - "flame.icon=wgeasy.png"
 

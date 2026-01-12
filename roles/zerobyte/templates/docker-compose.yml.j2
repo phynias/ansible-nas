@@ -27,6 +27,11 @@ services:
       - "traefik.http.routers.zerobyte.tls.domains[0].main={{ ansible_nas_domain }}"
       - "traefik.http.routers.zerobyte.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
       - "traefik.http.services.zerobyte.loadbalancer.server.port=4096"
+      - "flame.type=application"
+      - "flame.name=zerobyte"
+      - "flame.url=https://{{ zerobyte_hostname }}.{{ ansible_nas_domain }}"
+      - "flame.category=Backup & Sync"
+      - "flame.icon=zerobyte.png"
 
 networks:
   bridge:

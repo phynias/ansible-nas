@@ -120,3 +120,8 @@
       traefik.http.routers.librephotos.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.librephotos.loadbalancer.server.port: "80"
       com.centurylinklabs.watchtower.enable: "false"
+      flame.type: application
+      flame.name: librephotos
+      flame.url: "https://{{ librephotos_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Photos"
+      flame.icon: librephotos.png

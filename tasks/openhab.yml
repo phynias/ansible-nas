@@ -53,3 +53,8 @@
       traefik.http.routers.openhab.tls.domains[0].main: "{{ ansible_nas_domain }}"
       traefik.http.routers.openhab.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
       traefik.http.services.openhab.loadbalancer.server.port: "7777"
+      flame.type: application
+      flame.name: openhab
+      flame.url: "https://openhab.{{ ansible_nas_domain }}"
+      flame.category: "Home Automation"
+      flame.icon: "openhab.png"

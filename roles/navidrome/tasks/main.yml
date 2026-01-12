@@ -44,3 +44,8 @@
       traefik.http.middlewares.csp-headers.headers.customResponseHeaders.Content-Security-Policy: "frame-ancestors organizr.shazbot.one"
       # Attach the middleware to the router
       traefik.http.routers.navidrome.middlewares: "csp-headers"
+      flame.type: application
+      flame.name: navidrome
+      flame.url: "https://{{ navidrome_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "Music Streaming"
+      flame.icon: navidrome.png
