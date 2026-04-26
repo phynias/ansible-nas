@@ -1,0 +1,45 @@
+---
+- name: Create bindery Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ bindery_user_id }}"
+  with_items:
+    - "{{ bindery_data_directory }}"
+    - "{{ bindery_data_directory }}/config"
+
+- name: bindery
+  docker_container:
+    name: bindery
+    user: "{{ bindery_user_id }}:{{ bindery_group_id }}"
+    image: ghcr.io/vavallee/bindery:latest
+    pull: true
+    volumes:
+      - "{{ bindery_data_directory }}/config:/config:rw"
+      - "{{ bindery_books_directory }}:/books:rw"
+      - "{{ bindery_audio_books_directory }}:/audiobooks:rw"
+      - "{{ bindery_download_directory }}:/downloads:rw"
+    env:
+      TZ: "{{ ansible_nas_timezone }}"
+      BINDERY_AUDIOBOOK_DIR: "/audiobooks"
+      BINDERY_PUID: "{{ bindery_user_id }}"
+      BINDERY_PGID: "{{ bindery_group_id }}"
+      BINDERY_LOG_LEVEL: "debug"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    memory: 1g
+    networks:
+      - name: "{{ nas_bridge_network }}"
+    labels:
+      traefik.enable: "{{ bindery_available_externally }}"
+      traefik.http.routers.bindery.entrypoints: "websecure,web"
+      traefik.http.routers.bindery.rule: "Host(`{{ bindery_hostname }}.{{ ansible_nas_domain }}`)"
+      traefik.http.routers.bindery.tls.domains[0].main: "{{ ansible_nas_domain }}"
+      traefik.http.routers.bindery.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
+      traefik.http.services.bindery.loadbalancer.server.port: "8787"
+#      traefik.http.routers.bindery.middlewares: "{{ port|default(omit) if nas_auth_middleware is not defined else nas_auth_middleware }}"
+      flame.type: application
+      flame.name: bindery
+      flame.url: "https://{{ bindery_hostname }}.{{ ansible_nas_domain }}"
+      flame.category: "`Arr"
+      flame.icon: bindery.png

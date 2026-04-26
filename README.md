@@ -36,7 +36,9 @@ Ansible config and a bunch of Docker containers.
 * [AudioBookShelf](retract-unwanted-celtic-aptly) - self-hosted audiobook and podcast server
 * [Authentik](https://github.com/goauthentik/authentik) - an open-source Identity Provider that emphasizes flexibility and versatility
 * [Bazarr](https://github.com/morpheus65535/bazarr) - companion to Radarr and Sonarr for downloading subtitles
+* [Bindery](https://github.com/vavallee/bindery) - automated book download manager
 * [Bitwarden_rs](https://github.com/dani-garcia/bitwarden_rs) - Self-Hosting port of password manager
+* [BudgetBee](https://github.com/budgetbee/budgetbee) - Self-hosted personal finance management
 * [Calibre-web](https://github.com/janeczku/calibre-web) - Provides a clean interface for browsing, reading and downloading eBooks using an existing Calibre database.
 * [Cloud Commander](https://cloudcmd.io/) - A dual panel file manager with integrated web console and text editor
 * [Cloudflare DDNS](https://hub.docker.com/r/joshuaavalon/cloudflare-ddns/) - automatically update Cloudflare with your IP address
@@ -69,6 +71,7 @@ Ansible config and a bunch of Docker containers.
 * [Kometa](https://github.com/kometa-team/Kometa) - A tool designed to give you complete control over your Plex media libraries
 * [Krusader](https://krusader.org/) - Twin panel file management for your desktop
 * [Lidarr](https://github.com/lidarr/Lidarr) - Music collection manager for Usenet and BitTorrent users
+* [Linkwarden](https://github.com/linkwarden/linkwarden) - Bookmarks, Evolved
 * [Komga](https://komga.org/) - a media server for your comics, mangas, BDs and magazines
 * [MineCraft](https://www.minecraft.net) - It's MineCraft...
 * [MiniDLNA](https://sourceforge.net/projects/minidlna/) - simple media server which is fully compliant with DLNA/UPnP-AV clients
@@ -109,6 +112,7 @@ Ansible config and a bunch of Docker containers.
 * [Speedtest-tracker](retract-unwanted-celtic-aptly) - self-hosted internet performance tracking application that runs speedtest checks against Ookla's Speedtest service
 * [Syncthing](https://syncthing.net/) - sync directories with another device
 * [Subsonic](http://www.subsonic.org/) - catalog and music streaming (og)
+* [Tailscale](https://github.com/tailscale/tailscale) - Private WireGuard® networks made easy
 * [Tandoor Recipes](https://github.com/TandoorRecipes/recipes) - The recipe manager that allows you to manage your ever growing collection of digital recipes
 * [Tautulli](http://tautulli.com/) - Monitor Your Plex Media Server
 * [Telegraf](https://github.com/influxdata/telegraf) - Metrics collection agent

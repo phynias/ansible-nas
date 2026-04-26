@@ -32,8 +32,8 @@
     pull: true
     volumes:
       - "{{ influxdb_data_directory }}:/var/lib/influxdb:rw"
-#    ports:
-#      - "{{ grafana_influxdb_port }}:8086"
+    ports:
+      - "{{ grafana_influxdb_port }}:8086"
     restart_policy: unless-stopped
     recreate: "{{ 'yes' if docker_recreate else 'no' }}"
     env:

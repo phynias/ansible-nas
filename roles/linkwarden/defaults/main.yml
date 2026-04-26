@@ -1,0 +1,14 @@
+---
+linkwarden_enabled: false
+linkwarden_available_externally: "false"
+
+# directories
+linkwarden_data_directory: "{{ docker_home }}/linkwarden"
+
+# network
+linkwarden_hostname: "lw"
+
+linkwarden_proxy: false
+
+linkwarden_user_id: 1001
+linkwarden_group_id: 1001

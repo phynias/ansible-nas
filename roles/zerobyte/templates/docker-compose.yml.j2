@@ -10,6 +10,8 @@ services:
       - /dev/fuse:/dev/fuse
     environment:
       - "TZ={{ ansible_nas_timezone }}"
+      - "BASE_URL=https://{{ zerobyte_hostname }}.{{ ansible_nas_domain }}"
+      - "APP_SECRET={{ zerobyte_secret_key }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "{{ zerobyte_data_directory }}:/var/lib/zerobyte"
@@ -21,6 +23,7 @@ services:
     networks:
       - bridge
     labels:
+      - "com.centurylinklabs.watchtower.enable=false"
       - "traefik.http.routers.zerobyte.entrypoints=websecure"
       - "traefik.enable={{ zerobyte_available_externally }}"
       - "traefik.http.routers.zerobyte.rule=Host(`{{ zerobyte_hostname }}.{{ ansible_nas_domain }}`)"

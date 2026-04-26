@@ -1,0 +1,72 @@
+---
+services:
+  nginx:
+    image: ghcr.io/budgetbee/budgetbee/proxy:latest
+    container_name: budgetbee_nginx
+    command: nginx -g "daemon off;"
+    depends_on:
+      - webserver
+      - web
+    restart: unless-stopped
+    networks:
+      - bridge
+    labels:
+      - "traefik.http.routers.budgetbee.entrypoints=websecure"
+      - "traefik.enable={{ budgetbee_available_externally }}"
+      - "traefik.http.routers.budgetbee.rule=Host(`{{ budgetbee_hostname }}.{{ ansible_nas_domain }}`)"
+      - "traefik.http.routers.budgetbee.tls.domains[0].main={{ ansible_nas_domain }}"
+      - "traefik.http.routers.budgetbee.tls.domains[0].sans=*.{{ ansible_nas_domain }}"
+      - "traefik.http.services.budgetbee.loadbalancer.server.port=80"
+      - "flame.type=application"
+      - "flame.name=budgetbee"
+      - "flame.url=https://{{ budgetbee_hostname }}.{{ ansible_nas_domain }}"
+      - "flame.category=Finance"
+      - "flame.icon=budgetbee.png"
+
+  webserver:
+    image: ghcr.io/budgetbee/budgetbee/api:latest
+    container_name: budgetbee_webserver
+    working_dir: /var/www/html
+    command: sh entrypoint.sh
+    environment:
+      DB_HOST: db
+      DB_DATABASE: "{{ budgetbee_db_name }}"   # Name of the MySQL database (e.g. budgetbee)
+      DB_USERNAME: "{{ budgetbee_db_user }}"   # MySQL user the app connects with (e.g. budgetbee)
+      DB_PASSWORD: "{{ budgetbee_db_pass }}"   # Password for the MySQL app user - use a strong value
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - bridge
+
+  web:
+    image: ghcr.io/budgetbee/budgetbee/web:latest
+    container_name: budgetbee_web
+    restart: unless-stopped
+    networks:
+      - bridge
+
+  db:
+    image: mysql:8.2.0
+    container_name: budgetbee_db
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: "{{ budgetbee_db_root_pass }}" # MySQL root password - keep this secret
+      MYSQL_DATABASE: "{{ budgetbee_db_name }}"           # Must match DB_DATABASE above
+      MYSQL_USER: "{{ budgetbee_db_user }}"               # Must match DB_USERNAME above
+      MYSQL_PASSWORD: "{{ budgetbee_db_pass }}"           # Must match DB_PASSWORD above
+    healthcheck:
+      test: ["CMD", "/usr/bin/mysql", "--user={{ budgetbee_db_user }}", "--password={{ budgetbee_db_pass }}", "--execute", "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{{ budgetbee_db_name }}';"]
+      timeout: 20s
+      retries: 100
+    restart: unless-stopped
+    volumes:
+      - "{{ budgetbee_data_directory }}/db:/var/lib/mysql"
+    networks:
+      - bridge
+
+networks:
+  bridge:
+    external: true
+    name: "{{ nas_bridge_network }}"

@@ -15,7 +15,8 @@
 - name: ExpressVPN
   docker_container:
     name: expressvpn
-    image: misioslav/expressvpn:3.68.0.2
+#    image: misioslav/expressvpn:3.68.0.2
+    image: misioslav/expressvpn
     pull: true
     networks:
       - name: "{{ nas_bridge_network }}"
@@ -34,7 +35,7 @@
     etc_hosts: "{ \n  \"{{ sabnzbd_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ transmission_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ jackett_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ bazarr_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ sonarr_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ radarr_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ lidarr_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ mylar_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ webhookd_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ static_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ plex_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ emby_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\",\n  \"{{ subsonic_hostname }}.{{ ansible_nas_domain }}\": \"{{ nas_ip }}\"\n}\n"
     env:
       WHITELIST_DNS: "{{ expressvpn_whitelist_dns }}"
-      SERVER: "SMART"
+      SERVER: "smart"
       CODE: "{{ secret.expressvpn_code }}"
       DDSN: "{{ ansible_nas_hostname }}.{{ ansible_nas_domain }}"
       NETWORK: "on"

@@ -98,6 +98,11 @@
         - openvpn
       when: (openvpn_enabled | default(False))
 
+    - role: tailscale
+      tags:
+        - tailscale
+      when: (tailscale_enabled | default(False))
+
     ##
     ## put this near top or else we get alerts saying they aren't availble to sanorr,radarr...
     ##
@@ -246,6 +251,11 @@
         - readarr
       when: (readarr_enabled | default(False))
 
+    - role: bindery
+      tags:
+        - bindery
+      when: (bindery_enabled | default(False))
+
     - role: speakarr
       tags:
         - speakarr
@@ -316,6 +326,11 @@
         - tandoor
       when: (tandoor_enabled | default(False))
 
+    - role: budgetbee
+      tags:
+        - budgetbee
+      when: (budgetbee_enabled | default(False))
+
     - role: zerobyte
       tags:
         - zerobyte
@@ -325,6 +340,11 @@
       tags:
         - searxng
       when: (searxng_enabled | default(False))
+
+    - role: linkwarden
+      tags:
+        - linkwarden
+      when: (linkwarden_enabled | default(False))
 
     - role: postiz
       tags:
@@ -415,6 +435,11 @@
       tags:
         - trilium
       when: (trilium_enabled | default(False))
+
+    - role: solidtime
+      tags:
+        - solidtime
+      when: (solidtime_enabled | default(False))
 
     - role: watchlistarr
       tags:

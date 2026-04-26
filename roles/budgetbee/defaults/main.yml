@@ -1,0 +1,18 @@
+---
+budgetbee_enabled: false
+budgetbee_available_externally: "false"
+
+# directories
+budgetbee_data_directory: "{{ docker_home }}/budgetbee"
+
+budgetbee_db_name: ""
+budgetbee_db_user: ""
+budgetbee_db_pass: ""
+budgetbee_db_root_pass:: ""
+# network
+budgetbee_hostname: "bb"
+
+budgetbee_proxy: false
+
+budgetbee_user_id: 1001
+budgetbee_group_id: 1001

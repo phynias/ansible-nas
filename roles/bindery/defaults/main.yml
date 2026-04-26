@@ -1,0 +1,17 @@
+---
+bindery_enabled: false
+bindery_available_externally: "false"
+
+# directories
+bindery_data_directory: "{{ docker_home }}/bindery"
+
+bindery_books_directory: "{{ books_root }}"
+bindery_audio_books_directory: "{{ audiobooks_root }}"
+bindery_download_directory: "{{ downloads_root }}"
+
+# uid / gid
+bindery_user_id: "{{ nas_uid }}"
+bindery_group_id: "{{ nas_gid }}"
+
+# network
+bindery_hostname: "bindery"

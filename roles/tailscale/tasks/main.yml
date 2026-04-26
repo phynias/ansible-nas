@@ -1,0 +1,17 @@
+---
+- name: tailscale
+  docker_container:
+    name: tailscaled
+    image: tailscale/tailscale
+    pull: true
+    volumes:
+      - "/var/lib:/var/lib"
+      - "/dev/net/tun:/dev/net/tun"
+    env:
+      TS_AUTHKEY: "{{ tailscale_authkey }}"
+    restart_policy: unless-stopped
+    recreate: "{{ 'yes' if docker_recreate else 'no' }}"
+    network_mode: host
+    capabilities:
+      - NET_ADMIN
+      - NET_RAW

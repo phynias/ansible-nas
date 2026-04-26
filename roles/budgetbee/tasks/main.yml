@@ -1,30 +1,19 @@
 ---
-- name: Create searxng Directories
+- name: Create budgetbee Directories
   file:
     path: "{{ item }}"
     state: directory
-    owner: "{{ searxng_user_id }}"
+    owner: "{{ budgetbee_user_id }}"
   with_items:
-    - "{{ searxng_data_directory }}"
-    - "{{ searxng_data_directory }}/valkey"
-    - "{{ searxng_data_directory }}/data"
-    - "{{ searxng_data_directory }}/etc"
+    - "{{ budgetbee_data_directory }}"
+    - "{{ budgetbee_data_directory }}/data"
+    - "{{ budgetbee_data_directory }}/db"
 
-- name: Setup searxng docker-compose.yml
+- name: Setup budgetbee docker-compose.yml
   template:
     src: templates/docker-compose.yml.j2
     dest: "{{ role_path }}/docker-compose.yml"
 
-
-- name: Setup searxng settings file
-  template:
-    src: templates/searxng_settings.yml.j2
-    dest: "{{ searxng_data_directory }}/etc/settings.yml"
-
-- name: Setup searxng limiter file
-  template:
-    src: templates/searxng_limiter.toml.j2
-    dest: "{{ searxng_data_directory }}/etc/limiter.toml"
 
 - name: Run docker compose pull
   shell: "docker compose pull --ignore-pull-failures || true"
@@ -40,13 +29,13 @@
 
 - debug: var=shell_output.stdout
 
-- name: Deploy searxng Docker Compose stack
+- name: Deploy budgetbee Docker Compose stack
   community.docker.docker_compose_v2:
     remove_orphans: true
     recreate: "{{ 'always' if docker_recreate else 'auto' }}"
     project_src: "{{ role_path }}"
     files:
-    - docker-compose.yml
+      - docker-compose.yml
   register: shell_output
 
 - name: Remove docker-compose.yml
